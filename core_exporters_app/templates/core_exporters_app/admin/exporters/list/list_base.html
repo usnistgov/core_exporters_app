@@ -1,0 +1,47 @@
+{% extends 'core_main_app/_render/admin/theme/tools/box.html' %}
+
+{% block box_title %}List all Exporters{% endblock %}
+
+{% block box_body %}
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-bordered table-striped table-hover">
+            <tr>
+                <th>Exporter Name</th>
+                <th>Associated Templates</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for exporter in data.exporters_list %}
+                {% cycle 'even' '' as rowcolors silent %}
+                <tr class="{{ rowcolors }}">
+                    <td>{{ exporter.name }}</td>
+                    <td>{{ exporter.get_templates_to_string }}</td>
+                    <td id="{{ exporter.id }}">
+                        {% block box_actions %}
+                            <span class="edit">
+                                <a class="btn btn-default" href="#"><i class="fa fa-edit">
+                                </i> Edit </a>
+                            </span>
+                            <span class="associated-templates">
+                                <a class="btn btn-default" href="#"><i class="fa fa-random">
+                                </i> Templates mapping </a>
+                            </span>
+                        {% endblock %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td class="empty" colspan="3">
+                        No exporters registered.
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block box_footer %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "core_main_app/_render/admin/theme/tools/section.html" %}
+{% load staticfiles %}
+
+{% block section_title %}EXPORTERS{% endblock %}
+
+{% block section_content %}
+        {% include 'core_exporters_app/admin/exporters/list/list_base.html' %}
+{% endblock %}

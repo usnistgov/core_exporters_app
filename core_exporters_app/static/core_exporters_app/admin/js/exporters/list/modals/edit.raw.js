@@ -1,0 +1,1 @@
+var editExporterPostUrl = "{% url 'admin:core_exporters_app_exporters_edit' %}";
