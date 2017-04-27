@@ -25,6 +25,18 @@ class Exporter(Document):
         return Exporter.objects().all()
 
     @staticmethod
+    def get_all_by_template_list(template_id_list):
+        """ Gets all template matching with the given list template id
+
+        Args:
+            template_id_list:
+
+        Returns:
+
+        """
+        return Exporter.objects(templates__in=template_id_list).all()
+
+    @staticmethod
     def get_by_id(exporter_id):
         """ Returns the object with the given id
 

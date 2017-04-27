@@ -36,6 +36,18 @@ def get_by_url(exporter_url):
     return Exporter.get_by_url(exporter_url)
 
 
+def get_all_by_template_list(template_id_list):
+    """ Returns all exporters object available for id templates given
+
+    Args:
+        template_id_list:
+
+    Returns:
+
+    """
+    return Exporter.get_all_by_template_list(template_id_list)
+
+
 def upsert(exporter):
     """Saves or updates exporter
 

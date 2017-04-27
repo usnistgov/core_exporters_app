@@ -10,7 +10,6 @@ import core_main_app.components.template.api as templates_api
 import core_main_app.commons.exceptions as main_exception
 import urls
 import re
-import importlib
 
 
 def __assemble_endpoint_data__(pattern, prefix='', filter_path=None):
@@ -66,6 +65,7 @@ def __flatten_patterns_tree__(patterns, prefix='', filter_path=None):
 
 def discover_exporter():
     """ Exporters discover
+
     Returns:
 
     """
@@ -91,22 +91,3 @@ def discover_exporter():
         raise Exception('A validation error occured during the exporter discovery :' + e.message)
     except Exception, e:
         raise e
-
-
-def _get_exporter(exporter):
-    """
-    :param exporter:
-    :return:
-    """
-    pkglist = exporter.split('.')
-
-    pkgs = '.'.join(pkglist[:-1])
-    func = pkglist[-1:][0]
-
-    imported_pkgs = importlib.import_module(pkgs)
-    a = getattr(imported_pkgs, func)
-    instance = a()
-
-    return instance
-
-
