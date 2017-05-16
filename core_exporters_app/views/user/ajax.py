@@ -3,7 +3,7 @@
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from core_explore_common_app.components.result.models import Result
-from core_explore_common_app.rest.result.serializers import ResultSerializer
+from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
 from django.template import RequestContext, loader
 from core_exporters_app.views.user.forms import ExportForm
 from core_exporters_app.exporters.exporter import get_exporter_module_from_url, AbstractExporter
@@ -138,9 +138,9 @@ def _get_results_list_from_url_list(url_base, url_list):
         response = requests.get(url_base + url)
         if response.status_code == 200:
             # Build serializer
-            results_serializer = ResultSerializer(data=json.loads(response.text))
-            # Validate result ((don't need all information of result, so don't need to throw an exception)
-            results_serializer.is_valid()
+            results_serializer = ResultBaseSerializer(data=json.loads(response.text))
+            # Validate result
+            results_serializer.is_valid(True)
             # Append the list returned
             result_list.append(Result(title=results_serializer.data['title'],
                                       xml_content=results_serializer.data['xml_content']))
