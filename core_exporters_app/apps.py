@@ -2,6 +2,7 @@
 """
 from django.apps import AppConfig
 from core_exporters_app.exporters import discover
+import core_exporters_app.components.exporter.watch as exporter_watch
 
 
 # TODO: loaded two times (not a problem and may not happen in production) 
@@ -16,3 +17,4 @@ class CoreExportersAppConfig(AppConfig):
         """ Run once at startup
         """
         discover.discover_exporter()
+        exporter_watch.init()

@@ -25,6 +25,15 @@ class Exporter(Document):
         return Exporter.objects().all()
 
     @staticmethod
+    def get_all_default_exporter():
+        """ Lists all default exporters
+
+        Returns: exporter collection
+
+        """
+        return Exporter.objects(enable_by_default=True).all()
+
+    @staticmethod
     def get_all_by_template_list(template_id_list):
         """ Gets all template matching with the given list template id
 

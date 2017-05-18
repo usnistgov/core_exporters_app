@@ -12,6 +12,15 @@ def get_all():
     return Exporter.get_all()
 
 
+def get_all_default_exporter():
+    """ Lists all default exporters
+
+    Returns: exporter collection
+
+    """
+    return Exporter.get_all_default_exporter()
+
+
 def get_by_id(exporter_id):
     """ Returns exporter object with the given id
 
