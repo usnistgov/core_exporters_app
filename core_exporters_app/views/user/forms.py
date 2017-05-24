@@ -31,8 +31,7 @@ class ExportForm(forms.Form):
             # Retrieves all common exporter for exporters given
             exporters = exporters_api.get_all_by_template_list(templates)
             for exporter in exporters:
-                # We add them
-                self.export_options.append((exporter.url, exporter.name))
+                self.export_options.append((exporter.id, exporter.name))
 
         if 'data_url_list' in kwargs:
             self.data_url_list = kwargs.pop('data_url_list')

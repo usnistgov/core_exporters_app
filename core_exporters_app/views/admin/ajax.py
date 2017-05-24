@@ -54,19 +54,18 @@ def _associated_templates_post(request):
 
     """
     try:
-        if request.method == 'POST':
-            form = AssociatedTemplatesForm(request.POST)
-            if form.is_valid():
-                templates = request.POST.getlist('templates_manager', [])
-                exporter_id = request.POST.get('id', None)
-                if exporter_id is not None:
-                    exporter = exporter_api.get_by_id(exporter_id)
-                    template_id_list = [template_api.get(template_id) for template_id in templates]
-                    exporter.templates = template_id_list
-                    exporter_api.upsert(exporter)
-                    return HttpResponse(json.dumps({}), content_type='application/javascript')
-            else:
-                return HttpResponseBadRequest('Bad entries. Please check your entries')
+        form = AssociatedTemplatesForm(request.POST)
+        if form.is_valid():
+            templates = request.POST.getlist('templates_manager', [])
+            exporter_id = request.POST.get('id', None)
+            if exporter_id is not None:
+                exporter = exporter_api.get_by_id(exporter_id)
+                template_id_list = [template_api.get(template_id) for template_id in templates]
+                exporter.templates = template_id_list
+                exporter_api.upsert(exporter)
+                return HttpResponse(json.dumps({}), content_type='application/javascript')
+        else:
+            return HttpResponseBadRequest('Bad entries. Please check your entries')
     except Exception, e:
         return HttpResponseBadRequest(e.message, content_type='application/javascript')
 

@@ -5,24 +5,44 @@ from core_main_app.commons import exceptions
 from core_main_app.components.template.models import Template
 import core_main_app.components.version_manager.api as version_manager_api
 from mongoengine import errors as mongoengine_errors
+from mongoengine.queryset.base import PULL
 
 
 class Exporter(Document):
     """Represents an exporter"""
+    meta = {'allow_inheritance': True}
+
     name = fields.StringField(blank=False, unique=True)
     url = fields.StringField(blank=False)
     enable_by_default = fields.BooleanField(blank=False)
-    templates = fields.ListField(fields.ReferenceField(Template), blank=True)
+    templates = fields.ListField(fields.ReferenceField(Template), blank=True, reverse_delete_rule=PULL)
 
     @staticmethod
-    def get_all():
+    def get_all(is_cls):
         """ Returns all exporters
 
         Returns:
             exporter collection
 
         """
-        return Exporter.objects().all()
+        if is_cls:
+            # will return all Exporter object only
+            return Exporter.objects(_cls=Exporter.__name__).all()
+        else:
+            # will return all inherited object
+            return Exporter.object().all()
+
+    @staticmethod
+    def get_all_by_url(url):
+        """ Lists all exporters with the given url
+
+        Args:
+            url:
+
+        Returns:
+
+        """
+        return Exporter.objects(url=url).all()
 
     @staticmethod
     def get_all_default_exporter():

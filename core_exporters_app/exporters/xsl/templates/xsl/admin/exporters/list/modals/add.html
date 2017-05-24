@@ -1,0 +1,19 @@
+{% extends 'core_main_app/_render/admin/theme/tools/modal.html' %}
+
+{% block modal_id %}add-xslt-exporter-modal{% endblock %}
+{% block modal_title %}Add XSLT{% endblock %}
+
+{% block modal_body %}
+<div class="alert alert-danger hidden" id="banner_errors">
+        <a href="#" class="close" data-hide="alert" aria-label="close">&times;</a>
+     	<h4><i class="fa fa-exclamation-circle"></i> Error</h4>
+        <div id="add-xslt-errors"></div>
+</div>
+<form id="form-add-xslt-content" method="post">
+</form>
+{% endblock %}
+
+{% block modal_footer %}
+<a class="btn btn-default pull-left" data-dismiss="modal" href="#"><i class="fa fa-times"></i>Cancel</a>
+<button id="btn-add-xslt" class="btn btn-default">Add</button>
+{% endblock %}

@@ -3,13 +3,13 @@
 from core_exporters_app.components.exporter.models import Exporter
 
 
-def get_all():
+def get_all(is_cls=True):
     """ Lists all exporters
 
     Returns: exporter collection
 
     """
-    return Exporter.get_all()
+    return Exporter.get_all(is_cls)
 
 
 def get_all_default_exporter():
@@ -19,6 +19,18 @@ def get_all_default_exporter():
 
     """
     return Exporter.get_all_default_exporter()
+
+
+def get_all_by_url(url):
+    """ Lists all exporters with the given url
+
+    Args:
+        url:
+
+    Returns:
+
+    """
+    return Exporter.get_all_by_url(url)
 
 
 def get_by_id(exporter_id):

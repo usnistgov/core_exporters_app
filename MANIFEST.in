@@ -2,3 +2,5 @@ include README.rst
 include requirements.txt
 recursive-include core_exporters_app/static *
 recursive-include core_exporters_app/templates *
+recursive-include core_exporters_app/exporters/xsl/static *
+recursive-include core_exporters_app/exporters/xsl/templates *

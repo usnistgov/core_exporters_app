@@ -7,7 +7,9 @@ from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
 from django.template import RequestContext, loader
 from core_exporters_app.views.user.forms import ExportForm
 from core_exporters_app.exporters.exporter import get_exporter_module_from_url, AbstractExporter
+import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exported_compressed_file.api as exported_file_api
+import core_exporters_app.components.exporter.api as exporter_api
 import requests
 import json
 
@@ -160,9 +162,17 @@ def _export_result(exporters_list_url, result_list):
     transformed_result_list = []
 
     # Converts all data
-    for exporter_url in exporters_list_url:
-        exporter = get_exporter_module_from_url(exporter_url)
-        transformed_result_list.append(exporter.transform(result_list))
+    for exporter_id in exporters_list_url:
+        # get the exporter with the given id
+        exporter_object = exporter_api.get_by_id(exporter_id)
+        # get the exporter module
+        exporter_module = get_exporter_module_from_url(exporter_object.url)
+        # if is a xslt transformation, we have to set the xslt
+        if exporter_object.url == exporter_constants.XSL_URL:
+            # set the xslt
+            exporter_module.set_xslt(exporter_object.xsl_transformation.content)
+        # transform the list of xml files
+        transformed_result_list.append(exporter_module.transform(result_list))
 
     # Export in Zip
     exported_compressed_file_id = AbstractExporter.export(transformed_result_list)

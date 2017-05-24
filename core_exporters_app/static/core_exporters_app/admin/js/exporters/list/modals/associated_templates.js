@@ -15,7 +15,6 @@ associatedTemplatesExporterOpenModal = function(event) {
     $("#select-associated-template-modal").modal("show");
 };
 
-
 /**
  * AJAX call, loads associated template form
  */
@@ -28,21 +27,20 @@ load_associated_templates_form = function(exporterId){
             'exporter_id': exporterId
         },
         success: function(data){
-            $("#banner_errors").hide()
+            $("#banner_errors").hide();
             $("#form-associated-template-content").html(data.template);
             InitSelectMultipleTemplates();
         },
         error:function(data){
             if (data.responseText != ""){
                 $("#form-associated-templates-errors").html(data.responseText);
-                $("#banner_errors").show(500)
+                $("#banner_errors").show(500);
                 return (false);
             }
             return (true);
         }
     });
 };
-
 
 /**
  * AJAX call, submit associated templates
@@ -63,7 +61,7 @@ submit_associated_templates_form = function(){
         error:function(data){
             if (data.responseText != ""){
                 $("#form-associated-templates-errors").html(data.responseText);
-                $("#banner_errors").show(500)
+                $("#banner_errors").show(500);
                 return (false);
             }
             return (true);
