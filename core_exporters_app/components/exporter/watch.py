@@ -20,5 +20,8 @@ def post_save_template(sender, document, **kwargs):
     default_exporter_list = exporter_api.get_all_default_exporter()
 
     for exporter in default_exporter_list:
-        exporter.templates.append(document)
-        exporter_api.upsert(exporter)
+        # When an template is added, save is called 2 times
+        # so we have to avoid to had the same document several time
+        if document not in exporter.templates:
+            exporter.templates.append(document)
+            exporter_api.upsert(exporter)

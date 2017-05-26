@@ -109,11 +109,7 @@ class Exporter(Document):
         """
         version_name_list = []
         for template in self.templates:
-            version_manager = version_manager_api.get_from_version(template)
-            version_number = version_manager_api.get_version_number(version_manager, template.id)
-            version_name = "{0} (Version {1})".format(version_manager.title,
-                                                      version_number)
-            version_name_list.append(version_name)
+            version_name_list.append(template.display_name)
 
         return_value = ", ".join(version_name_list)
         return return_value
