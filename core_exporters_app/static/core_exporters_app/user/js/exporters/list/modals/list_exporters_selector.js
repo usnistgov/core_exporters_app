@@ -62,6 +62,9 @@ submitExporterSelectionForm = function(){
     var formData = new FormData($("#form-exporter-selection")[0]);
     formData.append("templates_id", templates_list);
     formData.append("data_url_list", data_url_selected);
+    // Need to be initialized. window.open not working in asynchronous call (Safari)
+    // https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
+    var windowReference = window.open();
 
     $.ajax({
         url : exporterSelectionUrl,
@@ -76,7 +79,7 @@ submitExporterSelectionForm = function(){
             // parse datat to json
             data = $.parseJSON(data);
             // redirect to the download view
-            window.open(data.url_to_redirect, '_blank');
+            windowReference.location = data.url_to_redirect;
         },
         error:function(data){
             if (data.responseText != ""){
