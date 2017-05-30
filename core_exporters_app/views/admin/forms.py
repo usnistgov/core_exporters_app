@@ -1,7 +1,7 @@
 """ Forms admin exporter
 """
 from django import forms
-from core_main_app.components.template_version_manager import api as template_version_manager_api
+from core_main_app.components.template import api as template_api
 
 
 class AssociatedTemplatesForm(forms.Form):
@@ -24,12 +24,10 @@ def _get_templates_versions():
     """
     templates = []
     try:
-        list_ = template_version_manager_api.get_active_global_version_manager()
-        for elt in list_:
-            for version in elt.versions:
-                version_name = "{0} (Version {1})".format(elt.title,
-                                                          template_version_manager_api.get_version_number(elt, version))
-                templates.append((version, version_name))
+        # display all template, global and from users
+        template_list = template_api.get_all()
+        for template in template_list:
+            templates.append((template.id, template.display_name))
     except Exception:
         pass
 
