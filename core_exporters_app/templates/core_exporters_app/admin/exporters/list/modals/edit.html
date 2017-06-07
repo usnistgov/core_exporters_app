@@ -5,6 +5,13 @@
 {% block modal_title %}Edit Exporter{% endblock %}
 
 {% block modal_body %}
+<div id="edit-error-div">
+    <br/>
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong><span id="edit-error-message"></span></strong>
+    </div>
+</div>
 <form id="edit-exporter-form">
     <input id="edit-exporter-id" type="hidden" value=""/>
     <div class="form-group">

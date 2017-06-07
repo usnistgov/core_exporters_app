@@ -3,7 +3,6 @@
 from django_mongoengine import fields, Document
 from core_main_app.commons import exceptions
 from core_main_app.components.template.models import Template
-import core_main_app.components.version_manager.api as version_manager_api
 from mongoengine import errors as mongoengine_errors
 from mongoengine.queryset.base import PULL
 
@@ -113,3 +112,16 @@ class Exporter(Document):
 
         return_value = ", ".join(version_name_list)
         return return_value
+
+    def save_object(self):
+        """ Custom save
+
+        Returns:
+
+        """
+        try:
+            return self.save()
+        except mongoengine_errors.NotUniqueError as e:
+            raise exceptions.NotUniqueError("The name is already used by an other exporter.")
+        except Exception as ex:
+            raise exceptions.ModelError(ex.message)

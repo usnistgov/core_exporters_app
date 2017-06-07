@@ -7,7 +7,7 @@
 {% block box_tools %}
 <div class="btn-group pull-right">
     <a href="#" class="btn btn-default btn-add-xslt-exporter">
-        <i class="fa fa-plus-circle"></i> Add
+        <i class="fa fa-gear"></i> Manage
     </a>
 </div>
 {% endblock %}
@@ -17,7 +17,8 @@
     <div class="col-md-12">
         <table class="table table-bordered table-striped table-hover">
             <tr>
-                <th>XSLT Name</th>
+                <th>Exporter Name</th>
+                <th>Associated XSLT</th>
                 <th>Associated Templates</th>
                 <th>Actions</th>
             </tr>
@@ -25,6 +26,7 @@
             {% for exporter in data.exporter_xslt_list %}
                 <tr>
                     <td>{{ exporter.name }}</td>
+                    <td>{{ exporter.xsl_transformation.name }}</td>
                     <td>{{ exporter.get_templates_to_string }}</td>
                     <td id="{{ exporter.id }}">
                         {% block box_actions %}

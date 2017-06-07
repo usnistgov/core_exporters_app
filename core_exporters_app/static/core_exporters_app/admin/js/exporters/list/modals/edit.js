@@ -16,6 +16,7 @@ editExporterOpenModal = function(event) {
 
     $("#edit-exporter-name").val(exporterName);
     $("#edit-exporter-id").val(exporterId);
+    $('#edit-error-div').hide();
     $("#edit-exporter-modal").modal("show");
 };
 
@@ -37,6 +38,10 @@ editExporterSave = function(event) {
         },
         success: function(data){
             location.reload();
+        },
+        error: function(data){
+            $('#edit-error-message').html(data.responseText);
+            $('#edit-error-div').show();
         }
     });
 };

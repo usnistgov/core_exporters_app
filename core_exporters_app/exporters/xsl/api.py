@@ -22,7 +22,7 @@ def get_all_xsl_id():
         XSL exporter collection
 
     """
-    return [exporter.xsl_transformation.id for exporter in get_all()]
+    return [str(exporter.xsl_transformation.id) for exporter in get_all()]
 
 
 def get_all_by_xsl_id_list(xsl_id_list):
@@ -72,9 +72,7 @@ def upsert_or_delete_exporter_xsl(xsl_list):
 
     # deletes all exporter not in list but in database without associated templates
     for exporter in exporter_list_for_deletion:
-        # if no template attached
-        if len(exporter.templates) == 0:
-            exporter.delete()
+        exporter.delete()
 
     # get all xsl id to upsert as Exporter
     list_for_upsert = set(xsl_list).difference(xsl_list_from_database)
