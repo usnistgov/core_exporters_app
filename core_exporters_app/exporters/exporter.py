@@ -3,7 +3,6 @@
 from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
 from cStringIO import StringIO
 from abc import ABCMeta, abstractmethod
-from multiprocessing import Pool
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import os
 import hashlib
@@ -44,10 +43,8 @@ class AbstractExporter(object):
         # Save in database to generate an Id and be accessible via url
         exported_compressed_file_api.upsert(exported_file)
 
-        # Generate the zip file asynchronously
-        pool = Pool(processes=1)
-        pool.apply_async(generate_zip_wrapper,
-                         [(exported_file, transformed_result_list)])
+        # Generate the zip file
+        AbstractExporter.generate_zip(exported_file, transformed_result_list)
 
         # Returns the id generated
         return exported_file.id
