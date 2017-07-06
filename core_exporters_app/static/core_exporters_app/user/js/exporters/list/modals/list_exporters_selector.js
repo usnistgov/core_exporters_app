@@ -51,7 +51,7 @@ loadExporterSelectionForm = function(){
             }
         });
     }else{
-        alert("Please select data to export");
+        showErrorModal("Please select data to export")
     }
 };
 
