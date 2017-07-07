@@ -2,6 +2,7 @@
 """
 from django_mongoengine import fields, Document
 from core_main_app.commons import exceptions
+from core_main_app.commons.regex import NOT_EMPTY_OR_WHITESPACES
 from core_main_app.components.template.models import Template
 from mongoengine import errors as mongoengine_errors
 from mongoengine.queryset.base import PULL
@@ -11,7 +12,7 @@ class Exporter(Document):
     """Represents an exporter"""
     meta = {'allow_inheritance': True}
 
-    name = fields.StringField(blank=False, unique=True)
+    name = fields.StringField(blank=False, unique=True, regex=NOT_EMPTY_OR_WHITESPACES)
     url = fields.StringField(blank=False)
     enable_by_default = fields.BooleanField(blank=False)
     templates = fields.ListField(fields.ReferenceField(Template), blank=True, reverse_delete_rule=PULL)
