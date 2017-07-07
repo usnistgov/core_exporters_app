@@ -9,12 +9,13 @@ $(document).ready(function() {
  * AJAX call, Check if the file is ready
  */
 checkDownloadStatus = function(){
+    var file_id = $('#download-id').attr('value');
     $.ajax({
         url: checkDownloadUrl,
         type: "GET",
         dataType: "json",
         data: {
-            'file_id': $('#download-id').attr('value')
+            'file_id': file_id
         },
         success: function (data) {
             if(data.is_ready == true){

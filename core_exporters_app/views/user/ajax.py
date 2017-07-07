@@ -84,7 +84,7 @@ def _exporters_selection_post(request):
                     url_download = reverse("core_exporters_app_exporters_download")
                     url_to_redirect = "{0}{1}?id={2}".format(url_base, url_download, str(exported_compressed_file_id))
                     return HttpResponse(json.dumps({'url_to_redirect': url_to_redirect}),
-                                        content_type='application/javascript')
+                                        content_type='application/json')
             else:
                 return HttpResponseBadRequest('Bad entries. Please check your entries')
         else:

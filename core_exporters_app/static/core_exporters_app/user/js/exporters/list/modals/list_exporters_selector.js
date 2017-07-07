@@ -44,14 +44,14 @@ loadExporterSelectionForm = function(){
             error: function (data) {
                 if (data.responseText != "") {
                     $("#form-exporter-selection-errors").html(data.responseText);
-                    $("#banner_errors").show(500)
-                    return (false);
+                    $("#banner_errors").show(500);
+                    return false;
                 }
-                return (true);
+                return true;
             }
         });
     }else{
-        showErrorModal("Please select data to export")
+        showErrorModal("Please select data to export");
     }
 };
 
@@ -64,7 +64,9 @@ submitExporterSelectionForm = function(){
     formData.append("data_url_list", data_url_selected);
     // Need to be initialized. window.open not working in asynchronous call (Safari)
     // https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
-    var windowReference = window.open();
+
+    // Don't need to redirect for now, put it back when Celery will work
+    // var windowReference = window.open();
 
     $.ajax({
         url : exporterSelectionUrl,
@@ -72,22 +74,24 @@ submitExporterSelectionForm = function(){
         cache: false,
         contentType: false,
         processData: false,
-        async:true,
+        async: true,
         data: formData,
         success: function(data){
             $("#select-exporters-modal").modal("hide");
-            // parse datat to json
-            data = $.parseJSON(data);
+
+            // Don't need to redirect for now, put it back when Celery will work
+            // windowReference.location = data.url_to_redirect;
+
             // redirect to the download view
-            windowReference.location = data.url_to_redirect;
+            $(window).attr('location', data.url_to_redirect);
         },
         error:function(data){
             if (data.responseText != ""){
                 $("#form-exporter-selection-errors").html(data.responseText);
-                $("#banner_errors").show(500)
-                return (false);
+                $("#banner_errors").show(500);
+                return false;
             }
-            return (true);
+            return true;
         }
     });
 };
