@@ -1,14 +1,15 @@
 """ Abstract class exporter
 """
-from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
-from cStringIO import StringIO
-from abc import ABCMeta, abstractmethod
-import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
-import os
 import hashlib
-import sha3
 import importlib
+import os
 import zipfile
+from abc import ABCMeta, abstractmethod
+from cStringIO import StringIO
+
+from django_mongoengine import fields, Document
+
+import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 
 
 class AbstractExporter(object):
@@ -31,23 +32,12 @@ class AbstractExporter(object):
         raise NotImplementedError("This method is not implemented.")
 
     @staticmethod
-    def export(transformed_result_list):
+    def export(exported_compressed_file_id, transformed_result_list):
         """
             Method: Exports the data
         """
-        # Creation of the compressed file with is_ready to false
-        exported_file = ExportedCompressedFile(file_name='Query_Results.zip',
-                                               is_ready=False,
-                                               mime_type="application/zip")
-
-        # Save in database to generate an Id and be accessible via url
-        exported_compressed_file_api.upsert(exported_file)
-
         # Generate the zip file
-        AbstractExporter.generate_zip(exported_file, transformed_result_list)
-
-        # Returns the id generated
-        return exported_file.id
+        AbstractExporter.generate_zip(exported_compressed_file_id, transformed_result_list)
 
     @staticmethod
     def get_title_document(document_name, content):
@@ -82,7 +72,7 @@ class AbstractExporter(object):
             raise Exception("number_of_characters should be > 0 and < 128")
 
         # new instance of sha3
-        hash_result = hashlib.sha3_512()
+        hash_result = hashlib.sha512()
         # if unicode, the content must be encoded
         if isinstance(content, unicode):
             content = content.encode('utf-8')
@@ -91,18 +81,18 @@ class AbstractExporter(object):
         return hash_result.hexdigest()[0:number_of_characters]
 
     @staticmethod
-    def generate_zip(exported_compressed_file, transformed_result_list):
+    def generate_zip(exported_compressed_file_id, transformed_result_list):
         """ Generates the zip file
 
         Args:
-            exported_compressed_file:
+            exported_compressed_file_id:
             transformed_result_list:
 
         Returns:
 
         """
         # Needed otherwise the file in db is not updated
-        exported_compressed_file = exported_compressed_file_api.get_by_id(exported_compressed_file.id)
+        exported_compressed_file = exported_compressed_file_api.get_by_id(exported_compressed_file_id)
 
         # ZIP fileCreation
         in_memory = StringIO()
@@ -110,14 +100,12 @@ class AbstractExporter(object):
 
         # For each result
         for transformed_result in transformed_result_list:
-            # Loops on converted file
-            for result in transformed_result:
-                # Loops on contents converted for each file
-                for content in result.transform_result_content:
-                    path = "{!s}/{!s}{!s}".format(result.source_document_name,
-                                                  content.file_name,
-                                                  content.content_extension)
-                    zip.writestr(path, content.content_converted)
+            # Loops on contents converted for each file
+            for content in transformed_result.transform_result_content:
+                path = "{!s}/{!s}{!s}".format(transformed_result.source_document_name,
+                                              content.file_name,
+                                              content.content_extension)
+                zip.writestr(path, content.content_converted)
 
         # fix for Linux zip files read in Windows
         for xmlFile in zip.filelist:
@@ -135,41 +123,36 @@ class AbstractExporter(object):
         exported_compressed_file_api.upsert(exported_compressed_file)
 
 
-class TransformResult(object):
-    """ Represents a result after transformation
-    """
-    def __init__(self):
-        """
-            source_document_name:
-                It will be the source document name like "myFile.xml"
-            transform_result_content:
-                List of result.
-                One result expected for simple conversion like XML, Json
-                but zero or N result for blob export
-        """
-        self.source_document_name = ""
-        self.transform_result_content = []
-
-
-class TransformResultContent(object):
+class TransformResultContent(Document):
     """ Represents a result content
-    """
 
-    def __init__(self):
-        """
-            file_name:
-                For simple conversion like XML, JSON etc.. The file name
-                will be the same as the TransformResult without extension
-                For conversion like Blob, the file name will be the blob's
-                file name
-            content_converted:
-                The content converter in string (XML, Json, unicode)
-            content_extension:
-                .xml, .json, .png
-        """
-        self.file_name = ""
-        self.content_converted = ""
-        self.content_extension = ""
+        file_name:
+            For simple conversion like XML, JSON etc.. The file name
+            will be the same as the TransformResult without extension
+            For conversion like Blob, the file name will be the blob's
+            file name
+        content_converted:
+            The content converter in string (XML, Json, unicode)
+        content_extension:
+            .xml, .json, .png
+    """
+    file_name = fields.StringField(default="")
+    content_converted = fields.StringField(default="")
+    content_extension = fields.StringField(default="")
+
+
+class TransformResult(Document):
+    """ Represents a result after transformation
+
+        source_document_name:
+            It will be the source document name like "myFile.xml"
+        transform_result_content:
+            List of result.
+            One result expected for simple conversion like XML, Json
+            but zero or N result for blob export
+    """
+    source_document_name = fields.StringField(default="")
+    transform_result_content = fields.ListField(TransformResultContent)
 
 
 def get_exporter_module_from_url(exporter_url):

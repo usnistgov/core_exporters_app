@@ -1,17 +1,17 @@
 """ Ajax Exporter user
 """
+import json
+
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
-from core_explore_common_app.components.result.models import Result
-from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
 from django.template import RequestContext, loader
-from core_exporters_app.views.user.forms import ExportForm
-from core_exporters_app.exporters.exporter import get_exporter_module_from_url, AbstractExporter
-import core_exporters_app.commons.constants as exporter_constants
+
+import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import core_exporters_app.components.exported_compressed_file.api as exported_file_api
-import core_exporters_app.components.exporter.api as exporter_api
-import requests
-import json
+import core_exporters_app.tasks as exporter_tasks
+from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
+from core_exporters_app.views.user.forms import ExportForm
+from celery.exceptions import TimeoutError, SoftTimeLimitExceeded
 
 
 def exporters_selection(request):
@@ -76,13 +76,27 @@ def _exporters_selection_post(request):
             if form.is_valid():
                 exporters = request.POST.getlist('my_exporters', None)
                 if exporters is not None:
-                    # gets all data from the url list
-                    result_list = _get_results_list_from_url_list(url_base, data_url_list)
-                    # start the export
-                    exported_compressed_file_id = _export_result(exporters, result_list)
-                    # generates the redirect link for download the file
+                    # Creation of the compressed file with is_ready to false
+                    exported_file = ExportedCompressedFile(file_name='Query_Results.zip',
+                                                           is_ready=False,
+                                                           mime_type="application/zip")
+
+                    # Save in database to generate an Id and be accessible via url
+                    exported_compressed_file_api.upsert(exported_file)
+
+                    try:
+                        # start asynchronous task
+                        exporter_tasks.export_files.delay(str(exported_file.id),
+                                                          exporters,
+                                                          url_base,
+                                                          data_url_list)
+                    except (TimeoutError, SoftTimeLimitExceeded, exporter_tasks.export_files.OperationalError):
+                        # Raised when a transport connection error occurs while sending a message
+                        exporter_tasks.export_files(str(exported_file.id), exporters, url_base, data_url_list)
+
+                    # redirecting
                     url_download = reverse("core_exporters_app_exporters_download")
-                    url_to_redirect = "{0}{1}?id={2}".format(url_base, url_download, str(exported_compressed_file_id))
+                    url_to_redirect = "{0}{1}?id={2}".format(url_base, url_download, str(exported_file.id))
                     return HttpResponse(json.dumps({'url_to_redirect': url_to_redirect}),
                                         content_type='application/json')
             else:
@@ -124,56 +138,3 @@ def _exporters_selection_get(request):
     except Exception as e:
         raise Exception('Error occurred during the form display')
 
-
-def _get_results_list_from_url_list(url_base, url_list):
-    """ Gets all data from url
-
-    Args:
-        url_base: url of running server
-        url_list: url list to request
-
-    Returns:
-
-    """
-    result_list = []
-    for url in url_list:
-        response = requests.get(url_base + url)
-        if response.status_code == 200:
-            # Build serializer
-            results_serializer = ResultBaseSerializer(data=json.loads(response.text))
-            # Validate result
-            results_serializer.is_valid(True)
-            # Append the list returned
-            result_list.append(Result(title=results_serializer.data['title'],
-                                      xml_content=results_serializer.data['xml_content']))
-    return result_list
-
-
-def _export_result(exporters_list_url, result_list):
-    """ Exports all result
-
-    Args:
-        exporters_list_url:
-        result_list:
-
-    Returns:
-
-    """
-    transformed_result_list = []
-
-    # Converts all data
-    for exporter_id in exporters_list_url:
-        # get the exporter with the given id
-        exporter_object = exporter_api.get_by_id(exporter_id)
-        # get the exporter module
-        exporter_module = get_exporter_module_from_url(exporter_object.url)
-        # if is a xslt transformation, we have to set the xslt
-        if exporter_object.url == exporter_constants.XSL_URL:
-            # set the xslt
-            exporter_module.set_xslt(exporter_object.xsl_transformation.content)
-        # transform the list of xml files
-        transformed_result_list.append(exporter_module.transform(result_list))
-
-    # Export in Zip
-    exported_compressed_file_id = AbstractExporter.export(transformed_result_list)
-    return exported_compressed_file_id

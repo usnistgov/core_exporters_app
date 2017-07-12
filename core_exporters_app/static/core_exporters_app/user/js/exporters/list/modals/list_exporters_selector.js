@@ -65,8 +65,7 @@ submitExporterSelectionForm = function(){
     // Need to be initialized. window.open not working in asynchronous call (Safari)
     // https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
 
-    // Don't need to redirect for now, put it back when Celery will work
-    // var windowReference = window.open();
+    var windowReference = window.open();
 
     $.ajax({
         url : exporterSelectionUrl,
@@ -78,12 +77,7 @@ submitExporterSelectionForm = function(){
         data: formData,
         success: function(data){
             $("#select-exporters-modal").modal("hide");
-
-            // Don't need to redirect for now, put it back when Celery will work
-            // windowReference.location = data.url_to_redirect;
-
-            // redirect to the download view
-            $(window).attr('location', data.url_to_redirect);
+            windowReference.location = data.url_to_redirect;
         },
         error:function(data){
             if (data.responseText != ""){
