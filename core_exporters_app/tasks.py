@@ -15,7 +15,7 @@ from core_exporters_app.exporters.exporter import get_exporter_module_from_url, 
 
 
 @shared_task
-def export_files(exported_file_id, exporters_list_url, url_base, data_url_list):
+def export_files(exported_file_id, exporters_list_url, url_base, data_url_list, session_key):
     """ Asynchronous tasks exporting files
 
     Args:
@@ -23,12 +23,13 @@ def export_files(exported_file_id, exporters_list_url, url_base, data_url_list):
         exporters_list_url:
         url_base:
         data_url_list:
+        session_key:
 
     Returns:
 
     """
     # gets all data from the url list
-    result_list = _get_results_list_from_url_list(url_base, data_url_list)
+    result_list = _get_results_list_from_url_list(url_base, data_url_list, session_key)
 
     transformed_result_list = []
     # Converts all data
@@ -48,19 +49,19 @@ def export_files(exported_file_id, exporters_list_url, url_base, data_url_list):
     AbstractExporter.export(exported_file_id, transformed_result_list)
 
 
-def _get_results_list_from_url_list(url_base, url_list):
+def _get_results_list_from_url_list(url_base, url_list, session_key):
     """ Gets all data from url
 
     Args:
         url_base: url of running server
         url_list: url list to request
-
+        session_key: Session key used for requests.get
     Returns:
 
     """
     result_list = []
     for url in url_list:
-        response = requests.get(url_base + url)
+        response = requests.get(url_base + url, cookies={"sessionid": session_key})
         if response.status_code == 200:
             # Build serializer
             results_serializer = ResultBaseSerializer(data=json.loads(response.text))

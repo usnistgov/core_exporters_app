@@ -27,9 +27,41 @@ def exporters_selection(request):
         if request.method == 'POST':
             return _exporters_selection_post(request)
         else:
-            return _exporters_selection_get(request)
+            raise Exception("request method should be POST")
     except Exception as e:
         return HttpResponseBadRequest(e.message)
+
+
+def open_form(request):
+    """ open form to selection exporters
+
+    Args:
+        request:
+
+    Returns:
+
+    """
+    try:
+        context_params = dict()
+
+        # Template form base
+        templates_selector = \
+            loader.get_template('core_exporters_app/user/exporters/list/list_exporters_selector_base.html')
+
+        # Getting the template ID list and data selected URL because the Export Form need it
+        templates_list = request.POST.getlist('templates_list[]')
+        data_url_list = request.POST.getlist('data_url_list[]')
+
+        # Generating the Export form
+        exporters_selection_form = ExportForm(templates_id=templates_list, data_url_list=data_url_list)
+        context_params['exporters_selector_form'] = exporters_selection_form
+
+        # Generates and returns the context
+        context = RequestContext(request, context_params)
+        return HttpResponse(json.dumps({'template': templates_selector.render(context)}),
+                            content_type='application/javascript')
+    except Exception as e:
+        raise Exception('Error occurred during the form display')
 
 
 def check_download_status(request):
@@ -89,10 +121,12 @@ def _exporters_selection_post(request):
                         exporter_tasks.export_files.delay(str(exported_file.id),
                                                           exporters,
                                                           url_base,
-                                                          data_url_list)
-                    except (TimeoutError, SoftTimeLimitExceeded, exporter_tasks.export_files.OperationalError):
+                                                          data_url_list,
+                                                          request.session.session_key)
+                    except (TimeoutError, SoftTimeLimitExceeded, exporter_tasks.export_files.OperationalError) as ex:
                         # Raised when a transport connection error occurs while sending a message
-                        exporter_tasks.export_files(str(exported_file.id), exporters, url_base, data_url_list)
+                        exporter_tasks.export_files(str(exported_file.id), exporters, url_base, data_url_list,
+                                                    request.session.session_key)
 
                     # redirecting
                     url_download = reverse("core_exporters_app_exporters_download")
@@ -107,34 +141,5 @@ def _exporters_selection_post(request):
         return HttpResponseBadRequest(e.message, content_type='application/javascript')
 
 
-def _exporters_selection_get(request):
-    """ exporters selection modal GET
 
-    Args:
-        request:
-
-    Returns:
-
-    """
-    try:
-        context_params = dict()
-
-        # Template form base
-        templates_selector = \
-            loader.get_template('core_exporters_app/user/exporters/list/list_exporters_selector_base.html')
-
-        # Getting the template ID list and data selected URL because the Export Form need it
-        templates_list = request.GET.getlist('templates_list[]')
-        data_url_list = request.GET.getlist('data_url_list[]')
-
-        # Generating the Export form
-        exporters_selection_form = ExportForm(templates_id=templates_list, data_url_list=data_url_list)
-        context_params['exporters_selector_form'] = exporters_selection_form
-
-        # Generates and returns the context
-        context = RequestContext(request, context_params)
-        return HttpResponse(json.dumps({'template': templates_selector.render(context)}),
-                            content_type='application/javascript')
-    except Exception as e:
-        raise Exception('Error occurred during the form display')
 

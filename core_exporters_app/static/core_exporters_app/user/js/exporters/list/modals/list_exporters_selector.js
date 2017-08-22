@@ -29,12 +29,12 @@ loadExporterSelectionForm = function(){
 
     if (data_url_selected.length != 0) {
         $.ajax({
-            url: exporterSelectionUrl,
-            type: "GET",
+            url: exporterOpenFormUrl,
+            type: "POST",
             dataType: "json",
             data: {
                 'templates_list': templates_list,
-                'data_url_list': JSON.stringify(data_url_selected)
+                'data_url_list': data_url_selected
             },
             success: function (data) {
                 $("#select-exporters-modal").modal("show");
