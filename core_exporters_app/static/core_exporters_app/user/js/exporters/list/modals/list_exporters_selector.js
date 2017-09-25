@@ -20,11 +20,12 @@ exporterSelectionOpenModal = function(event) {
  * AJAX call, loads exporter selection form
  */
 loadExporterSelectionForm = function(){
-    templates_list = $.parseJSON($('#templates-export').html());
     // re init the list
     data_url_selected = [];
+    templates_list = [];
     $(".results-page input:checked").each(function() {
         data_url_selected.push($(this).val());
+        templates_list.push($(this).attr("data-template-id"));
     });
 
     if (data_url_selected.length != 0) {
