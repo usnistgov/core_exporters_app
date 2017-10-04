@@ -1,11 +1,13 @@
 """ Ajax admin
 """
-from django.http.response import HttpResponse, HttpResponseBadRequest
-from core_exporters_app.views.admin.forms import AssociatedTemplatesForm
-import core_main_app.components.template.api as template_api
-from django.template import RequestContext, loader
-import core_exporters_app.components.exporter.api as exporter_api
 import json
+
+from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.template import loader
+
+import core_exporters_app.components.exporter.api as exporter_api
+import core_main_app.components.template.api as template_api
+from core_exporters_app.views.admin.forms import AssociatedTemplatesForm
 
 
 def edit_exporter(request):
@@ -90,7 +92,9 @@ def _associated_templates_get(request):
 
         associated_form = AssociatedTemplatesForm(data_form)
         context_params['associated_form'] = associated_form
-        context = RequestContext(request, context_params)
+        context = {}
+        context.update(request)
+        context.update(context_params)
         return HttpResponse(json.dumps({'template': templates_selector.render(context)}),
                             content_type='application/javascript')
     except Exception as e:

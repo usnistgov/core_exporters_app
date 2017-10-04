@@ -28,7 +28,7 @@ def __assemble_endpoint_data__(pattern, prefix='', filter_path=None):
 
     return {
         'url': path,
-        'view': pattern._callback_str,
+        'view': pattern.lookup_str,
         'name': pattern.default_args['name'],
         'enable_by_default': pattern.default_args['enable_by_default'],
     }

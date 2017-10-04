@@ -1,10 +1,9 @@
 """ Json exporter url
 """
-from django.conf.urls import patterns, url
-from core_exporters_app.commons.constants import BLOB_URL
+from django.conf.urls import url
 
+from models import BlobExporter
 
-urlpatterns = patterns(
-   '',
-   url('', BLOB_URL, {'name': 'BLOB', 'enable_by_default': True}),
-)
+urlpatterns = [
+   url('', BlobExporter, {'name': 'BLOB', 'enable_by_default': True}),
+]

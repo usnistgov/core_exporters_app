@@ -1,10 +1,12 @@
 """ XSLT ajax
 """
-from django.http.response import HttpResponseBadRequest, HttpResponse
-from django.template import RequestContext, loader
-from core_exporters_app.exporters.xsl.views.admin.forms import XsltSelectionForm
-import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 import json
+
+from django.http.response import HttpResponseBadRequest, HttpResponse
+from django.template import loader
+
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
+from core_exporters_app.exporters.xsl.views.admin.forms import XsltSelectionForm
 
 
 def add_xslt(request):
@@ -73,7 +75,9 @@ def _add_xslt_get(request):
         # set the list as data for pre selection
         xslt_form = XsltSelectionForm(data_form)
         context_params['xslt_selection_form'] = xslt_form
-        context = RequestContext(request, context_params)
+        context = {}
+        context.update(request)
+        context.update(context_params)
         return HttpResponse(json.dumps({'template': templates_selector.render(context)}),
                             content_type='application/javascript')
     except Exception as e:

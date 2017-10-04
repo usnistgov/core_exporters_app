@@ -1,10 +1,9 @@
 """ Exporters urls
 """
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url('', include('core_exporters_app.exporters.json_exporter.urls')),
     url('', include('core_exporters_app.exporters.xml.urls')),
     url('', include('core_exporters_app.exporters.blob.urls')),
-)
+]

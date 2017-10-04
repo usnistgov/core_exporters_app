@@ -2,16 +2,16 @@
 """
 import json
 
+from celery.exceptions import TimeoutError, SoftTimeLimitExceeded
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
-from django.template import RequestContext, loader
+from django.template import loader
 
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import core_exporters_app.components.exported_compressed_file.api as exported_file_api
 import core_exporters_app.tasks as exporter_tasks
 from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
 from core_exporters_app.views.user.forms import ExportForm
-from celery.exceptions import TimeoutError, SoftTimeLimitExceeded
 
 
 def exporters_selection(request):
@@ -57,7 +57,10 @@ def open_form(request):
         context_params['exporters_selector_form'] = exporters_selection_form
 
         # Generates and returns the context
-        context = RequestContext(request, context_params)
+        context = {}
+        context.update(request.COOKIES)
+        context.update(request.POST)
+        context.update(context_params)
         return HttpResponse(json.dumps({'template': templates_selector.render(context)}),
                             content_type='application/javascript')
     except Exception as e:
