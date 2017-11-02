@@ -22,10 +22,13 @@ exporterSelectionOpenModal = function(event) {
 loadExporterSelectionForm = function(){
     // re init the list
     data_url_selected = [];
-    templates_list = [];
+    templates_list = JSON.parse($("#templates-export").html());
     $(".results-page input:checked").each(function() {
         data_url_selected.push($(this).val());
-        templates_list.push($(this).attr("data-template-id"));
+        var template_id = $(this).attr("data-template-id");
+        if (template_id){
+            templates_list.push(template_id);
+        }
     });
 
     if (data_url_selected.length != 0) {
