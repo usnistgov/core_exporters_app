@@ -1,3 +1,1 @@
-core-main-app==1.0.0-alpha4
 pysha3==1.0.2
-requests==2.3.0
