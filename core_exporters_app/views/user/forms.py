@@ -3,7 +3,7 @@
 from django import forms
 import core_exporters_app.components.exporter.api as exporters_api
 import core_main_app.components.template.api as template_api
-
+from itertools import chain
 
 class ExportForm(forms.Form):
     """ Create the form for exporting data
@@ -17,19 +17,34 @@ class ExportForm(forms.Form):
         """ Init the form
 
         Args:
-            templates_id:
+            template_id_list:
+            template_hash_list:
             data_url_list:
         """
         self.export_options = []
         self.data_url_list = []
-        self.templates_id = []
+        self.template_id_list = []
+        self.template_hash_list = []
 
-        if 'templates_id' in kwargs:
-            self.templates_id = kwargs.pop('templates_id')
+        if 'template_id_list' in kwargs and 'template_hash_list' in kwargs:
+            self.template_id_list = kwargs.pop('template_id_list')
+            self.template_hash_list = kwargs.pop('template_hash_list')
+
             # Retrieves all corresponded template
-            templates = template_api.get_all_by_id_list(self.templates_id)
+            templates_from_id = template_api.get_all_by_id_list(self.template_id_list)
+            templates_from_hash = template_api.get_all_by_hash_list(self.template_hash_list)
+
             # Retrieves all common exporter for exporters given
-            exporters = exporters_api.get_all_by_template_list(templates)
+            exporters_from_ids = list(exporters_api.get_all_by_template_list(templates_from_id))
+            # with the hash, we can get more exporters than from ids
+            exporters_from_hash = list(exporters_api.get_all_by_template_list(templates_from_hash))
+
+            # if there is
+            if len(exporters_from_ids) > 0:
+                exporters = set(chain(exporters_from_ids, exporters_from_hash))
+            else:
+                exporters = exporters_from_hash
+
             for exporter in exporters:
                 self.export_options.append((exporter.id, exporter.name))
 

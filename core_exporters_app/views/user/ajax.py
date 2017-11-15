@@ -49,11 +49,14 @@ def open_form(request):
             loader.get_template('core_exporters_app/user/exporters/list/list_exporters_selector_base.html')
 
         # Getting the template ID list and data selected URL because the Export Form need it
-        templates_list = request.POST.getlist('templates_list[]')
+        template_id_list = request.POST.getlist('template_id_list[]')
+        template_hash_list = request.POST.getlist('template_hash_list[]')
         data_url_list = request.POST.getlist('data_url_list[]')
 
         # Generating the Export form
-        exporters_selection_form = ExportForm(templates_id=templates_list, data_url_list=data_url_list)
+        exporters_selection_form = ExportForm(template_id_list=template_id_list,
+                                              template_hash_list=template_hash_list,
+                                              data_url_list=data_url_list)
         context_params['exporters_selector_form'] = exporters_selection_form
 
         # Generates and returns the context
@@ -104,9 +107,13 @@ def _exporters_selection_post(request):
     try:
         if request.method == 'POST':
             # gets all parameters
-            templates_id = request.POST['templates_id'].split(',')
+            templates_id = request.POST['template_id_list'].split(',')
+            templates_hash = request.POST['template_hash_list'].split(',')
             data_url_list = request.POST['data_url_list'].split(',')
-            form = ExportForm(request.POST, templates_id=templates_id, data_url_list=data_url_list)
+            form = ExportForm(request.POST,
+                              template_id_list=templates_id,
+                              template_hash_list=templates_hash,
+                              data_url_list=data_url_list)
             url_base = request.build_absolute_uri('/')[:-1]
             if form.is_valid():
                 exporters = request.POST.getlist('my_exporters', None)

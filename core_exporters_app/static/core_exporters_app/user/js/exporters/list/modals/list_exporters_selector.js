@@ -1,5 +1,6 @@
 var data_url_selected = [];
-var templates_list = [];
+var template_id_list = [];
+var template_hash_list = [];
 
 $(document).ready(function() {
     $('#btn-explore-example-export').on('click', exporterSelectionOpenModal);
@@ -22,12 +23,20 @@ exporterSelectionOpenModal = function(event) {
 loadExporterSelectionForm = function(){
     // re init the list
     data_url_selected = [];
-    templates_list = JSON.parse($("#templates-export").html());
-    $(".results-page input:checked").each(function() {
+    template_hash_list = [];
+    template_id_list = [];
+
+    $("#results").find(":checked").each(function() {
         data_url_selected.push($(this).val());
         var template_id = $(this).attr("data-template-id");
-        if (template_id){
-            templates_list.push(template_id);
+        var template_hash = $(this).attr("data-template-hash");
+        // list of id
+        if(template_id_list.indexOf(template_id) < 0){
+            template_id_list.push(template_id);
+        }
+        // list of hash
+        if(template_hash_list.indexOf(template_hash) < 0){
+            template_hash_list.push(template_hash);
         }
     });
 
@@ -37,7 +46,8 @@ loadExporterSelectionForm = function(){
             type: "POST",
             dataType: "json",
             data: {
-                'templates_list': templates_list,
+                'template_id_list': template_id_list,
+                'template_hash_list': template_hash_list,
                 'data_url_list': data_url_selected
             },
             success: function (data) {
@@ -64,7 +74,8 @@ loadExporterSelectionForm = function(){
  */
 submitExporterSelectionForm = function(){
     var formData = new FormData($("#form-exporter-selection")[0]);
-    formData.append("templates_id", templates_list);
+    formData.append("template_id_list", template_id_list);
+    formData.append("template_hash_list", template_hash_list);
     formData.append("data_url_list", data_url_selected);
     // Need to be initialized. window.open not working in asynchronous call (Safari)
     // https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
