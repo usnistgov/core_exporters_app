@@ -8,7 +8,7 @@ from django.contrib.admindocs.views import simplify_regex
 import core_exporters_app.components.exporter.api as exporters_api
 import core_main_app.components.template.api as templates_api
 import core_main_app.commons.exceptions as main_exception
-import urls
+from core_exporters_app.exporters import urls
 import re
 
 

@@ -1,1 +1,4 @@
+core_explore_common_app==1.0.0-alpha5
 core-main-app==1.0.0-alpha5
+signals_utils==1.0.0-beta3
+xml_utils==1.0.0-alpha5
