@@ -25,15 +25,21 @@ class XmlExporter(AbstractExporter):
         # loops on all xml input
         for xml_item in xml_inputs:
             # generate the title document with the sha
-            document_name_with_sha = AbstractExporter.get_title_document(xml_item['title'], xml_item['xml_content'])
+            document_name_with_sha = AbstractExporter.get_title_document(xml_item['title'],
+                                                                         xml_item['xml_content'])
             transform_result = TransformResult()
             # set the document name to the collection
             transform_result.source_document_name = document_name_with_sha
             # for an XML transformation there is a list of one element
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
+
             # sets the content and extension
-            transform_result_content.content_converted = xml_item['xml_content']
+            try:
+                transform_result_content.content_converted = xml_item['xml_content'].encode('utf-8')
+            except:
+                transform_result_content.content_converted = xml_item['xml_content']
+
             transform_result_content.content_extension = self.extension
             # add the content to the list of content
             transform_result.transform_result_content.append(transform_result_content)

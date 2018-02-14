@@ -35,7 +35,15 @@ class JsonExporter(AbstractExporter):
             # Transform to JSON
             transformed_content = xml_utils.raw_xml_to_dict(xml_item['xml_content'],
                                                             xml_utils.post_processor)
-            transform_result_content.content_converted = json.dumps(transformed_content, indent=4)
+            # sets the content and extension
+            try:
+                transform_result_content.content_converted = json.dumps(transformed_content,
+                                                                        indent=4,
+                                                                        ensure_ascii=False).encode('utf-8')
+            except:
+                transform_result_content.content_converted = json.dumps(transformed_content,
+                                                                        indent=4)
+
             transform_result_content.content_extension = self.extension
             # add the content to the list of content
             transform_result.transform_result_content.append(transform_result_content)
