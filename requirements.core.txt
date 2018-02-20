@@ -1,4 +1,4 @@
-core_explore_common_app==1.0.0-alpha6
-core-main-app==1.0.0-alpha6
-signals_utils==1.0.0-beta4
-xml_utils==1.0.0-alpha6
+core_explore_common_app==1.0.0-beta1
+core-main-app==1.0.0-beta1
+signals_utils==1.0.0-beta5
+xml_utils==1.0.0-beta1
