@@ -126,3 +126,11 @@ class Exporter(Document):
             raise exceptions.NotUniqueError("The name is already used by an other exporter.")
         except Exception as ex:
             raise exceptions.ModelError(ex.message)
+
+    def clean(self):
+        """ Clean is called before saving
+
+        Returns:
+
+        """
+        self.name = self.name.strip()
