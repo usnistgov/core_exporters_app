@@ -30,7 +30,7 @@ class Exporter(Document):
             return Exporter.objects(_cls=Exporter.__name__).all()
         else:
             # will return all inherited object
-            return Exporter.object().all()
+            return Exporter.objects().all()
 
     @staticmethod
     def get_all_by_url(url):

@@ -85,7 +85,7 @@ class XslExporter(AbstractExporter):
 class ExporterXsl(Exporter):
     """ Export XSL object
     """
-    xsl_transformation = fields.ReferenceField(XslTransformation, blank=True, reverse_delete_rule=CASCADE)
+    xsl_transformation = fields.ReferenceField(XslTransformation, blank=False, reverse_delete_rule=CASCADE)
 
     @staticmethod
     def get_all(is_cls):

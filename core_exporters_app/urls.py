@@ -5,6 +5,7 @@ from core_exporters_app.views.user import ajax as user_ajax, views as user_views
 
 
 urlpatterns = [
+    url(r'^rest/', include('core_exporters_app.rest.urls')),
     url(r'^selection', user_ajax.exporters_selection,
         name='core_exporters_app_exporters_selection'),
     url(r'^open-form', user_ajax.open_form,

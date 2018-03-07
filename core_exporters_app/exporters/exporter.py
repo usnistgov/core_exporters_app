@@ -37,7 +37,7 @@ class AbstractExporter(object):
             Method: Exports the data
         """
         # Generate the zip file
-        AbstractExporter.generate_zip(exported_compressed_file_id, transformed_result_list)
+        return AbstractExporter.generate_zip(exported_compressed_file_id, transformed_result_list)
 
     @staticmethod
     def get_title_document(document_name, content):
@@ -120,7 +120,7 @@ class AbstractExporter(object):
         # save the file and upset the object
         exported_compressed_file.file.put(in_memory, content_type=exported_compressed_file.mime_type)
         exported_compressed_file.is_ready = True
-        exported_compressed_file_api.upsert(exported_compressed_file)
+        return exported_compressed_file_api.upsert(exported_compressed_file)
 
 
 class TransformResultContent(Document):
