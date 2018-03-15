@@ -1,4 +1,5 @@
-core_exporters_app
+==================
+Core Exporters App
 ==================
 
 Exporters for the curator core project.
