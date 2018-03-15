@@ -2,30 +2,32 @@
 """
 import json
 
-from django.http.response import HttpResponse, HttpResponseBadRequest
+from django.core.urlresolvers import reverse_lazy
+from django.http.response import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.template import loader
 
 import core_exporters_app.components.exporter.api as exporter_api
 import core_main_app.components.template.api as template_api
-from core_exporters_app.views.admin.forms import AssociatedTemplatesForm
+from core_exporters_app.components.exporter.models import Exporter
+from core_exporters_app.views.admin.forms import AssociatedTemplatesForm, EditExporterForm
+from core_main_app.views.common.ajax import EditObjectModalView
 
 
-def edit_exporter(request):
-    """ Edit the exporter
+class EditExporterView(EditObjectModalView):
+    form_class = EditExporterForm
+    model = Exporter
+    success_url = reverse_lazy("admin:core_exporters_app_exporters")
 
-    Args:
-        request:
+    def _save(self, form):
+        # Save treatment.
+        # It should return an HttpResponse.
+        try:
+            exporter_api.upsert(self.object)
+        except Exception, e:
+            form.add_error(None, e.message)
+            return super(EditExporterView, self).form_invalid(form)
 
-    Returns:
-
-    """
-    try:
-        exporter = exporter_api.get_by_id(request.POST['id'])
-        exporter.name = request.POST['title']
-        exporter_api.upsert(exporter)
-    except Exception, e:
-        return HttpResponseBadRequest(e.message, content_type='application/javascript')
-    return HttpResponse(json.dumps({}), content_type='application/javascript')
+        return HttpResponseRedirect(self.get_success_url())
 
 
 def associated_templates(request):

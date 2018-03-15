@@ -1,7 +1,20 @@
 """ Forms admin exporter
 """
 from django import forms
+from mongodbforms import DocumentForm
+
+from core_exporters_app.components.exporter.models import Exporter
 from core_main_app.components.template import api as template_api
+
+
+class EditExporterForm(DocumentForm):
+    name = forms.CharField(label='Name',
+                           widget=forms.TextInput(attrs={'class': 'form-control',
+                                                         'placeholder': 'Type the new name'}))
+
+    class Meta:
+        document = Exporter
+        fields = ['name']
 
 
 class AssociatedTemplatesForm(forms.Form):

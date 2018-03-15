@@ -1,9 +1,11 @@
 """ views exporters app
 """
 from django.contrib.admin.views.decorators import staff_member_required
-from core_main_app.utils.rendering import admin_render
-import core_exporters_app.components.exporter.api as exporter_api
+
 import core_exporters_app.commons.constants as exporter_constants
+import core_exporters_app.components.exporter.api as exporter_api
+from core_exporters_app.views.admin.ajax import EditExporterView
+from core_main_app.utils.rendering import admin_render
 
 
 @staff_member_required
@@ -25,9 +27,9 @@ def manage_exporters(request):
     }
 
     modals = [
-        "core_exporters_app/admin/exporters/list/modals/edit.html",
         "core_exporters_app/admin/exporters/list/modals/associated_templates.html",
-        "xsl/admin/exporters/list/modals/add.html"
+        "xsl/admin/exporters/list/modals/add.html",
+        EditExporterView.get_modal_html_path()
     ]
 
     assets = {
@@ -37,17 +39,14 @@ def manage_exporters(request):
                 "is_raw": False
             },
             {
-                "path": 'core_exporters_app/admin/js/exporters/list/modals/edit.js',
-                "is_raw": False
-            },
-            {
                 "path": 'core_exporters_app/admin/js/exporters/list/modals/associated_templates.js',
                 "is_raw": False
             },
             {
                 "path": 'xsl/admin/js/exporters/list/modals/add.js',
                 "is_raw": False
-            }
+            },
+            EditExporterView.get_modal_js_path()
         ],
         "css": [
             "core_main_app/libs/fSelect/css/fSelect.css",
