@@ -3,7 +3,7 @@
 import json
 
 from django.core.urlresolvers import reverse_lazy
-from django.http.response import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 
 import core_exporters_app.components.exporter.api as exporter_api
@@ -17,17 +17,14 @@ class EditExporterView(EditObjectModalView):
     form_class = EditExporterForm
     model = Exporter
     success_url = reverse_lazy("admin:core_exporters_app_exporters")
+    success_message = 'Exporter edited with success.'
 
     def _save(self, form):
         # Save treatment.
-        # It should return an HttpResponse.
         try:
             exporter_api.upsert(self.object)
         except Exception, e:
             form.add_error(None, e.message)
-            return super(EditExporterView, self).form_invalid(form)
-
-        return HttpResponseRedirect(self.get_success_url())
 
 
 def associated_templates(request):
