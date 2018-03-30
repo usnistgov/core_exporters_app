@@ -6,7 +6,7 @@ from rest_framework import status
 
 import core_exporters_app.rest.exporters.views as exporter_views
 from core_exporters_app.components.exporter.models import Exporter
-from core_main_app.utils.tests_tools.MockUser import MockUser
+from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 
 
@@ -18,7 +18,7 @@ class TestGetExporterList(SimpleTestCase):
     @patch.object(Exporter, 'get_all')
     def test_get_returns_status_200_with_no_permission_needed(self, mock_get_all):
         # Arrange
-        user = MockUser('0')
+        user = create_mock_user('0')
 
         # Act
         response = RequestMock.do_request_get(exporter_views.ExporterList.as_view(),

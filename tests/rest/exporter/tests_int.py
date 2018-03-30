@@ -5,7 +5,7 @@ from rest_framework import status
 
 import core_exporters_app.rest.exporters.views as exporter_views
 from core_main_app.utils.integration_tests.integration_base_test_case import MongoIntegrationBaseTestCase
-from core_main_app.utils.tests_tools.MockUser import MockUser
+from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 from tests.rest.exporter.fixtures.fixtures import ExporterFixtures
 
@@ -20,7 +20,7 @@ class TestGetExportersList(MongoIntegrationBaseTestCase):
 
     def test_get_all_returns_status_200_with_no_permission_needed(self):
         # Arrange
-        user = MockUser('1')
+        user = create_mock_user('1')
 
         # Act
         response = RequestMock.do_request_get(exporter_views.ExporterList.as_view(),
@@ -39,7 +39,7 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
 
     def test_get_returns_object_when_found(self):
         # Arrange
-        user = MockUser('0')
+        user = create_mock_user('0')
         self.param = {
             'pk': self.fixture.data_1.id
         }
@@ -55,7 +55,7 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
 
     def test_get_raise_404_when_not_found(self):
         # Arrange
-        user = MockUser('0')
+        user = create_mock_user('0')
         self.param = {
             'pk': str(ObjectId())
         }
@@ -71,7 +71,7 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
 
     def test_get_raise_500_sever_error_when_general_error_occured(self):
         # Arrange
-        user = MockUser('0')
+        user = create_mock_user('0')
         self.param = {
             'pk': '0'
         }
@@ -95,7 +95,7 @@ class TestGetExporterDownload(MongoIntegrationBaseTestCase):
 
     def test_get_raise_404_when_not_found(self):
         # Arrange
-        user = MockUser('0')
+        user = create_mock_user('0')
         self.param = {
             'pk': str(ObjectId())
         }
@@ -111,7 +111,7 @@ class TestGetExporterDownload(MongoIntegrationBaseTestCase):
 
     def test_get_raise_500_sever_error_when_general_error_occured(self):
         # Arrange
-        user = MockUser('0')
+        user = create_mock_user('0')
         self.param = {
             'pk': '0'
         }
