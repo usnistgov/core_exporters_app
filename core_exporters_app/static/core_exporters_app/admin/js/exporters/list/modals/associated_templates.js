@@ -76,7 +76,7 @@ InitSelectMultipleTemplates = function()
 {
     $('#id_templates_manager').fSelect({
         placeholder: 'Select templates',
-        numDisplayed: 500,
+        numDisplayed: 3,
         overflowText: '{n} selected',
         searchText: 'Search',
         showSearch: true
