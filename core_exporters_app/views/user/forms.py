@@ -42,12 +42,17 @@ class ExportForm(forms.Form):
 
             # Retrieves all common exporter for exporters given
             exporters_from_ids = list(exporters_api.get_all_by_template_list(templates_from_id))
+
             # with the hash, we can get more exporters than from ids
             exporters_from_hash = list(exporters_api.get_all_by_template_list(templates_from_hash))
 
-            # if there is
+            # if there is exporters from ids (means local data have been selected)
             if len(exporters_from_ids) > 0:
-                exporters = set(chain(exporters_from_ids, exporters_from_hash))
+                exporters = exporters_from_ids
+                # if there is exporters from hash (means remote data have been selected)
+                if len(exporters_from_hash) > 0:
+                    # we get only common exporters
+                    exporters = set(exporters_from_ids).intersection(exporters_from_hash)
             else:
                 exporters = exporters_from_hash
 

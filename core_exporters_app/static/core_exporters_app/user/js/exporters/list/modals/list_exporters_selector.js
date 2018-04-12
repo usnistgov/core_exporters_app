@@ -30,13 +30,17 @@ loadExporterSelectionForm = function(){
         data_url_selected.push($(this).val());
         var template_id = $(this).attr("data-template-id");
         var template_hash = $(this).attr("data-template-hash");
-        // list of id
-        if(template_id_list.indexOf(template_id) < 0){
-            template_id_list.push(template_id);
-        }
-        // list of hash
-        if(template_hash_list.indexOf(template_hash) < 0){
-            template_hash_list.push(template_hash);
+
+        if (template_id) {
+            // list of id
+            if(template_id_list.indexOf(template_id) < 0){
+                template_id_list.push(template_id);
+            }
+        } else {
+            // list of hash
+            if(template_hash_list.indexOf(template_hash) < 0){
+                template_hash_list.push(template_hash);
+            }
         }
     });
 

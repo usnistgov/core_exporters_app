@@ -63,7 +63,7 @@ class Exporter(Document):
         Returns:
 
         """
-        return Exporter.objects(templates__in=template_id_list).all()
+        return Exporter.objects(templates__all=template_id_list).all()
 
     @staticmethod
     def get_by_id(exporter_id):
