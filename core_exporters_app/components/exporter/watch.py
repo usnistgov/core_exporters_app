@@ -9,11 +9,13 @@ def init():
     """ Connect to template object events.
     """
     connector.connect(post_save_template, signals.post_save, sender=Template)
+    connector.connect(post_delete_template, signals.post_delete, sender=Template)
 
 
 def post_save_template(sender, document, **kwargs):
-    """ Method executed after a saving of a Template object.
+    """ Method executed after saving of a Template object.
     Args:
+        sender:
         document: template object.
         **kwargs:
     """
@@ -24,4 +26,19 @@ def post_save_template(sender, document, **kwargs):
         # so we have to avoid to had the same document several time
         if document not in exporter.templates:
             exporter.templates.append(document)
+            exporter_api.upsert(exporter)
+
+
+def post_delete_template(sender, document, **kwargs):
+    """ Method executed after a template deletion.
+        We are removing in all exporter, the reference to the deleted template
+    Args:
+        sender:
+        document:
+        **kwargs:
+    """
+    exporter_list = exporter_api.get_all()
+    for exporter in exporter_list:
+        if document in exporter.templates:
+            exporter.templates.remove(document)
             exporter_api.upsert(exporter)
