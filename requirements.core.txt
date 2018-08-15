@@ -1,4 +1,4 @@
-core-explore-common-app==1.0.0-beta4
-core-main-app==1.0.0-beta4
+core-explore-common-app==1.0.0-beta5
+core-main-app==1.0.0-beta5
 signals-utils==1.0.0-beta5
-xml-utils==1.0.0-beta1
+xml-utils==1.0.0-beta2
