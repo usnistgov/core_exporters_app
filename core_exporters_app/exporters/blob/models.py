@@ -65,7 +65,7 @@ def _get_blob_url_list_from_xml(xml):
     Returns:
 
     """
-    return re.findall('>(http[s]?:.+/rest/blob\?id=[^<]+)', xml)
+    return re.findall('>(http[s]?:[^<>]+/rest/blob/download/[0-9a-f]{24}/?)<', xml)
 
 
 def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
