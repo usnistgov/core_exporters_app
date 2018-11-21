@@ -4,7 +4,6 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 
-import requests
 from celery import shared_task
 
 import core_exporters_app.commons.constants as exporter_constants
@@ -12,6 +11,7 @@ import core_exporters_app.components.exporter.api as exporter_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
 from core_exporters_app.exporters.exporter import get_exporter_module_from_url, AbstractExporter
+from core_main_app.utils.requests_utils.requests_utils import send_get_request
 
 
 @shared_task
@@ -61,7 +61,7 @@ def _get_results_list_from_url_list(url_base, url_list, session_key):
     """
     result_list = []
     for url in url_list:
-        response = requests.get(url_base + url, cookies={"sessionid": session_key})
+        response = send_get_request(url_base + url, cookies={"sessionid": session_key})
         if response.status_code == 200:
             # Build serializer
             results_serializer = ResultBaseSerializer(data=json.loads(response.text))
