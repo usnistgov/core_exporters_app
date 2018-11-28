@@ -15,20 +15,23 @@ from core_main_app.utils.decorators import api_staff_member_required
 
 
 class ExporterXslList(APIView):
-    """ List all Xsl Exporters, or create.
+    """ List all XSL Exporters, or create
     """
 
     def get(self, request):
-        """ Return http response with all exporters.
+        """ Get all XSL Exporters
 
-            GET /rest/exporter/xsl
+        Args:
 
-            Args:
-                request:
+            request: HTTP request
 
-            Returns:
+        Returns:
 
-            """
+            - code: 200
+              content: List of XSL Exporters
+            - code: 500
+              content: Internal server error
+        """
         try:
             # Get object
             exporter_list = xsl_api.get_all()
@@ -42,21 +45,29 @@ class ExporterXslList(APIView):
 
     @method_decorator(api_staff_member_required())
     def post(self, request):
-        """ Save an exporter.
+        """ Save an XSL Exporter
 
-            POST /rest/exporter/xsl
+        Parameters:
+
             {
                 "name": "exporter_name",
                 "templates": ["id", "id"],
                 "xsl_transformation": "id"
             }
 
-            Args:
-                request:
+        Args:
 
-            Returns:
+            request: HTTP request
 
-            """
+        Returns:
+
+            - code: 201
+              content: Created XSL Exporter
+            - code: 400
+              content: Validation error
+            - code: 500
+              content: Internal server error
+        """
         try:
             # Build serializer
             xsl_serializer = ExporterXslSerializer(data=request.data)
@@ -74,17 +85,19 @@ class ExporterXslList(APIView):
 
 
 class ExporterXslDetail(APIView):
-    """" Get Xsl exporter.
+    """" Get an XSL Exporter
     """
 
     def get_object(self, pk):
-        """ Retrieve an exporter
+        """ Retrieve an XSL Exporter
 
         Args:
-            pk:
+
+            pk: ObjectId
 
         Returns:
 
+            ExporterXsl
         """
         try:
             return exporter_api.get_by_id(pk)
@@ -92,16 +105,21 @@ class ExporterXslDetail(APIView):
             raise Http404
 
     def get(self, request, pk):
-        """ Get exporter by its id.
-
-        GET /rest/exporter/xsl/pk
+        """ Get an XSL Exporter
 
         Args:
-            request:
-            pk:
+
+            request: HTTP request
+            pk: ObjectId
 
         Returns:
 
+            - code: 200
+              content: ExporterXsl
+            - code: 404
+              content: Object was not found
+            - code: 500
+              content: Internal server error
         """
         try:
             # Get object

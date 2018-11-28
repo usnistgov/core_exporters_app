@@ -23,16 +23,19 @@ class ExporterList(APIView):
     """
 
     def get(self, request):
-        """ Return http response with all exporters.
+        """ Get all Exporters
 
-            GET /rest/exporter
+        Args:
 
-            Args:
-                request:
+            request: HTTP request
 
-            Returns:
+        Returns:
 
-            """
+            - code: 200
+              content: List of exporters
+            - code: 500
+              content: Internal server error
+        """
         try:
             # Get object
             exporter_list = exporter_api.get_all(False)
@@ -46,11 +49,11 @@ class ExporterList(APIView):
 
 
 class ExporterDetail(APIView):
-    """" Get an exporter
+    """" Get an Exporter
     """
 
     def get_object(self, pk):
-        """ Retrieve an exporter
+        """ Retrieve an Exporter
 
         Args:
             pk:
@@ -64,16 +67,21 @@ class ExporterDetail(APIView):
             raise Http404
 
     def get(self, request, pk):
-        """ Get xslt by its id.
-
-        GET /rest/exporter/pk
+        """ Get an Exporter
 
         Args:
-            request:
-            pk:
+
+            request: HTTP request
+            pk: ObjectId
 
         Returns:
 
+            - code: 200
+              content: Exporter
+            - code: 404
+              content: Object was not found
+            - code: 500
+              content: Internal server error
         """
         try:
             # Get object
@@ -91,28 +99,36 @@ class ExporterDetail(APIView):
 
 
 class ExportToZip(APIView):
-    """ Export Data
+    """ Export Data into a zip file
     """
 
     def post(self, request):
         """ Generate a zip file
 
-        POST /rest/exporter/export
-        {
-            "exporter_id_list": ["id", "id", ...],
-            "data_id_list": ["id", "id", ...]
-        }
+        Parameters:
 
-        {
-            "exporter_id_list":["5a81bcc08e4b10323d26b4dd", "5a81bcc08e4b10323d26b4de"],
-            "data_id_list":["5a8314468e4b10dfbea6ffa4"]
-        }
+            {
+                "exporter_id_list": ["id", "id", ...],
+                "data_id_list": ["id", "id", ...]
+            }
+
+            {
+                "exporter_id_list":["5a81bcc08e4b10323d26b4dd", "5a81bcc08e4b10323d26b4de"],
+                "data_id_list":["5a8314468e4b10dfbea6ffa4"]
+            }
 
         Args:
-            request:
+
+            request: HTTP request
 
         Returns:
 
+            - code: 200
+              content: Link for download
+            - code: 400
+              content: Validation error
+            - code: 500
+              content: Internal server error
         """
         try:
             # Build serializer
@@ -165,10 +181,12 @@ class ExporterDownload(APIView):
         """ Retrieve an exported compressed file
 
         Args:
-            pk:
+
+            pk: ObjectId
 
         Returns:
 
+            ZipFile
         """
         try:
             return exported_compressed_file_api.get_by_id(pk)
@@ -178,14 +196,21 @@ class ExporterDownload(APIView):
     def get(self, request, pk):
         """ Download the file
 
-        GET /rest/exporter/download/pk
-
         Args:
-            request:
-            pk:
+
+            request: HTTP request
+            pk: ObjectId
 
         Returns:
 
+            - code: 200
+              content: ZipFile
+            - code: 204
+              content: The zip file is not yet ready
+            - code: 203
+              content: Object was not found
+            - code: 500
+              content: Internal server error
         """
         try:
             # Get object
