@@ -31,7 +31,7 @@ chdir(normpath(join(abspath(__file__), pardir)))
 
 setup(
     name="core_exporters_app",
-    version="1.0.0-rc2",
+    version="1.0.0",
     description="Exporters for the curator core project",
     long_description=long_desc,
     author="NIST IT Lab",
