@@ -3,6 +3,7 @@
 from django.http import Http404
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -21,6 +22,7 @@ from core_main_app.utils.file import get_file_http_response
 class ExporterList(APIView):
     """ List all Exporters
     """
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         """ Get all Exporters
@@ -51,6 +53,7 @@ class ExporterList(APIView):
 class ExporterDetail(APIView):
     """" Get an Exporter
     """
+    permission_classes = (IsAuthenticated, )
 
     def get_object(self, pk):
         """ Retrieve an Exporter
@@ -101,6 +104,7 @@ class ExporterDetail(APIView):
 class ExportToZip(APIView):
     """ Export Data into a zip file
     """
+    permission_classes = (IsAuthenticated, )
 
     def post(self, request):
         """ Generate a zip file
@@ -176,6 +180,7 @@ class ExportToZip(APIView):
 class ExporterDownload(APIView):
     """ Download a zip file
     """
+    permission_classes = (IsAuthenticated, )
 
     def get_object(self, pk):
         """ Retrieve an exported compressed file

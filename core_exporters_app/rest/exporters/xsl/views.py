@@ -4,6 +4,7 @@ from django.http import Http404
 from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -17,6 +18,7 @@ from core_main_app.utils.decorators import api_staff_member_required
 class ExporterXslList(APIView):
     """ List all XSL Exporters, or create
     """
+    permission_classes = (IsAuthenticated, )
 
     def get(self, request):
         """ Get all XSL Exporters
@@ -87,6 +89,7 @@ class ExporterXslList(APIView):
 class ExporterXslDetail(APIView):
     """" Get an XSL Exporter
     """
+    permission_classes = (IsAuthenticated, )
 
     def get_object(self, pk):
         """ Retrieve an XSL Exporter
