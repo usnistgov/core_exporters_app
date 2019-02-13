@@ -14,11 +14,12 @@ class BlobExporter(AbstractExporter):
         self.name = "BLOB"
         self.extension = ".blob"
 
-    def transform(self, xml_inputs):
+    def transform(self, xml_inputs, session_key):
         """ find and download all blobs from an xml content
 
         Args:
             xml_inputs:
+            session_key: session key
 
         Returns:
 
@@ -37,7 +38,7 @@ class BlobExporter(AbstractExporter):
             for url in urls:
                 try:
                     # download the blob
-                    blob_file = send_get_request(url)
+                    blob_file = send_get_request(url, cookies={"sessionid": session_key})
                     blob_content = blob_file.content
                     # generates the file name
                     blob_name = _get_filename_from_blob(blob_file, blob_content, sha)

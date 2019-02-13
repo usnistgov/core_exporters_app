@@ -43,7 +43,7 @@ def export_files(exported_file_id, exporters_list_url, url_base, data_url_list, 
             # set the xslt
             exporter_module.set_xslt(exporter_object.xsl_transformation.content)
         # transform the list of xml files
-        transformed_result_list.extend(exporter_module.transform(result_list))
+        transformed_result_list.extend(exporter_module.transform(result_list, session_key))
 
     # Export in Zip
     AbstractExporter.export(exported_file_id, transformed_result_list)

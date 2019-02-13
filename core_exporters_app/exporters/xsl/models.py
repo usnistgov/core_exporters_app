@@ -38,11 +38,12 @@ class XslExporter(AbstractExporter):
         # set the transform
         self.transformation = XSDTree.transform_to_xslt(xslt_parsed)
 
-    def transform(self, xml_inputs):
+    def transform(self, xml_inputs, session_key):
         """ Transforms the input to a json content
 
         Args:
             xml_inputs: xml files
+            session_key: session key
 
         Returns:
 

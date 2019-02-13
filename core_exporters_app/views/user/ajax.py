@@ -135,7 +135,10 @@ def _exporters_selection_post(request):
                                                           request.session.session_key)
                     except (TimeoutError, SoftTimeLimitExceeded, exporter_tasks.export_files.OperationalError) as ex:
                         # Raised when a transport connection error occurs while sending a message
-                        exporter_tasks.export_files(str(exported_file.id), exporters, url_base, data_url_list,
+                        exporter_tasks.export_files(str(exported_file.id),
+                                                    exporters,
+                                                    url_base,
+                                                    data_url_list,
                                                     request.session.session_key)
 
                     # redirecting

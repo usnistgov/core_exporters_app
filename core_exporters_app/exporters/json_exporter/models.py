@@ -12,11 +12,12 @@ class JsonExporter(AbstractExporter):
         self.name = "JSON"
         self.extension = ".json"
 
-    def transform(self, xml_inputs):
+    def transform(self, xml_inputs, session_key):
         """ Transforms the input to a json content
 
         Args:
             xml_inputs:
+            session_key:
 
         Returns:
 

@@ -25,7 +25,7 @@ class AbstractExporter(object):
         self.exporter_extension = ""
 
     @abstractmethod
-    def transform(self, results):
+    def transform(self, results, session_key):
         """
             Method: Returns converted data
         """
