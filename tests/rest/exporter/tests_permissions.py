@@ -10,7 +10,7 @@ import core_main_app.components.data.api as data_api
 from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
 from core_exporters_app.exporters.exporter import AbstractExporter
 from core_exporters_app.rest.exporters import views as exporters_api_views
-from core_exporters_app.rest.exporters.serializers import ExporterSerializer, ExporterExporterSerializer
+from core_exporters_app.rest.exporters.serializers import ExporterSerializer, ExporterToZipSerializer
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 
@@ -94,8 +94,8 @@ class TestExportToZipPostPermissions(SimpleTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    @patch.object(ExporterExporterSerializer, "data")
-    @patch.object(ExporterExporterSerializer, "is_valid")
+    @patch.object(ExporterToZipSerializer, "data")
+    @patch.object(ExporterToZipSerializer, "is_valid")
     @patch.object(exported_compressed_file_api, "upsert")
     @patch.object(data_api, "get_by_id_list")
     @patch.object(AbstractExporter, "export")
@@ -119,8 +119,8 @@ class TestExportToZipPostPermissions(SimpleTestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    @patch.object(ExporterExporterSerializer, "data")
-    @patch.object(ExporterExporterSerializer, "is_valid")
+    @patch.object(ExporterToZipSerializer, "data")
+    @patch.object(ExporterToZipSerializer, "is_valid")
     @patch.object(exported_compressed_file_api, "upsert")
     @patch.object(data_api, "get_by_id_list")
     @patch.object(AbstractExporter, "export")

@@ -1,11 +1,12 @@
 """ Exporter Serializers
 """
-from rest_framework_mongoengine.serializers import DocumentSerializer
 from rest_framework.serializers import ListField
+from rest_framework_mongoengine.serializers import DocumentSerializer
 
 import core_exporters_app.components.exporter.api as exporter_api
 import core_exporters_app.exporters.xsl.api as xsl_api
 from core_exporters_app.commons.constants import XSL_URL
+from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
 from core_exporters_app.components.exporter.models import Exporter
 from core_exporters_app.exporters.xsl.models import ExporterXsl
 from core_main_app.commons.serializers import BasicSerializer
@@ -48,6 +49,19 @@ class ExporterXslSerializer(DocumentSerializer):
         return xsl_api.upsert(exporter)
 
 
-class ExporterExporterSerializer(BasicSerializer):
+class ExporterToZipSerializer(BasicSerializer):
+    """ Serializer used for entered data validation
+    """
     exporter_id_list = ListField(required=True)
     data_id_list = ListField(required=True)
+
+
+class ExporterExportedCompressedFileSerializer(DocumentSerializer):
+    """ Compressed File serializer
+    """
+
+    class Meta:
+        """ Meta
+        """
+        model = ExportedCompressedFile
+        fields = ("id",)

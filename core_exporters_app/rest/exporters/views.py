@@ -14,7 +14,8 @@ import core_main_app.components.data.api as data_api
 from core_explore_common_app.components.result.models import Result
 from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
 from core_exporters_app.exporters.exporter import get_exporter_module_from_url, AbstractExporter
-from core_exporters_app.rest.exporters.serializers import ExporterSerializer, ExporterExporterSerializer
+from core_exporters_app.rest.exporters.serializers import ExporterSerializer, ExporterToZipSerializer, \
+    ExporterExportedCompressedFileSerializer
 from core_main_app.commons import exceptions
 from core_main_app.utils.file import get_file_http_response
 
@@ -107,7 +108,9 @@ class ExportToZip(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
-        """ Generate a zip file
+        """ Generate a zip file and return its ID
+
+        It can then be used with the download url to retrieve the file
 
         Parameters:
 
@@ -128,7 +131,7 @@ class ExportToZip(APIView):
         Returns:
 
             - code: 200
-              content: Link for download
+              content: Zip file Id
             - code: 400
               content: Validation error
             - code: 500
@@ -136,7 +139,7 @@ class ExportToZip(APIView):
         """
         try:
             # Build serializer
-            export_serializer = ExporterExporterSerializer(data=request.data)
+            export_serializer = ExporterToZipSerializer(data=request.data)
             # Validate xsl
             export_serializer.is_valid(True)
             # Creation of the compressed file with is_ready to false
@@ -162,13 +165,14 @@ class ExportToZip(APIView):
                 # transform the list of xml files
                 transformed_result_list.extend(exporter_module.transform([Result(title=data_item.title,
                                                                                  xml_content=data_item.xml_content)
-                                                                          for data_item in data]))
+                                                                          for data_item in data],
+                                                                         request.session.session_key))
             # Export in Zip
             AbstractExporter.export(exported_file.id, transformed_result_list)
-            content = {'message': 'the file is accessible for download at /rest/exporter/export/download/' +
-                                  str(exported_file.id)}
+            # Serialize object
+            return_value = ExporterExportedCompressedFileSerializer(exported_file)
             # return the Id to download the zip file
-            return Response(content, status=status.HTTP_200_OK)
+            return Response(return_value.data, status=status.HTTP_200_OK)
         except ValidationError as validation_exception:
             content = {'message': validation_exception.detail}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
