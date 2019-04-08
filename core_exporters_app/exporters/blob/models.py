@@ -5,6 +5,7 @@ import re
 from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
 from core_main_app.utils.file import get_filename_from_response
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
+from core_main_app.utils.urls import get_blob_download_regex
 
 
 class BlobExporter(AbstractExporter):
@@ -66,7 +67,7 @@ def _get_blob_url_list_from_xml(xml):
     Returns:
 
     """
-    return re.findall('>(http[s]?:[^<>]+/rest/blob/download/[0-9a-f]{24}/?)<', xml)
+    return re.findall(get_blob_download_regex(), xml)
 
 
 def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
