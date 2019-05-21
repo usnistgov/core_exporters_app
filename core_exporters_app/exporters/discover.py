@@ -1,5 +1,6 @@
 """ Auto discovery of Exporters
 """
+from __future__ import print_function
 
 from core_exporters_app.components.exporter.models import Exporter
 from mongoengine.errors import ValidationError
@@ -85,9 +86,9 @@ def discover_exporter():
                     if exporter_added.enable_by_default is True:
                         exporter_added.templates = templates_api.get_all()
                     exporters_api.upsert(exporter_added)
-            except Exception, e:
+            except Exception as e:
                 print('ERROR : Impossible to load the following exporter, class not found : ' + pattern['view'])
     except ValidationError as e:
         raise Exception('A validation error occured during the exporter discovery :' + e.message)
-    except Exception, e:
+    except Exception as e:
         raise e

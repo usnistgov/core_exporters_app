@@ -51,7 +51,7 @@ def _add_xslt_post(request):
                     return HttpResponseBadRequest('Bad entries. Please check your entries')
             else:
                 return HttpResponseBadRequest('Bad entries. Please check your entries')
-    except Exception, e:
+    except Exception as e:
         return HttpResponseBadRequest(e.message, content_type='application/javascript')
 
 

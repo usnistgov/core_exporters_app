@@ -23,7 +23,7 @@ class EditExporterView(EditObjectModalView):
         # Save treatment.
         try:
             exporter_api.upsert(self.object)
-        except Exception, e:
+        except Exception as e:
             form.add_error(None, e.message)
 
 
@@ -67,7 +67,7 @@ def _associated_templates_post(request):
                 return HttpResponse(json.dumps({}), content_type='application/javascript')
         else:
             return HttpResponseBadRequest('Bad entries. Please check your entries')
-    except Exception, e:
+    except Exception as e:
         return HttpResponseBadRequest(e.message, content_type='application/javascript')
 
 
