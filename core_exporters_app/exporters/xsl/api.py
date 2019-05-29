@@ -1,5 +1,6 @@
 """ Exporter XSL api
 """
+from builtins import str
 from core_exporters_app.exporters.xsl.models import ExporterXsl
 from core_exporters_app.commons.constants import XSL_URL
 import core_main_app.components.xsl_transformation.api as xsl_transformation_api

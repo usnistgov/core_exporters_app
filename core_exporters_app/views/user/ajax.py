@@ -1,5 +1,6 @@
 """ Ajax Exporter user
 """
+from builtins import str
 import json
 
 from celery.exceptions import TimeoutError, SoftTimeLimitExceeded

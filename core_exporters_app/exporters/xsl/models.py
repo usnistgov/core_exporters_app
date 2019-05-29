@@ -1,5 +1,6 @@
 """ XSLT exporter
 """
+from builtins import str
 from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
 from core_exporters_app.components.exporter.models import Exporter
 from xml_utils.xsd_tree.xsd_tree import XSDTree

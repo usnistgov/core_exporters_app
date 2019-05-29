@@ -1,5 +1,6 @@
 """ Exporter Serializers
 """
+from builtins import object
 from rest_framework.serializers import ListField
 from rest_framework_mongoengine.serializers import DocumentSerializer
 
@@ -15,7 +16,7 @@ from core_main_app.commons.serializers import BasicSerializer
 class ExporterSerializer(DocumentSerializer):
     """ Exporter serializer
     """
-    class Meta:
+    class Meta(object):
         """ Meta
         """
         model = Exporter
@@ -34,7 +35,7 @@ class ExporterXslSerializer(DocumentSerializer):
     """ Xsl Exporter serializer
     """
 
-    class Meta:
+    class Meta(object):
         """ Meta
         """
         model = ExporterXsl
@@ -60,7 +61,7 @@ class ExporterExportedCompressedFileSerializer(DocumentSerializer):
     """ Compressed File serializer
     """
 
-    class Meta:
+    class Meta(object):
         """ Meta
         """
         model = ExportedCompressedFile

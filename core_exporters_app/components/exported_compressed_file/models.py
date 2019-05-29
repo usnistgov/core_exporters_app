@@ -1,9 +1,12 @@
 """ Exported Compressed File model
 """
+from builtins import str
+
 from django_mongoengine import fields, Document
-from core_main_app.commons import exceptions
 from mongoengine import errors as mongoengine_errors
+
 from core_exporters_app.settings import GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION
+from core_main_app.commons import exceptions
 
 
 class ExportedCompressedFile(Document):
@@ -27,6 +30,6 @@ class ExportedCompressedFile(Document):
         try:
             return ExportedCompressedFile.objects.get(pk=str(object_id))
         except mongoengine_errors.DoesNotExist as e:
-            raise exceptions.DoesNotExist(e.message)
+            raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
-            raise exceptions.ModelError(ex.message)
+            raise exceptions.ModelError(str(ex))

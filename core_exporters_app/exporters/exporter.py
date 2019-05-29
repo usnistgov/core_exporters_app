@@ -5,20 +5,24 @@ import importlib
 import os
 import zipfile
 from abc import ABCMeta, abstractmethod
-from cStringIO import StringIO
+from builtins import object
+from io import StringIO
 
 from django_mongoengine import fields, Document
+from future import standard_library
+from future.utils import with_metaclass
 
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 
+standard_library.install_aliases()
 
-class AbstractExporter(object):
+
+class AbstractExporter(with_metaclass(ABCMeta, object)):
     """
     Export data to different formats
         - export: export the data
         - transform: transforms a XML to another format
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self):
         self.exporter_name = ""
@@ -74,7 +78,7 @@ class AbstractExporter(object):
         # new instance of sha3
         hash_result = hashlib.sha512()
         # if unicode, the content must be encoded
-        if isinstance(content, unicode):
+        if isinstance(content, str):
             content = content.encode('utf-8')
         hash_result.update(content)
         # take first 8 letters

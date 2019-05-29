@@ -1,11 +1,14 @@
 """ Exporter model
 """
+from builtins import str
+
 from django_mongoengine import fields, Document
+from mongoengine import errors as mongoengine_errors
+from mongoengine.queryset.base import PULL
+
 from core_main_app.commons import exceptions
 from core_main_app.commons.regex import NOT_EMPTY_OR_WHITESPACES
 from core_main_app.components.template.models import Template
-from mongoengine import errors as mongoengine_errors
-from mongoengine.queryset.base import PULL
 
 
 class Exporter(Document):
@@ -79,9 +82,9 @@ class Exporter(Document):
         try:
             return Exporter.objects.get(pk=str(exporter_id))
         except mongoengine_errors.DoesNotExist as e:
-            raise exceptions.DoesNotExist(e.message)
+            raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
-            raise exceptions.ModelError(ex.message)
+            raise exceptions.ModelError(str(ex))
 
     @staticmethod
     def get_by_url(exporter_url):

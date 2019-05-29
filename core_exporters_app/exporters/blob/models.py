@@ -1,5 +1,6 @@
 """ Blob exporter
 """
+from builtins import range
 import re
 
 from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
@@ -89,7 +90,7 @@ def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
         # file name start with the first element
         return_value = file_name_split[0]
         # loop on the list and generate the file name
-        for index in xrange(1, len(file_name_split)):
+        for index in range(1, len(file_name_split)):
             # If is the last element, we insert the sha before the extension
             if index == len(file_name_split) - 1:
                 return_value += '.' + sha_from_xml + '.' + sha

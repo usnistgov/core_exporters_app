@@ -1,5 +1,6 @@
 """ Forms admin exporter
 """
+from builtins import object
 from django import forms
 from mongodbforms import DocumentForm
 
@@ -12,7 +13,7 @@ class EditExporterForm(DocumentForm):
                            widget=forms.TextInput(attrs={'class': 'form-control',
                                                          'placeholder': 'Type the new name'}))
 
-    class Meta:
+    class Meta(object):
         document = Exporter
         fields = ['name']
 
