@@ -24,7 +24,7 @@ class EditExporterView(EditObjectModalView):
         try:
             exporter_api.upsert(self.object)
         except Exception as e:
-            form.add_error(None, e.message)
+            form.add_error(None, str(e))
 
 
 def associated_templates(request):
@@ -42,7 +42,7 @@ def associated_templates(request):
         else:
             return _associated_templates_get(request)
     except Exception as e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest(str(e))
 
 
 def _associated_templates_post(request):
@@ -68,7 +68,7 @@ def _associated_templates_post(request):
         else:
             return HttpResponseBadRequest('Bad entries. Please check your entries')
     except Exception as e:
-        return HttpResponseBadRequest(e.message, content_type='application/javascript')
+        return HttpResponseBadRequest(str(e), content_type='application/javascript')
 
 
 def _associated_templates_get(request):

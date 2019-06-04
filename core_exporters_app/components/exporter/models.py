@@ -100,9 +100,9 @@ class Exporter(Document):
         try:
             return Exporter.objects.get(url=exporter_url)
         except mongoengine_errors.DoesNotExist as e:
-            raise exceptions.DoesNotExist(e.message)
+            raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
-            raise exceptions.ModelError(ex.message)
+            raise exceptions.ModelError(str(ex))
 
     def get_templates_to_string(self):
         """ To string value for exporter's template list
@@ -128,7 +128,7 @@ class Exporter(Document):
         except mongoengine_errors.NotUniqueError as e:
             raise exceptions.NotUniqueError("The name is already used by an other exporter.")
         except Exception as ex:
-            raise exceptions.ModelError(ex.message)
+            raise exceptions.ModelError(str(ex))
 
     def clean(self):
         """ Clean is called before saving

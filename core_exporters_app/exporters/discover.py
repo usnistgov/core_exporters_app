@@ -89,6 +89,6 @@ def discover_exporter():
             except Exception as e:
                 print('ERROR : Impossible to load the following exporter, class not found : ' + pattern['view'])
     except ValidationError as e:
-        raise Exception('A validation error occured during the exporter discovery :' + e.message)
+        raise Exception('A validation error occured during the exporter discovery :' + str(e))
     except Exception as e:
         raise e

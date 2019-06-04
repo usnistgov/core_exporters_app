@@ -24,7 +24,7 @@ def add_xslt(request):
         else:
             return _add_xslt_get(request)
     except Exception as e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest(str(e))
 
 
 def _add_xslt_post(request):
@@ -52,7 +52,7 @@ def _add_xslt_post(request):
             else:
                 return HttpResponseBadRequest('Bad entries. Please check your entries')
     except Exception as e:
-        return HttpResponseBadRequest(e.message, content_type='application/javascript')
+        return HttpResponseBadRequest(str(e), content_type='application/javascript')
 
 
 def _add_xslt_get(request):

@@ -30,7 +30,7 @@ def exporters_selection(request):
         else:
             raise Exception("request method should be POST")
     except Exception as e:
-        return HttpResponseBadRequest(e.message)
+        return HttpResponseBadRequest(str(e))
 
 
 def open_form(request):
@@ -152,7 +152,7 @@ def _exporters_selection_post(request):
         else:
             return HttpResponseBadRequest('Bad entries. Please check your entries')
     except Exception as e:
-        return HttpResponseBadRequest(e.message, content_type='application/javascript')
+        return HttpResponseBadRequest(str(e), content_type='application/javascript')
 
 
 
