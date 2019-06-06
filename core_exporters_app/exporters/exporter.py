@@ -6,7 +6,7 @@ import os
 import zipfile
 from abc import ABCMeta, abstractmethod
 from builtins import object
-from io import StringIO
+from io import BytesIO
 
 from django_mongoengine import fields, Document
 from future import standard_library
@@ -99,7 +99,7 @@ class AbstractExporter(with_metaclass(ABCMeta, object)):
         exported_compressed_file = exported_compressed_file_api.get_by_id(exported_compressed_file_id)
 
         # ZIP fileCreation
-        in_memory = StringIO()
+        in_memory = BytesIO()
         zip = zipfile.ZipFile(in_memory, "a")
 
         # For each result

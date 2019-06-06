@@ -40,7 +40,7 @@ class JsonExporter(AbstractExporter):
             try:
                 transform_result_content.content_converted = json.dumps(transformed_content,
                                                                         indent=4,
-                                                                        ensure_ascii=False).encode('utf-8')
+                                                                        ensure_ascii=False)
             except:
                 transform_result_content.content_converted = json.dumps(transformed_content,
                                                                         indent=4)

@@ -34,13 +34,9 @@ class XmlExporter(AbstractExporter):
             # for an XML transformation there is a list of one element
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
-
-            # sets the content and extension
-            try:
-                transform_result_content.content_converted = xml_item['xml_content'].encode('utf-8')
-            except:
-                transform_result_content.content_converted = xml_item['xml_content']
-
+            # sets the content
+            transform_result_content.content_converted = xml_item['xml_content']
+            # sets the extension
             transform_result_content.content_extension = self.extension
             # add the content to the list of content
             transform_result.transform_result_content.append(transform_result_content)
