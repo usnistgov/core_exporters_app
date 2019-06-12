@@ -2,6 +2,7 @@
 """
 from builtins import str
 import json
+import logging
 
 from celery.exceptions import TimeoutError, SoftTimeLimitExceeded
 from django.core.urlresolvers import reverse
@@ -13,6 +14,9 @@ import core_exporters_app.components.exported_compressed_file.api as exported_fi
 import core_exporters_app.tasks as exporter_tasks
 from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
 from core_exporters_app.views.user.forms import ExportForm
+from core_main_app.commons import exceptions
+
+logger = logging.getLogger(__name__)
 
 
 def exporters_selection(request):
@@ -86,8 +90,11 @@ def check_download_status(request):
         try:
             # Get the exported file with the given id
             exported_file = exported_file_api.get_by_id(file_id)
-        except:
-            return HttpResponseBadRequest("File with the given id does not exist")
+        except exceptions.DoesNotExist as e:
+            return HttpResponseBadRequest("The file with the given id does not exist.")
+        except Exception as e:
+            logger.error("Something went wrong while downloading: {0}".format(str(e)))
+            return HttpResponseBadRequest("Something went wrong while downloading. Please contact an administrator.")
 
         return HttpResponse(json.dumps({'is_ready': exported_file.is_ready,
                                         'message': "The file is now ready for download"}),

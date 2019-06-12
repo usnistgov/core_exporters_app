@@ -1,12 +1,18 @@
 """ XSLT exporter
 """
+import logging
+
 from builtins import str
-from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
-from core_exporters_app.components.exporter.models import Exporter
-from xml_utils.xsd_tree.xsd_tree import XSDTree
 from django_mongoengine import fields
-from core_main_app.components.xsl_transformation.models import XslTransformation
 from mongoengine.queryset.base import CASCADE
+
+import xml_utils.commons.exceptions as exceptions
+from core_exporters_app.components.exporter.models import Exporter
+from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
+from core_main_app.components.xsl_transformation.models import XslTransformation
+from xml_utils.xsd_tree.xsd_tree import XSDTree
+
+logger = logging.getLogger(__name__)
 
 
 class XslExporter(AbstractExporter):
@@ -79,8 +85,15 @@ class XslExporter(AbstractExporter):
         Returns:
 
         """
-        extension_result = XSDTree.get_extension(xslt)
-        if extension_result is not None:
+        extension_result = None
+
+        try:
+            extension_result = XSDTree.get_extension(xslt)
+        except exceptions.XMLError as e:
+            logger.error("It is not possible to determine the output format, xml by default will be used: {0}"
+                         .format(str(e)))
+
+        if extension_result:
             self.extension = ".{!s}".format(extension_result)
 
 

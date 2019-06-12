@@ -1,5 +1,6 @@
 """ Blob exporter
 """
+import logging
 from builtins import range
 import re
 
@@ -7,6 +8,8 @@ from core_exporters_app.exporters.exporter import AbstractExporter, TransformRes
 from core_main_app.utils.file import get_filename_from_response
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
 from core_main_app.utils.urls import get_blob_download_regex
+
+logger = logging.getLogger(__name__)
 
 
 class BlobExporter(AbstractExporter):
@@ -52,8 +55,10 @@ class BlobExporter(AbstractExporter):
                     transform_result_content.content_extension = ""
                     # add the blob to the result list
                     transform_result.transform_result_content.append(transform_result_content)
-                except Exception:
-                    pass
+                except Exception as ex:
+                    # if something happens while downloading the blob, we don't want to freeze the export
+                    # so we log the Url that fails
+                    logger.error("Something went wrong while exporting blob at {0}: {1}".format(url, str(ex)))
 
             results_transform.append(transform_result)
         return results_transform

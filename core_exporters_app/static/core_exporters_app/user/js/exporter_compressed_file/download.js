@@ -28,7 +28,7 @@ checkDownloadStatus = function(){
             }
         },
         error: function (data) {
-            $('#download-message').html('An Error occurred while contacting the server');
+            $('#download-message').html(data.responseText);
         }
     });
 };

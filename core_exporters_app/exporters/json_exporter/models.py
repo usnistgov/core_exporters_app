@@ -1,8 +1,9 @@
 """ Json exporter
 """
+import json
+
 from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
 from core_main_app.utils import xml as xml_utils
-import json
 
 
 class JsonExporter(AbstractExporter):

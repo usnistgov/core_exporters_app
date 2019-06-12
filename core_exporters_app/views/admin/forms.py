@@ -37,12 +37,8 @@ def _get_templates_versions():
 
     """
     templates = []
-    try:
-        # display all template, global and from users
-        template_list = template_api.get_all()
-        for template in template_list:
-            templates.append((template.id, template.display_name))
-    except Exception:
-        pass
-
+    # display all template, global and from users
+    template_list = template_api.get_all()
+    for template in template_list:
+        templates.append((template.id, template.display_name))
     return templates
