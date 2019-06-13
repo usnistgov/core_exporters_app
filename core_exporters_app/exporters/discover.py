@@ -1,7 +1,6 @@
 """ Auto discovery of exporters.
 """
 import logging
-
 from core_exporters_app.components.exporter.models import Exporter
 from mongoengine.errors import ValidationError
 from django.core.urlresolvers import RegexURLResolver, RegexURLPattern

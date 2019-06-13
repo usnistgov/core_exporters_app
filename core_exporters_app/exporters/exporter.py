@@ -5,19 +5,14 @@ import importlib
 import os
 import zipfile
 from abc import ABCMeta, abstractmethod
-from builtins import object
 from io import BytesIO
 
 from django_mongoengine import fields, Document
-from future import standard_library
-from future.utils import with_metaclass
 
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 
-standard_library.install_aliases()
 
-
-class AbstractExporter(with_metaclass(ABCMeta, object)):
+class AbstractExporter(object, metaclass=ABCMeta):
     """
     Export data to different formats
         - export: export the data

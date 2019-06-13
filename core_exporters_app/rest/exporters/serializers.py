@@ -1,6 +1,5 @@
 """ Exporter Serializers
 """
-from builtins import object
 from rest_framework.serializers import ListField
 from rest_framework_mongoengine.serializers import DocumentSerializer
 

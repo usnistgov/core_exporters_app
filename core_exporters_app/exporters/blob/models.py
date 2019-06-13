@@ -1,7 +1,6 @@
 """ Blob exporter
 """
 import logging
-from builtins import range
 import re
 
 from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
