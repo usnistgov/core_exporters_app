@@ -1,6 +1,6 @@
-""" Auto discovery of Exporters
+""" Auto discovery of exporters.
 """
-from __future__ import print_function
+import logging
 
 from core_exporters_app.components.exporter.models import Exporter
 from mongoengine.errors import ValidationError
@@ -12,34 +12,46 @@ import core_main_app.commons.exceptions as main_exception
 from core_exporters_app.exporters import urls
 import re
 
+logger = logging.getLogger(__name__)
 
-def __assemble_endpoint_data__(pattern, prefix='', filter_path=None):
-    """
-    Creates a dictionary for matched API urls
-    pattern -- the pattern to parse
-    prefix -- the API path prefix (used by recursion)
+
+def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
+    """ Creates a dictionary for matched API urls.
+
+    Args:
+        pattern: pattern to parse.
+        prefix: API path prefix (used by recursion).
+        filter_path:
+
+    Returns:
+
     """
     path = simplify_regex(prefix + pattern.regex.pattern)
 
     if filter_path is not None:
-        if re.match('^/?%s(/.*)?$' % re.escape(filter_path), path) is None:
+        if re.match("^/?%s(/.*)?$" % re.escape(filter_path), path) is None:
             return None
 
-    path = path.replace('<', '{').replace('>', '}')
+    path = path.replace("<", "{").replace(">", "}")
 
     return {
-        'url': path,
-        'view': pattern.lookup_str,
-        'name': pattern.default_args['name'],
-        'enable_by_default': pattern.default_args['enable_by_default'],
+        "url": path,
+        "view": pattern.lookup_str,
+        "name": pattern.default_args["name"],
+        "enable_by_default": pattern.default_args["enable_by_default"],
     }
 
 
-def __flatten_patterns_tree__(patterns, prefix='', filter_path=None):
-    """
-    Uses recursion to flatten url tree.
-    patterns -- urlpatterns list
-    prefix -- (optional) Prefix for URL pattern
+def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
+    """ Uses recursion to flatten url tree.
+
+    Args:
+        patterns: urlpatterns list
+        prefix (optional): Prefix for URL pattern
+        filter_path:
+
+    Returns:
+
     """
     pattern_list = []
 
@@ -75,20 +87,22 @@ def discover_exporter():
         for pattern in patterns:
             try:
                 try:
-                    exporters_api.get_by_url(pattern['view'])
+                    exporters_api.get_by_url(pattern["view"])
                 except main_exception.DoesNotExist:
-                    # if there is no exporter with the given url
-                    # we add it
-                    exporter_added = Exporter(name=pattern['name'],
-                                              url=pattern['view'],
-                                              enable_by_default=pattern['enable_by_default'])
-                    # if we added an exporter and it is a default one, we have to add it in all template
+                    # If there is no exporter with the given url, it is added
+                    exporter_added = Exporter(name=pattern["name"],
+                                              url=pattern["view"],
+                                              enable_by_default=pattern["enable_by_default"])
+                    # If an exporter was added and is a default one, it is added in all template
                     if exporter_added.enable_by_default is True:
                         exporter_added.templates = templates_api.get_all()
                     exporters_api.upsert(exporter_added)
             except Exception as e:
-                print('ERROR : Impossible to load the following exporter, class not found : ' + pattern['view'])
+                logger.error(
+                    "Impossible to load the following exporter, class %s not found, exception: %s" %
+                    (pattern["view"], str(e))
+                )
     except ValidationError as e:
-        raise Exception('A validation error occured during the exporter discovery :' + str(e))
+        raise Exception("A validation error occured during the exporter discovery: %s" % str(e))
     except Exception as e:
         raise e
