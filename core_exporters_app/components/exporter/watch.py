@@ -1,8 +1,8 @@
 """ Handle Exporter signals
 """
-from signals_utils.signals.mongo import connector, signals
-from core_main_app.components.template.models import Template
 import core_exporters_app.components.exporter.api as exporter_api
+from core_main_app.components.template.models import Template
+from signals_utils.signals.mongo import connector, signals
 
 
 def init():

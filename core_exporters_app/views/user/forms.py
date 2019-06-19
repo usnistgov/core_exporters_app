@@ -1,12 +1,11 @@
 """ Exporter forms
 """
-from itertools import chain
 
 import bson
-import core_main_app.components.template.api as template_api
 from django import forms
 
 import core_exporters_app.components.exporter.api as exporters_api
+import core_main_app.components.template.api as template_api
 
 
 class ExportForm(forms.Form):

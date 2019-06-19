@@ -1,8 +1,8 @@
 """ Url router for the exporters application
 """
 from django.conf.urls import url, include
-from core_exporters_app.views.user import ajax as user_ajax, views as user_views
 
+from core_exporters_app.views.user import ajax as user_ajax, views as user_views
 
 urlpatterns = [
     url(r'^rest/', include('core_exporters_app.rest.urls')),
