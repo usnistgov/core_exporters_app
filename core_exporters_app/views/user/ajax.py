@@ -4,7 +4,7 @@ import json
 import logging
 
 from celery.exceptions import TimeoutError, SoftTimeLimitExceeded
-from django.urls import reverse
+from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 

@@ -4,8 +4,7 @@ import logging
 import re
 
 from django.contrib.admindocs.views import simplify_regex
-from django.urls import URLResolver, URLPattern
-from django.urls.resolvers import RegexPattern
+from django.core.urlresolvers import RegexURLResolver, RegexURLPattern
 from mongoengine.errors import ValidationError
 
 import core_exporters_app.components.exporter.api as exporters_api
@@ -18,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
-    """ Create a dictionary for matched API urls.
+    """ Creates a dictionary for matched API urls.
 
     Args:
         pattern: pattern to parse.
@@ -28,7 +27,7 @@ def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
     Returns:
 
     """
-    path = simplify_regex(prefix + pattern.pattern.regex.pattern)
+    path = simplify_regex(prefix + pattern.regex.pattern)
 
     if filter_path is not None:
         if re.match("^/?%s(/.*)?$" % re.escape(filter_path), path) is None:
@@ -45,7 +44,7 @@ def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
 
 
 def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
-    """ Use recursion to flatten url tree.
+    """ Uses recursion to flatten url tree.
 
     Args:
         patterns: urlpatterns list
@@ -58,23 +57,22 @@ def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
     pattern_list = []
 
     for pattern in patterns:
-        if isinstance(pattern, URLPattern):
-            if isinstance(pattern.pattern, RegexPattern):
-                endpoint_data = __assemble_endpoint_data__(pattern, prefix, filter_path=filter_path)
+        if isinstance(pattern, RegexURLPattern):
+            endpoint_data = __assemble_endpoint_data__(pattern, prefix, filter_path=filter_path)
 
-                if endpoint_data is None:
-                    continue
+            if endpoint_data is None:
+                continue
 
-                pattern_list.append(endpoint_data)
+            pattern_list.append(endpoint_data)
 
-        elif isinstance(pattern, URLResolver):
-            if isinstance(pattern.pattern, RegexPattern):
-                pref = prefix + pattern.pattern.regex.pattern
-                pattern_list.extend(__flatten_patterns_tree__(
-                    pattern.url_patterns,
-                    pref,
-                    filter_path=filter_path
-                ))
+        elif isinstance(pattern, RegexURLResolver):
+
+            pref = prefix + pattern.regex.pattern
+            pattern_list.extend(__flatten_patterns_tree__(
+                pattern.url_patterns,
+                pref,
+                filter_path=filter_path
+            ))
 
     return pattern_list
 
@@ -96,7 +94,7 @@ def discover_exporter():
                     exporter_added = Exporter(name=pattern["name"],
                                               url=pattern["view"],
                                               enable_by_default=pattern["enable_by_default"])
-                    # If an exporter was added and is a default one, it is added in all templates
+                    # If an exporter was added and is a default one, it is added in all template
                     if exporter_added.enable_by_default is True:
                         exporter_added.templates = templates_api.get_all()
                     exporters_api.upsert(exporter_added)
@@ -106,6 +104,6 @@ def discover_exporter():
                     (pattern["view"], str(e))
                 )
     except ValidationError as e:
-        raise Exception("A validation error occurred during the exporter discovery: %s" % str(e))
+        raise Exception("A validation error occured during the exporter discovery: %s" % str(e))
     except Exception as e:
         raise e
