@@ -1,9 +1,10 @@
 """ Xml exporter url
 """
-from django.conf.urls import url
+
+from django.urls import re_path
 
 from core_exporters_app.exporters.xml.models import XmlExporter
 
 urlpatterns = [
-   url('', XmlExporter, {'name': 'XML', 'enable_by_default': True}),
+   re_path('', XmlExporter, {'name': 'XML', 'enable_by_default': True}),
 ]
