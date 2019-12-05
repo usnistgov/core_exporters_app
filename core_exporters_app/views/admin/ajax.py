@@ -15,7 +15,7 @@ from core_main_app.views.common.ajax import EditObjectModalView
 
 class EditExporterView(EditObjectModalView):
     form_class = EditExporterForm
-    model = Exporter
+    document = Exporter
     success_url = reverse_lazy("admin:core_exporters_app_exporters")
     success_message = 'Exporter edited with success.'
 

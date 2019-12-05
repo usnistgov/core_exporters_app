@@ -1,10 +1,10 @@
 """ Forms admin exporter
 """
 from django import forms
-from mongodbforms import DocumentForm
 
 from core_exporters_app.components.exporter.models import Exporter
 from core_main_app.components.template import api as template_api
+from django_mongoengine.forms import DocumentForm
 
 
 class EditExporterForm(DocumentForm):

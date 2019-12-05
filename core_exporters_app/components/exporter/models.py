@@ -1,20 +1,19 @@
 """ Exporter model
 """
-
-from django_mongoengine import fields, Document
 from mongoengine import errors as mongoengine_errors
 from mongoengine.queryset.base import PULL
 
 from core_main_app.commons import exceptions
-from core_main_app.commons.regex import NOT_EMPTY_OR_WHITESPACES
 from core_main_app.components.template.models import Template
+from core_main_app.utils.validation.regex_validation import not_empty_or_whitespaces
+from django_mongoengine import fields, Document
 
 
 class Exporter(Document):
     """Represents an exporter"""
     meta = {'allow_inheritance': True}
 
-    name = fields.StringField(blank=False, unique=True, regex=NOT_EMPTY_OR_WHITESPACES)
+    name = fields.StringField(blank=False, unique=True, validation=not_empty_or_whitespaces)
     url = fields.StringField(blank=False)
     enable_by_default = fields.BooleanField(blank=False)
     templates = fields.ListField(fields.ReferenceField(Template), blank=True, reverse_delete_rule=PULL)
