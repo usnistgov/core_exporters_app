@@ -61,7 +61,7 @@ class XslExporter(AbstractExporter):
             document_name_with_sha = AbstractExporter.get_title_document(xml_item['title'], xml_item['xml_content'])
             transform_result = TransformResult()
             # set the document name to the collection
-            transform_result.source_document_name = document_name_with_sha
+            transform_result.source_document_name = "{!s}.{!s}".format(document_name_with_sha, self.name )
             # for an XML transformation there is a list of one element
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
