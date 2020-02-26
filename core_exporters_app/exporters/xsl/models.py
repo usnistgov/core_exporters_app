@@ -26,19 +26,21 @@ class XslExporter(AbstractExporter):
         self.xslt = None
         self.transformation = None
 
-    def set_xslt(self, xslt):
+    def set_xslt(self, xsl_transformation):
         """ Set the XSLT to use for the transformation.
 
         Args:
-            xslt:
+            xsl_transformation:
 
         Returns:
 
         """
+        # set the name
+        self.name = xsl_transformation.name
         # set the xslt
-        self.xslt = xslt
+        self.xslt = xsl_transformation.content
         # parse the xslt
-        xslt_parsed = XSDTree.build_tree(xslt)
+        xslt_parsed = XSDTree.build_tree(xsl_transformation.content)
         # set the extension
         self._set_extension_from_xslt(xslt_parsed)
         # set the transform

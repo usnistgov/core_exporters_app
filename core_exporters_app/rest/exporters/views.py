@@ -161,7 +161,7 @@ class ExportToZip(APIView):
                 # if is a xslt transformation, we have to set the xslt
                 if exporter_object.url == exporter_constants.XSL_URL:
                     # set the xslt
-                    exporter_module.set_xslt(exporter_object.xsl_transformation.content)
+                    exporter_module.set_xslt(exporter_object.xsl_transformation)
                 # transform the list of xml files
                 transformed_result_list.extend(exporter_module.transform([Result(title=data_item.title,
                                                                                  xml_content=data_item.xml_content)
