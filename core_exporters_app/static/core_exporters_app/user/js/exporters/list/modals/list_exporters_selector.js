@@ -1,12 +1,29 @@
+/*
+* button exporter modal js file
+*/
+
+var EXPORTER_MAX_RETRY = 30;
 var data_url_selected = [];
 var template_id_list = [];
 var template_hash_list = [];
 
 $(document).ready(function() {
-    $('#btn-explore-example-export').on('click', exporterSelectionOpenModal);
-    $('#btn-exporter-selection-save').on('click', submitExporterSelectionForm);
+    initExporterModal(0);
 });
 
+/**
+  * Wait the sharable link in the DOM and create the listeners
+  *@param tryCount how many times the function was called
+  */
+var initExporterModal = function(tryCount) {
+    var exporterElement = $('.btn-explore-export');
+    if(exporterElement && exporterElement.length > 0) {
+        exporterElement.on('click', exporterSelectionOpenModal);
+        $('#btn-exporter-selection-save').on('click', submitExporterSelectionForm);
+    } else if (tryCount < EXPORTER_MAX_RETRY) {
+        setTimeout( function(){initExporterModal(tryCount+1);}, 1000 );
+    }
+}
 
 /**
  * Exporter selection form
