@@ -16,7 +16,7 @@ $(document).ready(function() {
   *@param tryCount how many times the function was called
   */
 var initExporterModal = function(tryCount) {
-    var exporterElement = $('.btn-explore-export');
+    var exporterElement = $('.export-button');
     if(exporterElement && exporterElement.length > 0) {
         exporterElement.on('click', exporterSelectionOpenModal);
         $('#btn-exporter-selection-save').on('click', submitExporterSelectionForm);
@@ -43,7 +43,7 @@ loadExporterSelectionForm = function(){
     template_hash_list = [];
     template_id_list = [];
 
-    $("#results").find(":checked").each(function() {
+    $(".result-line-main-container").find(":checked").each(function() {
         data_url_selected.push($(this).val());
         var template_id = $(this).attr("data-template-id");
         var template_hash = $(this).attr("data-template-hash");
