@@ -97,33 +97,46 @@ loadExporterSelectionForm = function(){
  */
 submitExporterSelectionForm = function(){
     var formData = new FormData($("#form-exporter-selection")[0]);
+    var isFormValid = false;
     formData.append("template_id_list", template_id_list);
     formData.append("template_hash_list", template_hash_list);
     formData.append("data_url_list", data_url_selected);
-    // Need to be initialized. window.open not working in asynchronous call (Safari)
-    // https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
 
-    var windowReference = window.open();
-
-    $.ajax({
-        url : exporterSelectionUrl,
-        type : "POST",
-        cache: false,
-        contentType: false,
-        processData: false,
-        async: true,
-        data: formData,
-        success: function(data){
-            $("#select-exporters-modal").modal("hide");
-            windowReference.location = data.url_to_redirect;
-        },
-        error:function(data){
-            if (data.responseText != ""){
-                $("#form-exporter-selection-errors").html(data.responseText);
-                $("#banner_errors").show(500);
-                return false;
-            }
-            return true;
-        }
+    // at least one of the exporters have to be selected
+    $("[name=my_exporters]").each( (index, checkboxElement) => {
+        if (checkboxElement.checked)
+            isFormValid = true;
     });
+
+    if (isFormValid) {
+        // Need to be initialized. window.open not working in asynchronous call (Safari)
+        // https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
+        var windowReference = window.open();
+
+        $.ajax({
+            url : exporterSelectionUrl,
+            type : "POST",
+            cache: false,
+            contentType: false,
+            processData: false,
+            async: true,
+            data: formData,
+            success: function(data){
+                $("#select-exporters-modal").modal("hide");
+                windowReference.location = data.url_to_redirect;
+            },
+            error:function(data){
+                if (data.responseText != ""){
+                    $("#form-exporter-selection-errors").html(data.responseText);
+                    $("#banner_errors").show(500);
+                    return false;
+                }
+                return true;
+            }
+        });
+    } else {
+        $("#form-exporter-selection-errors").html("No exporter selected.");
+        $("#banner_errors").show(500);
+    }
+
 };
