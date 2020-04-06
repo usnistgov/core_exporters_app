@@ -18,12 +18,10 @@ $(document).ready(function() {
 var initExporterModal = function(tryCount) {
     var exporterElement = $('.export-button');
     if(exporterElement && exporterElement.length > 0) {
-        // the toolbar button is displayed with the disabled attribute to avoid unpredictable behavior
-        $(".result-toolbar-button").removeAttr("disabled");
         exporterElement.on('click', exporterSelectionOpenModal);
         $('#btn-exporter-selection-save').on('click', submitExporterSelectionForm);
     } else if (tryCount < EXPORTER_MAX_RETRY) {
-        setTimeout( function(){initExporterModal(tryCount+1);}, 1000 );
+        setTimeout( function(){initExporterModal(tryCount+1);}, 1000);
     }
 }
 
