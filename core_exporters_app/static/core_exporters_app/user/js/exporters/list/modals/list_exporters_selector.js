@@ -16,12 +16,27 @@ $(document).ready(function() {
   *@param tryCount how many times the function was called
   */
 var initExporterModal = function(tryCount) {
+    var dataSourceNumber = $(".results-container").length;
     var exporterElement = $('.export-button');
-    if(exporterElement && exporterElement.length > 0) {
-        exporterElement.on('click', exporterSelectionOpenModal);
-        $('#btn-exporter-selection-save').on('click', submitExporterSelectionForm);
+    var notActiveExporterElement = $('.export-button:not(.active)');
+    var exporterSelectionElement = $('#btn-exporter-selection-save');
+    var paginationElement = $('.pagination li[class != active][class != disabled]');
+
+    if(exporterElement
+       && exporterElement.length !== 0
+       && exporterElement.length === dataSourceNumber
+       && notActiveExporterElement.length > 0) {
+        // create click event on the non active download button
+        notActiveExporterElement.unbind( "click" );
+        notActiveExporterElement.on('click', exporterSelectionOpenModal);
+        notActiveExporterElement.addClass('active');
+        exporterSelectionElement.unbind( "click" );
+        exporterSelectionElement.on('click', submitExporterSelectionForm);
+
+        paginationElement.unbind( "click" );
+        paginationElement.on('click', function() { initExporterModal(0); });
     } else if (tryCount < EXPORTER_MAX_RETRY) {
-        setTimeout( function(){initExporterModal(tryCount+1);}, 1000);
+        setTimeout( function(){ initExporterModal(tryCount+1); }, 1000 );
     }
 }
 
