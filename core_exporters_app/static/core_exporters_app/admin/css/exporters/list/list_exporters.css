@@ -5,3 +5,7 @@
 .fs-dropdown {
     width: 90%;
 }
+
+.col-associated-templates {
+    min-width: 18em;
+}
