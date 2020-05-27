@@ -15,32 +15,33 @@ from core_main_app.utils.tests_tools.RequestMock import RequestMock
 class TestExporterXslListGetPermissions(SimpleTestCase):
     def test_anonymous_returns_http_403(self):
         response = RequestMock.do_request_get(
-            xsl_exporters_api_views.ExporterXslList.as_view(),
-            None
+            xsl_exporters_api_views.ExporterXslList.as_view(), None
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     @patch.object(xsl_api, "get_all")
     @patch.object(ExporterXslSerializer, "data")
-    def test_authenticated_returns_http_200(self, mock_exporter_serializer_data, mock_xsl_get_all):
+    def test_authenticated_returns_http_200(
+        self, mock_exporter_serializer_data, mock_xsl_get_all
+    ):
         mock_user = create_mock_user("1")
 
         response = RequestMock.do_request_get(
-            xsl_exporters_api_views.ExporterXslList.as_view(),
-            mock_user
+            xsl_exporters_api_views.ExporterXslList.as_view(), mock_user
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @patch.object(xsl_api, "get_all")
     @patch.object(ExporterXslSerializer, "data")
-    def test_staff_returns_http_200(self, mock_exporter_serializer_data, mock_xsl_get_all):
+    def test_staff_returns_http_200(
+        self, mock_exporter_serializer_data, mock_xsl_get_all
+    ):
         mock_user = create_mock_user("1", is_staff=True)
 
         response = RequestMock.do_request_get(
-            xsl_exporters_api_views.ExporterXslList.as_view(),
-            mock_user
+            xsl_exporters_api_views.ExporterXslList.as_view(), mock_user
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -49,8 +50,7 @@ class TestExporterXslListGetPermissions(SimpleTestCase):
 class TestExporterXslListPostPermissions(SimpleTestCase):
     def test_anonymous_returns_http_403(self):
         response = RequestMock.do_request_post(
-            xsl_exporters_api_views.ExporterXslList.as_view(),
-            None
+            xsl_exporters_api_views.ExporterXslList.as_view(), None
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -58,15 +58,13 @@ class TestExporterXslListPostPermissions(SimpleTestCase):
     @patch.object(ExporterXslSerializer, "is_valid")
     @patch.object(ExporterXslSerializer, "save")
     @patch.object(ExporterXslSerializer, "data")
-    def test_authenticated_returns_http_403(self,
-                                            mock_exporter_xsl_data,
-                                            mock_exporter_xsl_save,
-                                            mock_exporter_xsl_is_valid):
+    def test_authenticated_returns_http_403(
+        self, mock_exporter_xsl_data, mock_exporter_xsl_save, mock_exporter_xsl_is_valid
+    ):
         mock_user = create_mock_user("1")
 
         response = RequestMock.do_request_post(
-            xsl_exporters_api_views.ExporterXslList.as_view(),
-            mock_user
+            xsl_exporters_api_views.ExporterXslList.as_view(), mock_user
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -74,15 +72,13 @@ class TestExporterXslListPostPermissions(SimpleTestCase):
     @patch.object(ExporterXslSerializer, "is_valid")
     @patch.object(ExporterXslSerializer, "save")
     @patch.object(ExporterXslSerializer, "data")
-    def test_staff_returns_http_201(self,
-                                    mock_exporter_xsl_data,
-                                    mock_exporter_xsl_save,
-                                    mock_exporter_xsl_is_valid):
+    def test_staff_returns_http_201(
+        self, mock_exporter_xsl_data, mock_exporter_xsl_save, mock_exporter_xsl_is_valid
+    ):
         mock_user = create_mock_user("1", is_staff=True)
 
         response = RequestMock.do_request_post(
-            xsl_exporters_api_views.ExporterXslList.as_view(),
-            mock_user
+            xsl_exporters_api_views.ExporterXslList.as_view(), mock_user
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -91,21 +87,22 @@ class TestExporterXslListPostPermissions(SimpleTestCase):
 class TestExporterXslDetailGetPermissions(SimpleTestCase):
     def test_anonymous_returns_http_403(self):
         response = RequestMock.do_request_get(
-            xsl_exporters_api_views.ExporterXslDetail.as_view(),
-            None
+            xsl_exporters_api_views.ExporterXslDetail.as_view(), None
         )
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     @patch.object(exporter_api, "get_by_id")
     @patch.object(ExporterXslSerializer, "data")
-    def test_authenticated_returns_http_200(self, mock_exporter_data, mock_exporter_get_by_id):
+    def test_authenticated_returns_http_200(
+        self, mock_exporter_data, mock_exporter_get_by_id
+    ):
         mock_user = create_mock_user("1")
 
         response = RequestMock.do_request_get(
             xsl_exporters_api_views.ExporterXslDetail.as_view(),
             mock_user,
-            param={"pk": "0"}
+            param={"pk": "0"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -118,7 +115,7 @@ class TestExporterXslDetailGetPermissions(SimpleTestCase):
         response = RequestMock.do_request_get(
             xsl_exporters_api_views.ExporterXslDetail.as_view(),
             mock_user,
-            param={"pk": "0"}
+            param={"pk": "0"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

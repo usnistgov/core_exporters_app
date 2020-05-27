@@ -8,24 +8,30 @@ from django_mongoengine.forms import DocumentForm
 
 
 class EditExporterForm(DocumentForm):
-    name = forms.CharField(label='Name',
-                           widget=forms.TextInput(attrs={'class': 'form-control',
-                                                         'placeholder': 'Type the new name'}))
+    name = forms.CharField(
+        label="Name",
+        widget=forms.TextInput(
+            attrs={"class": "form-control", "placeholder": "Type the new name"}
+        ),
+    )
 
     class Meta(object):
         document = Exporter
-        fields = ['name']
+        fields = ["name"]
 
 
 class AssociatedTemplatesForm(forms.Form):
     """ Associated Template form
     """
+
     id = forms.CharField(widget=forms.HiddenInput(), required=False)
-    templates_manager = forms.MultipleChoiceField(label='', widget=forms.SelectMultiple(), required=False)
+    templates_manager = forms.MultipleChoiceField(
+        label="", widget=forms.SelectMultiple(), required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super(AssociatedTemplatesForm, self).__init__(*args, **kwargs)
-        self.fields['templates_manager'].choices = _get_templates_versions()
+        self.fields["templates_manager"].choices = _get_templates_versions()
 
 
 def _get_templates_versions():

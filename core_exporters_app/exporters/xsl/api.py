@@ -80,8 +80,10 @@ def upsert_or_delete_exporter_xsl(xsl_list):
     # upsert all exporter is in list but not in database
     for xsl_id in list_for_upsert:
         xsl_transformation = xsl_transformation_api.get_by_id(xsl_id)
-        exporter = ExporterXsl(name=xsl_transformation.name,
-                               url=XSL_URL,
-                               enable_by_default=False,
-                               xsl_transformation=xsl_transformation)
+        exporter = ExporterXsl(
+            name=xsl_transformation.name,
+            url=XSL_URL,
+            enable_by_default=False,
+            xsl_transformation=xsl_transformation,
+        )
         upsert(exporter)

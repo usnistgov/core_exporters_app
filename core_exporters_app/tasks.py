@@ -10,12 +10,17 @@ import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
-from core_exporters_app.exporters.exporter import get_exporter_module_from_url, AbstractExporter
+from core_exporters_app.exporters.exporter import (
+    get_exporter_module_from_url,
+    AbstractExporter,
+)
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
 
 
 @shared_task
-def export_files(exported_file_id, exporters_list_url, url_base, data_url_list, session_key):
+def export_files(
+    exported_file_id, exporters_list_url, url_base, data_url_list, session_key
+):
     """ Asynchronous tasks exporting files
 
     Args:
@@ -43,7 +48,9 @@ def export_files(exported_file_id, exporters_list_url, url_base, data_url_list, 
             # set the xslt
             exporter_module.set_xslt(exporter_object.xsl_transformation)
         # transform the list of xml files
-        transformed_result_list.extend(exporter_module.transform(result_list, session_key))
+        transformed_result_list.extend(
+            exporter_module.transform(result_list, session_key)
+        )
 
     # Export in Zip
     AbstractExporter.export(exported_file_id, transformed_result_list)
@@ -68,6 +75,10 @@ def _get_results_list_from_url_list(url_base, url_list, session_key):
             # Validate result
             results_serializer.is_valid(True)
             # Append the list returned
-            result_list.append(Result(title=results_serializer.data['title'],
-                                      xml_content=results_serializer.data['xml_content']))
+            result_list.append(
+                Result(
+                    title=results_serializer.data["title"],
+                    xml_content=results_serializer.data["xml_content"],
+                )
+            )
     return result_list

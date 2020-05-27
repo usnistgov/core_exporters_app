@@ -1,6 +1,8 @@
 """ Exported Compressed File api
 """
-from core_exporters_app.components.exported_compressed_file.models import ExportedCompressedFile
+from core_exporters_app.components.exported_compressed_file.models import (
+    ExportedCompressedFile,
+)
 
 
 def get_by_id(exported_compressed_file_id):

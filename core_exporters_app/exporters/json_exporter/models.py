@@ -2,13 +2,18 @@
 """
 import json
 
-from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
+from core_exporters_app.exporters.exporter import (
+    AbstractExporter,
+    TransformResult,
+    TransformResultContent,
+)
 from core_main_app.utils import xml as xml_utils
 
 
 class JsonExporter(AbstractExporter):
     """ JSON Exporter. Allows to transform an XML to a JSON
     """
+
     def __init__(self):
         self.name = "JSON"
         self.extension = ".json"
@@ -27,7 +32,9 @@ class JsonExporter(AbstractExporter):
         # loops on all xml input
         for xml_item in xml_inputs:
             # generate the title document with the sha
-            document_name_with_sha = AbstractExporter.get_title_document(xml_item['title'], xml_item['xml_content'])
+            document_name_with_sha = AbstractExporter.get_title_document(
+                xml_item["title"], xml_item["xml_content"]
+            )
             transform_result = TransformResult()
             # set the document name to the collection
             transform_result.source_document_name = document_name_with_sha
@@ -35,16 +42,18 @@ class JsonExporter(AbstractExporter):
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
             # Transform to JSON
-            transformed_content = xml_utils.raw_xml_to_dict(xml_item['xml_content'],
-                                                            xml_utils.post_processor)
+            transformed_content = xml_utils.raw_xml_to_dict(
+                xml_item["xml_content"], xml_utils.post_processor
+            )
             # sets the content and extension
             try:
-                transform_result_content.content_converted = json.dumps(transformed_content,
-                                                                        indent=4,
-                                                                        ensure_ascii=False)
+                transform_result_content.content_converted = json.dumps(
+                    transformed_content, indent=4, ensure_ascii=False
+                )
             except:
-                transform_result_content.content_converted = json.dumps(transformed_content,
-                                                                        indent=4)
+                transform_result_content.content_converted = json.dumps(
+                    transformed_content, indent=4
+                )
 
             transform_result_content.content_extension = self.extension
             # add the content to the list of content

@@ -8,6 +8,7 @@ from core_main_app.utils.integration_tests.fixture_interface import FixtureInter
 class ExporterFixtures(FixtureInterface):
     """ Exporter fixtures
     """
+
     data_1 = None
     data_collection = None
 
@@ -26,8 +27,7 @@ class ExporterFixtures(FixtureInterface):
         Returns:
 
         """
-        self.data_1 = Exporter(name="name_1",
-                               url=constants.XSL_URL,
-                               enable_by_default=False,
-                               templates=[]).save()
+        self.data_1 = Exporter(
+            name="name_1", url=constants.XSL_URL, enable_by_default=False, templates=[]
+        ).save()
         self.data_collection = [self.data_1]

@@ -11,8 +11,11 @@ from core_main_app.commons import exceptions
 class ExportedCompressedFile(Document):
     """ Represents exported files
     """
+
     file_name = fields.StringField()
-    file = fields.FileField(blank=True, collection_name=GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION)
+    file = fields.FileField(
+        blank=True, collection_name=GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION
+    )
     is_ready = fields.BooleanField(default=False)
     mime_type = fields.StringField()
 

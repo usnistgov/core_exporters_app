@@ -18,7 +18,8 @@ from core_main_app.utils.decorators import api_staff_member_required
 class ExporterXslList(APIView):
     """ List all XSL Exporters, or create
     """
-    permission_classes = (IsAuthenticated, )
+
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         """ Get all XSL Exporters
@@ -42,7 +43,7 @@ class ExporterXslList(APIView):
             # Return response
             return Response(return_value.data)
         except Exception as api_exception:
-            content = {'message': str(api_exception)}
+            content = {"message": str(api_exception)}
             return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @method_decorator(api_staff_member_required())
@@ -79,17 +80,18 @@ class ExporterXslList(APIView):
             xsl_serializer.save()
             return Response(xsl_serializer.data, status=status.HTTP_201_CREATED)
         except ValidationError as validation_exception:
-            content = {'message': validation_exception.detail}
+            content = {"message": validation_exception.detail}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         except Exception as api_exception:
-            content = {'message': str(api_exception)}
+            content = {"message": str(api_exception)}
             return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ExporterXslDetail(APIView):
     """" Get an XSL Exporter
     """
-    permission_classes = (IsAuthenticated, )
+
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         """ Retrieve an XSL Exporter
@@ -132,8 +134,8 @@ class ExporterXslDetail(APIView):
             # Return response
             return Response(return_value.data)
         except Http404:
-            content = {'message': 'Xsl exporter not found.'}
+            content = {"message": "Xsl exporter not found."}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
         except Exception as api_exception:
-            content = {'message': str(api_exception)}
+            content = {"message": str(api_exception)}
             return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

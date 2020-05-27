@@ -15,15 +15,15 @@ class TestGetExporterList(SimpleTestCase):
         super(TestGetExporterList, self).setUp()
         self.data = None
 
-    @patch.object(Exporter, 'get_all')
+    @patch.object(Exporter, "get_all")
     def test_get_returns_status_200_with_no_permission_needed(self, mock_get_all):
         # Arrange
-        user = create_mock_user('0')
+        user = create_mock_user("0")
 
         # Act
-        response = RequestMock.do_request_get(exporter_views.ExporterList.as_view(),
-                                              user,
-                                              self.data)
+        response = RequestMock.do_request_get(
+            exporter_views.ExporterList.as_view(), user, self.data
+        )
 
         # Assert
         self.assertEqual(response.status_code, status.HTTP_200_OK)

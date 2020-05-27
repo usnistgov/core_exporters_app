@@ -7,7 +7,11 @@ from mongoengine.queryset.base import CASCADE
 
 import xml_utils.commons.exceptions as exceptions
 from core_exporters_app.components.exporter.models import Exporter
-from core_exporters_app.exporters.exporter import AbstractExporter, TransformResult, TransformResultContent
+from core_exporters_app.exporters.exporter import (
+    AbstractExporter,
+    TransformResult,
+    TransformResultContent,
+)
 from core_main_app.components.xsl_transformation.models import XslTransformation
 from xml_utils.xsd_tree.xsd_tree import XSDTree
 
@@ -17,6 +21,7 @@ logger = logging.getLogger(__name__)
 class XslExporter(AbstractExporter):
     """ XSLT Exporter module. generate the XML results
     """
+
     def __init__(self):
         """ Sets the default name and extension
         """
@@ -60,15 +65,19 @@ class XslExporter(AbstractExporter):
         # loops on all xml input
         for xml_item in xml_inputs:
             # generate the title document with the sha
-            document_name_with_sha = AbstractExporter.get_title_document(xml_item['title'], xml_item['xml_content'])
+            document_name_with_sha = AbstractExporter.get_title_document(
+                xml_item["title"], xml_item["xml_content"]
+            )
             transform_result = TransformResult()
             # set the document name to the collection
-            transform_result.source_document_name = "{!s}.{!s}".format(document_name_with_sha, self.name )
+            transform_result.source_document_name = "{!s}.{!s}".format(
+                document_name_with_sha, self.name
+            )
             # for an XML transformation there is a list of one element
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
             # sets the content and extension
-            dom = XSDTree.transform_to_xml(xml_item['xml_content'])
+            dom = XSDTree.transform_to_xml(xml_item["xml_content"])
             transform_result_content.content_converted = str(self.transformation(dom))
             transform_result_content.content_extension = self.extension
             # add the content to the list of content
@@ -91,8 +100,11 @@ class XslExporter(AbstractExporter):
         try:
             extension_result = XSDTree.get_extension(xslt)
         except exceptions.XMLError as e:
-            logger.error("It is not possible to determine the output format, xml by default will be used: {0}"
-                         .format(str(e)))
+            logger.error(
+                "It is not possible to determine the output format, xml by default will be used: {0}".format(
+                    str(e)
+                )
+            )
 
         if extension_result:
             self.extension = ".{!s}".format(extension_result)
@@ -101,7 +113,10 @@ class XslExporter(AbstractExporter):
 class ExporterXsl(Exporter):
     """ Export XSL object
     """
-    xsl_transformation = fields.ReferenceField(XslTransformation, blank=False, reverse_delete_rule=CASCADE)
+
+    xsl_transformation = fields.ReferenceField(
+        XslTransformation, blank=False, reverse_delete_rule=CASCADE
+    )
 
     @staticmethod
     def get_all(is_cls):
@@ -113,7 +128,9 @@ class ExporterXsl(Exporter):
         """
         if is_cls:
             # will return all Template object only
-            return ExporterXsl.objects(_cls="{0}.{1}".format(Exporter.__name__, ExporterXsl.__name__)).all()
+            return ExporterXsl.objects(
+                _cls="{0}.{1}".format(Exporter.__name__, ExporterXsl.__name__)
+            ).all()
         else:
             # will return all inherited object
             return ExporterXsl.object().all()

@@ -36,7 +36,9 @@ class AbstractExporter(object, metaclass=ABCMeta):
             Method: Exports the data
         """
         # Generate the zip file
-        return AbstractExporter.generate_zip(exported_compressed_file_id, transformed_result_list)
+        return AbstractExporter.generate_zip(
+            exported_compressed_file_id, transformed_result_list
+        )
 
     @staticmethod
     def get_title_document(document_name, content):
@@ -74,7 +76,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
         hash_result = hashlib.sha512()
         # if unicode, the content must be encoded
         if isinstance(content, str):
-            content = content.encode('utf-8')
+            content = content.encode("utf-8")
         hash_result.update(content)
         # take first 8 letters
         return hash_result.hexdigest()[0:number_of_characters]
@@ -91,7 +93,9 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
         """
         # Needed otherwise the file in db is not updated
-        exported_compressed_file = exported_compressed_file_api.get_by_id(exported_compressed_file_id)
+        exported_compressed_file = exported_compressed_file_api.get_by_id(
+            exported_compressed_file_id
+        )
 
         # ZIP fileCreation
         in_memory = BytesIO()
@@ -101,9 +105,11 @@ class AbstractExporter(object, metaclass=ABCMeta):
         for transformed_result in transformed_result_list:
             # Loops on contents converted for each file
             for content in transformed_result.transform_result_content:
-                path = "{!s}/{!s}{!s}".format(transformed_result.source_document_name,
-                                              content.file_name,
-                                              content.content_extension)
+                path = "{!s}/{!s}{!s}".format(
+                    transformed_result.source_document_name,
+                    content.file_name,
+                    content.content_extension,
+                )
                 zip.writestr(path, content.content_converted)
 
         # fix for Linux zip files read in Windows
@@ -117,7 +123,9 @@ class AbstractExporter(object, metaclass=ABCMeta):
         in_memory.seek(0)
 
         # save the file and upset the object
-        exported_compressed_file.file.put(in_memory, content_type=exported_compressed_file.mime_type)
+        exported_compressed_file.file.put(
+            in_memory, content_type=exported_compressed_file.mime_type
+        )
         exported_compressed_file.is_ready = True
         return exported_compressed_file_api.upsert(exported_compressed_file)
 
@@ -135,6 +143,7 @@ class TransformResultContent(Document):
         content_extension:
             .xml, .json, .png
     """
+
     file_name = fields.StringField(default="")
     content_converted = fields.StringField(default="")
     content_extension = fields.StringField(default="")
@@ -150,6 +159,7 @@ class TransformResult(Document):
             One result expected for simple conversion like XML, Json
             but zero or N result for blob export
     """
+
     source_document_name = fields.StringField(default="")
     transform_result_content = fields.ListField(TransformResultContent)
 
@@ -163,9 +173,9 @@ def get_exporter_module_from_url(exporter_url):
     Returns:
 
     """
-    pkglist = exporter_url.split('.')
+    pkglist = exporter_url.split(".")
 
-    pkgs = '.'.join(pkglist[:-1])
+    pkgs = ".".join(pkglist[:-1])
     func = pkglist[-1:][0]
 
     imported_pkgs = importlib.import_module(pkgs)

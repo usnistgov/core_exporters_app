@@ -60,7 +60,9 @@ def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
     for pattern in patterns:
         if isinstance(pattern, URLPattern):
             if isinstance(pattern.pattern, RegexPattern):
-                endpoint_data = __assemble_endpoint_data__(pattern, prefix, filter_path=filter_path)
+                endpoint_data = __assemble_endpoint_data__(
+                    pattern, prefix, filter_path=filter_path
+                )
 
                 if endpoint_data is None:
                     continue
@@ -70,11 +72,11 @@ def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
         elif isinstance(pattern, URLResolver):
             if isinstance(pattern.pattern, RegexPattern):
                 pref = prefix + pattern.pattern.regex.pattern
-                pattern_list.extend(__flatten_patterns_tree__(
-                    pattern.url_patterns,
-                    pref,
-                    filter_path=filter_path
-                ))
+                pattern_list.extend(
+                    __flatten_patterns_tree__(
+                        pattern.url_patterns, pref, filter_path=filter_path
+                    )
+                )
 
     return pattern_list
 
@@ -93,19 +95,23 @@ def discover_exporter():
                     exporters_api.get_by_url(pattern["view"])
                 except main_exception.DoesNotExist:
                     # If there is no exporter with the given url, it is added
-                    exporter_added = Exporter(name=pattern["name"],
-                                              url=pattern["view"],
-                                              enable_by_default=pattern["enable_by_default"])
+                    exporter_added = Exporter(
+                        name=pattern["name"],
+                        url=pattern["view"],
+                        enable_by_default=pattern["enable_by_default"],
+                    )
                     # If an exporter was added and is a default one, it is added in all templates
                     if exporter_added.enable_by_default is True:
                         exporter_added.templates = templates_api.get_all()
                     exporters_api.upsert(exporter_added)
             except Exception as e:
                 logger.error(
-                    "Impossible to load the following exporter, class %s not found, exception: %s" %
-                    (pattern["view"], str(e))
+                    "Impossible to load the following exporter, class %s not found, exception: %s"
+                    % (pattern["view"], str(e))
                 )
     except ValidationError as e:
-        raise Exception("A validation error occurred during the exporter discovery: %s" % str(e))
+        raise Exception(
+            "A validation error occurred during the exporter discovery: %s" % str(e)
+        )
     except Exception as e:
         raise e

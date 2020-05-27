@@ -11,12 +11,17 @@ from django_mongoengine import fields, Document
 
 class Exporter(Document):
     """Represents an exporter"""
-    meta = {'allow_inheritance': True}
 
-    name = fields.StringField(blank=False, unique=True, validation=not_empty_or_whitespaces)
+    meta = {"allow_inheritance": True}
+
+    name = fields.StringField(
+        blank=False, unique=True, validation=not_empty_or_whitespaces
+    )
     url = fields.StringField(blank=False)
     enable_by_default = fields.BooleanField(blank=False)
-    templates = fields.ListField(fields.ReferenceField(Template), blank=True, reverse_delete_rule=PULL)
+    templates = fields.ListField(
+        fields.ReferenceField(Template), blank=True, reverse_delete_rule=PULL
+    )
 
     @staticmethod
     def get_all(is_cls):
@@ -124,7 +129,9 @@ class Exporter(Document):
         try:
             return self.save()
         except mongoengine_errors.NotUniqueError as e:
-            raise exceptions.NotUniqueError("The name is already used by an other exporter.")
+            raise exceptions.NotUniqueError(
+                "The name is already used by an other exporter."
+            )
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
 

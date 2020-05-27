@@ -20,14 +20,14 @@ def download_exported_compressed_file(request):
     Returns:
 
     """
-    exporter_file_id = request.GET['id']
+    exporter_file_id = request.GET["id"]
     exported_file = None
 
     # Generate a default context
     context = {
-        'message': 'Please wait, the download will start automatically',
-        'is_ready': False,
-        'id_file': exporter_file_id
+        "message": "Please wait, the download will start automatically",
+        "is_ready": False,
+        "id_file": exporter_file_id,
     }
 
     try:
@@ -37,28 +37,33 @@ def download_exported_compressed_file(request):
         context["message"] = "The file with the given id does not exist."
     except Exception as e:
         logger.error("Something went wrong while downloading: {0}".format(str(e)))
-        context["message"] = "Something went wrong while downloading. Please contact administrator"
+        context[
+            "message"
+        ] = "Something went wrong while downloading. Please contact administrator"
 
     if exported_file and exported_file.is_ready:
         # the file is ready to be downloaded
         response = HttpResponse(exported_file.file.read())
-        response['Content-Disposition'] = "attachment; filename=" + exported_file.file_name
-        response['Content-Type'] = exported_file.file.content_type
+        response["Content-Disposition"] = (
+            "attachment; filename=" + exported_file.file_name
+        )
+        response["Content-Type"] = exported_file.file.content_type
         return response
     else:
         # Add assets
         assets = {
             "js": [
                 {
-                    "path": 'core_exporters_app/user/js/exporter_compressed_file/download.js',
-                    "is_raw": False
+                    "path": "core_exporters_app/user/js/exporter_compressed_file/download.js",
+                    "is_raw": False,
                 }
             ],
             "css": [],
         }
         # Render the page
-        return render(request,
-                      'core_exporters_app/user/exported_compressed_file/download.html',
-                      context=context,
-                      assets=assets)
-
+        return render(
+            request,
+            "core_exporters_app/user/exported_compressed_file/download.html",
+            context=context,
+            assets=assets,
+        )
