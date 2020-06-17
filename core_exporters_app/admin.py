@@ -3,6 +3,7 @@ Url router for the administration site
 """
 from django.conf.urls import include
 from django.contrib import admin
+from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import re_path
 
 from core_exporters_app.views.admin import views as admin_views, ajax as admin_ajax
@@ -10,12 +11,12 @@ from core_exporters_app.views.admin import views as admin_views, ajax as admin_a
 admin_urls = [
     re_path(
         r"^exporters/(?P<pk>[\w-]+)/edit/$",
-        admin_ajax.EditExporterView.as_view(),
+        staff_member_required(admin_ajax.EditExporterView.as_view()),
         name="core_exporters_app_exporters_edit",
     ),
     re_path(
         r"^exporters/associated-templates",
-        admin_ajax.associated_templates,
+        staff_member_required(admin_ajax.associated_templates),
         name="core_exporters_app_exporters_associated_templates",
     ),
     re_path(
