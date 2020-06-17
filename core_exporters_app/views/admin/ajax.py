@@ -2,9 +2,10 @@
 """
 import json
 
-from django.urls import reverse_lazy
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
+from django.urls import reverse_lazy
+from django.utils.html import escape
 
 import core_exporters_app.components.exporter.api as exporter_api
 import core_main_app.components.template.api as template_api
@@ -45,7 +46,7 @@ def associated_templates(request):
         else:
             return _associated_templates_get(request)
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(escape(str(e)))
 
 
 def _associated_templates_post(request):
@@ -75,7 +76,9 @@ def _associated_templates_post(request):
         else:
             return HttpResponseBadRequest("Bad entries. Please check your entries")
     except Exception as e:
-        return HttpResponseBadRequest(str(e), content_type="application/javascript")
+        return HttpResponseBadRequest(
+            escape(str(e)), content_type="application/javascript"
+        )
 
 
 def _associated_templates_get(request):

@@ -4,6 +4,7 @@ import json
 
 from django.http.response import HttpResponseBadRequest, HttpResponse
 from django.template import loader
+from django.utils.html import escape
 
 import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 from core_exporters_app.exporters.xsl.views.admin.forms import XsltSelectionForm
@@ -24,7 +25,7 @@ def add_xslt(request):
         else:
             return _add_xslt_get(request)
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(escape(str(e)))
 
 
 def _add_xslt_post(request):
@@ -56,7 +57,9 @@ def _add_xslt_post(request):
             else:
                 return HttpResponseBadRequest("Bad entries. Please check your entries")
     except Exception as e:
-        return HttpResponseBadRequest(str(e), content_type="application/javascript")
+        return HttpResponseBadRequest(
+            escape(str(e)), content_type="application/javascript"
+        )
 
 
 def _add_xslt_get(request):

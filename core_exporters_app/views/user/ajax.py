@@ -4,9 +4,10 @@ import json
 import logging
 
 from celery.exceptions import TimeoutError, SoftTimeLimitExceeded
-from django.urls import reverse
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
+from django.urls import reverse
+from django.utils.html import escape
 
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import core_exporters_app.components.exported_compressed_file.api as exported_file_api
@@ -35,7 +36,7 @@ def exporters_selection(request):
         else:
             raise Exception("request method should be POST")
     except Exception as e:
-        return HttpResponseBadRequest(str(e))
+        return HttpResponseBadRequest(escape(str(e)))
 
 
 def open_form(request):
@@ -189,4 +190,6 @@ def _exporters_selection_post(request):
         else:
             return HttpResponseBadRequest("Bad entries. Please check your entries")
     except Exception as e:
-        return HttpResponseBadRequest(str(e), content_type="application/javascript")
+        return HttpResponseBadRequest(
+            escape(str(e)), content_type="application/javascript"
+        )
