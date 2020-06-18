@@ -2,6 +2,7 @@
 """
 import json
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.http.response import HttpResponseBadRequest, HttpResponse
 from django.template import loader
 from django.utils.html import escape
@@ -10,6 +11,7 @@ import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 from core_exporters_app.exporters.xsl.views.admin.forms import XsltSelectionForm
 
 
+@staff_member_required
 def add_xslt(request):
     """ add xslt modal POST / GET
 
