@@ -21,8 +21,7 @@ class EditExporterForm(DocumentForm):
 
 
 class AssociatedTemplatesForm(forms.Form):
-    """ Associated Template form
-    """
+    """Associated Template form"""
 
     id = forms.CharField(widget=forms.HiddenInput(), required=False)
     templates_manager = forms.MultipleChoiceField(
@@ -35,7 +34,7 @@ class AssociatedTemplatesForm(forms.Form):
 
 
 def _get_templates_versions():
-    """ Get templates versions.
+    """Get templates versions.
 
     Returns:
         List of templates versions.

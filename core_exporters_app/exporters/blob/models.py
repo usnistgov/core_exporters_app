@@ -24,15 +24,14 @@ logger = logging.getLogger(__name__)
 
 
 class BlobExporter(AbstractExporter):
-    """ BLOB Exporter. Allows to find and download all blobs from an xml content
-    """
+    """BLOB Exporter. Allows to find and download all blobs from an xml content"""
 
     def __init__(self):
         self.name = "BLOB"
         self.extension = ".blob"
 
     def transform(self, xml_inputs, session_key):
-        """ find and download all blobs from an xml content
+        """find and download all blobs from an xml content
 
         Args:
             xml_inputs:
@@ -90,7 +89,7 @@ class BlobExporter(AbstractExporter):
 
 
 def _get_blob_url_list_from_xml(xml):
-    """ Returns all blob's url list
+    """Returns all blob's url list
 
     Args:
         xml:
@@ -102,7 +101,7 @@ def _get_blob_url_list_from_xml(xml):
 
 
 def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
-    """ Returns the file name like "file_name.sha3.extension"
+    """Returns the file name like "file_name.sha3.extension"
 
     Args:
         blob_file_info:

@@ -15,12 +15,10 @@ from core_main_app.commons.serializers import BasicSerializer
 
 
 class ExporterSerializer(DocumentSerializer):
-    """ Exporter serializer
-    """
+    """Exporter serializer"""
 
     class Meta(object):
-        """ Meta
-        """
+        """Meta"""
 
         model = Exporter
         fields = "__all__"
@@ -35,12 +33,10 @@ class ExporterSerializer(DocumentSerializer):
 
 
 class ExporterXslSerializer(DocumentSerializer):
-    """ Xsl Exporter serializer
-    """
+    """Xsl Exporter serializer"""
 
     class Meta(object):
-        """ Meta
-        """
+        """Meta"""
 
         model = ExporterXsl
         fields = "__all__"
@@ -55,20 +51,17 @@ class ExporterXslSerializer(DocumentSerializer):
 
 
 class ExporterToZipSerializer(BasicSerializer):
-    """ Serializer used for entered data validation
-    """
+    """Serializer used for entered data validation"""
 
     exporter_id_list = ListField(required=True)
     data_id_list = ListField(required=True)
 
 
 class ExporterExportedCompressedFileSerializer(DocumentSerializer):
-    """ Compressed File serializer
-    """
+    """Compressed File serializer"""
 
     class Meta(object):
-        """ Meta
-        """
+        """Meta"""
 
         model = ExportedCompressedFile
         fields = ("id",)

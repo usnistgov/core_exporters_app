@@ -25,7 +25,7 @@ class Exporter(Document):
 
     @staticmethod
     def get_all(is_cls):
-        """ Returns all exporters
+        """Returns all exporters
 
         Returns:
             exporter collection
@@ -40,7 +40,7 @@ class Exporter(Document):
 
     @staticmethod
     def get_all_by_url(url):
-        """ Lists all exporters with the given url
+        """Lists all exporters with the given url
 
         Args:
             url:
@@ -52,7 +52,7 @@ class Exporter(Document):
 
     @staticmethod
     def get_all_default_exporter():
-        """ Lists all default exporters
+        """Lists all default exporters
 
         Returns: exporter collection
 
@@ -61,7 +61,7 @@ class Exporter(Document):
 
     @staticmethod
     def get_all_by_template_list(template_id_list):
-        """ Gets all template matching with the given list template id
+        """Gets all template matching with the given list template id
 
         Args:
             template_id_list:
@@ -73,7 +73,7 @@ class Exporter(Document):
 
     @staticmethod
     def get_by_id(exporter_id):
-        """ Returns the object with the given id
+        """Returns the object with the given id
 
         Args:
             exporter_id:
@@ -91,7 +91,7 @@ class Exporter(Document):
 
     @staticmethod
     def get_by_url(exporter_url):
-        """ Returns the object with the given url
+        """Returns the object with the given url
 
         Args:
             exporter_url:
@@ -108,7 +108,7 @@ class Exporter(Document):
             raise exceptions.ModelError(str(ex))
 
     def get_templates_to_string(self):
-        """ To string value for exporter's template list
+        """To string value for exporter's template list
 
         Returns:
 
@@ -121,7 +121,7 @@ class Exporter(Document):
         return return_value
 
     def save_object(self):
-        """ Custom save
+        """Custom save
 
         Returns:
 
@@ -136,7 +136,7 @@ class Exporter(Document):
             raise exceptions.ModelError(str(ex))
 
     def clean(self):
-        """ Clean is called before saving
+        """Clean is called before saving
 
         Returns:
 

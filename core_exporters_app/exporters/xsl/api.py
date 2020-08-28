@@ -6,7 +6,7 @@ from core_exporters_app.exporters.xsl.models import ExporterXsl
 
 
 def get_all(is_cls=True):
-    """ Returns all XSL exporters
+    """Returns all XSL exporters
 
     Returns:
         XSL exporter collection
@@ -16,7 +16,7 @@ def get_all(is_cls=True):
 
 
 def get_all_xsl_id():
-    """ Returns all xsl transformation id
+    """Returns all xsl transformation id
 
     Returns:
         XSL exporter collection
@@ -26,7 +26,7 @@ def get_all_xsl_id():
 
 
 def get_all_by_xsl_id_list(xsl_id_list):
-    """ Returns all Xsl exporter with the given id list
+    """Returns all Xsl exporter with the given id list
 
     Returns:
         XSL exporter collection
@@ -36,7 +36,7 @@ def get_all_by_xsl_id_list(xsl_id_list):
 
 
 def upsert(exporter):
-    """ upsert the exporter
+    """upsert the exporter
 
     Args:
         exporter:
@@ -48,7 +48,7 @@ def upsert(exporter):
 
 
 def upsert_or_delete_exporter_xsl(xsl_list):
-    """ Upsert or delete exporter xslt
+    """Upsert or delete exporter xslt
 
         If Exist in database and not in list -> Delete If does not contains associated templates
         If Exist in list and not in database -> Upsert

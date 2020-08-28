@@ -13,7 +13,7 @@ from core_exporters_app.exporters.xsl.views.admin.forms import XsltSelectionForm
 
 @staff_member_required
 def add_xslt(request):
-    """ add xslt modal POST / GET
+    """add xslt modal POST / GET
 
     Args:
         request:
@@ -31,7 +31,7 @@ def add_xslt(request):
 
 
 def _add_xslt_post(request):
-    """ add xslt modal POST
+    """add xslt modal POST
 
     Args:
         request:
@@ -65,7 +65,7 @@ def _add_xslt_post(request):
 
 
 def _add_xslt_get(request):
-    """ add xslt modal GET
+    """add xslt modal GET
 
     Args:
         request:

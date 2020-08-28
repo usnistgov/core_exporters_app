@@ -10,7 +10,7 @@ from core_main_app.utils.rendering import admin_render
 
 @staff_member_required
 def manage_exporters(request):
-    """ Manage exporters, Display as list
+    """Manage exporters, Display as list
 
     Args:
         request:

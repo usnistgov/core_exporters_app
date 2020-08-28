@@ -9,8 +9,7 @@ import core_main_app.components.template.api as template_api
 
 
 class ExportForm(forms.Form):
-    """ Create the form for exporting data
-    """
+    """Create the form for exporting data"""
 
     my_exporters = forms.MultipleChoiceField(
         label="", choices=[], widget=forms.CheckboxSelectMultiple(), required=True
@@ -19,7 +18,7 @@ class ExportForm(forms.Form):
     export_options = []
 
     def __init__(self, *args, **kwargs):
-        """ Init the form
+        """Init the form
 
         Args:
             template_id_list:

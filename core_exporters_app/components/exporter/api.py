@@ -4,7 +4,7 @@ from core_exporters_app.components.exporter.models import Exporter
 
 
 def get_all(is_cls=True):
-    """ Lists all exporters
+    """Lists all exporters
 
     Returns: exporter collection
 
@@ -13,7 +13,7 @@ def get_all(is_cls=True):
 
 
 def get_all_default_exporter():
-    """ Lists all default exporters
+    """Lists all default exporters
 
     Returns: exporter collection
 
@@ -22,7 +22,7 @@ def get_all_default_exporter():
 
 
 def get_all_by_url(url):
-    """ Lists all exporters with the given url
+    """Lists all exporters with the given url
 
     Args:
         url:
@@ -34,7 +34,7 @@ def get_all_by_url(url):
 
 
 def get_by_id(exporter_id):
-    """ Returns exporter object with the given id
+    """Returns exporter object with the given id
 
     Args:
         exporter_id:
@@ -46,7 +46,7 @@ def get_by_id(exporter_id):
 
 
 def get_by_url(exporter_url):
-    """ Returns exporter object with the given url
+    """Returns exporter object with the given url
 
     Args:
         exporter_url:
@@ -58,7 +58,7 @@ def get_by_url(exporter_url):
 
 
 def get_all_by_template_list(template_id_list):
-    """ Returns all exporters object available for id templates given
+    """Returns all exporters object available for id templates given
 
     Args:
         template_id_list:

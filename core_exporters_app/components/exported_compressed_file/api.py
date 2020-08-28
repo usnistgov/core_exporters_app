@@ -6,7 +6,7 @@ from core_exporters_app.components.exported_compressed_file.models import (
 
 
 def get_by_id(exported_compressed_file_id):
-    """ Gets Exported compressed file with the given id
+    """Gets Exported compressed file with the given id
 
     Args:
         exported_compressed_file_id: id
@@ -18,7 +18,7 @@ def get_by_id(exported_compressed_file_id):
 
 
 def upsert(exported_compressed_file):
-    """ Saves or updates the file
+    """Saves or updates the file
 
     Args:
         exported_compressed_file:

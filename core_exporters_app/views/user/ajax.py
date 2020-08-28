@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def exporters_selection(request):
-    """ exporters selection modal POST / GET
+    """exporters selection modal POST / GET
 
     Args:
         request:
@@ -40,7 +40,7 @@ def exporters_selection(request):
 
 
 def open_form(request):
-    """ open form to selection exporters
+    """open form to selection exporters
 
     Args:
         request:
@@ -83,7 +83,7 @@ def open_form(request):
 
 
 def check_download_status(request):
-    """ Checks if a file is ready for download, Id is expected on the request
+    """Checks if a file is ready for download, Id is expected on the request
 
     Args:
         request:
@@ -119,7 +119,7 @@ def check_download_status(request):
 
 
 def _exporters_selection_post(request):
-    """ exporters selection modal POST
+    """exporters selection modal POST
 
     Args:
         request:

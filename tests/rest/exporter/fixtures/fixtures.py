@@ -6,14 +6,13 @@ from core_main_app.utils.integration_tests.fixture_interface import FixtureInter
 
 
 class ExporterFixtures(FixtureInterface):
-    """ Exporter fixtures
-    """
+    """Exporter fixtures"""
 
     data_1 = None
     data_collection = None
 
     def insert_data(self):
-        """ Insert a set of Data.
+        """Insert a set of Data.
 
         Returns:
 
@@ -22,7 +21,7 @@ class ExporterFixtures(FixtureInterface):
         self.generate_data_collection()
 
     def generate_data_collection(self):
-        """ Generate a Data collection.
+        """Generate a Data collection.
 
         Returns:
 

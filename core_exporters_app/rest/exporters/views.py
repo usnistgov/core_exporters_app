@@ -29,13 +29,12 @@ from core_main_app.utils.file import get_file_http_response
 
 
 class ExporterList(APIView):
-    """ List all Exporters
-    """
+    """List all Exporters"""
 
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        """ Get all Exporters
+        """Get all Exporters
 
         Args:
 
@@ -61,13 +60,12 @@ class ExporterList(APIView):
 
 
 class ExporterDetail(APIView):
-    """" Get an Exporter
-    """
+    """ " Get an Exporter"""
 
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
-        """ Retrieve an Exporter
+        """Retrieve an Exporter
 
         Args:
             pk:
@@ -81,7 +79,7 @@ class ExporterDetail(APIView):
             raise Http404
 
     def get(self, request, pk):
-        """ Get an Exporter
+        """Get an Exporter
 
         Args:
 
@@ -113,13 +111,12 @@ class ExporterDetail(APIView):
 
 
 class ExportToZip(APIView):
-    """ Export Data into a zip file
-    """
+    """Export Data into a zip file"""
 
     permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        """ Generate a zip file and return its ID
+        """Generate a zip file and return its ID
 
         It can then be used with the download url to retrieve the file
 
@@ -202,13 +199,12 @@ class ExportToZip(APIView):
 
 
 class ExporterDownload(APIView):
-    """ Download a zip file
-    """
+    """Download a zip file"""
 
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
-        """ Retrieve an exported compressed file
+        """Retrieve an exported compressed file
 
         Args:
 
@@ -224,7 +220,7 @@ class ExporterDownload(APIView):
             raise Http404
 
     def get(self, request, pk):
-        """ Download the file
+        """Download the file
 
         Args:
 

@@ -32,7 +32,7 @@ class EditExporterView(EditObjectModalView):
 
 
 def associated_templates(request):
-    """ associated templates modal POST / GET
+    """associated templates modal POST / GET
 
     Args:
         request:
@@ -50,7 +50,7 @@ def associated_templates(request):
 
 
 def _associated_templates_post(request):
-    """ associated templates modal POST
+    """associated templates modal POST
 
     Args:
         request:
@@ -82,7 +82,7 @@ def _associated_templates_post(request):
 
 
 def _associated_templates_get(request):
-    """ associated templates modal GET
+    """associated templates modal GET
 
     Args:
         request:

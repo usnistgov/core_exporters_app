@@ -6,14 +6,13 @@ from signals_utils.signals.mongo import connector, signals
 
 
 def init():
-    """ Connect to template object events.
-    """
+    """Connect to template object events."""
     connector.connect(post_save_template, signals.post_save, sender=Template)
     connector.connect(post_delete_template, signals.post_delete, sender=Template)
 
 
 def post_save_template(sender, document, **kwargs):
-    """ Method executed after saving of a Template object.
+    """Method executed after saving of a Template object.
     Args:
         sender:
         document: template object.
@@ -30,7 +29,7 @@ def post_save_template(sender, document, **kwargs):
 
 
 def post_delete_template(sender, document, **kwargs):
-    """ Method executed after a template deletion.
+    """Method executed after a template deletion.
         We are removing in all exporter, the reference to the deleted template
     Args:
         sender:

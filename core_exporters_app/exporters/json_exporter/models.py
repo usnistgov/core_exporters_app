@@ -11,15 +11,14 @@ from core_main_app.utils import xml as xml_utils
 
 
 class JsonExporter(AbstractExporter):
-    """ JSON Exporter. Allows to transform an XML to a JSON
-    """
+    """JSON Exporter. Allows to transform an XML to a JSON"""
 
     def __init__(self):
         self.name = "JSON"
         self.extension = ".json"
 
     def transform(self, xml_inputs, session_key):
-        """ Transforms the input to a json content
+        """Transforms the input to a json content
 
         Args:
             xml_inputs:

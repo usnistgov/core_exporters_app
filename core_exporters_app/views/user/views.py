@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 def download_exported_compressed_file(request):
-    """ Download view, ID file expected in parameters
+    """Download view, ID file expected in parameters
 
     Args:
         request:

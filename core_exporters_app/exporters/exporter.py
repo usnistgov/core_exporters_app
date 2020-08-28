@@ -26,14 +26,14 @@ class AbstractExporter(object, metaclass=ABCMeta):
     @abstractmethod
     def transform(self, results, session_key):
         """
-            Method: Returns converted data
+        Method: Returns converted data
         """
         raise NotImplementedError("This method is not implemented.")
 
     @staticmethod
     def export(exported_compressed_file_id, transformed_result_list):
         """
-            Method: Exports the data
+        Method: Exports the data
         """
         # Generate the zip file
         return AbstractExporter.generate_zip(
@@ -42,7 +42,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
     @staticmethod
     def get_title_document(document_name, content):
-        """ Add a Sha-3 and returns the title of the document exported
+        """Add a Sha-3 and returns the title of the document exported
 
         Args:
             document_name:
@@ -59,7 +59,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
     @staticmethod
     def get_sha(content, number_of_characters=8):
-        """ Generates the Sha-3 from the xml content
+        """Generates the Sha-3 from the xml content
 
         Args:
             content:
@@ -83,7 +83,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
     @staticmethod
     def generate_zip(exported_compressed_file_id, transformed_result_list):
-        """ Generates the zip file
+        """Generates the zip file
 
         Args:
             exported_compressed_file_id:
@@ -131,17 +131,17 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
 
 class TransformResultContent(Document):
-    """ Represents a result content
+    """Represents a result content
 
-        file_name:
-            For simple conversion like XML, JSON etc.. The file name
-            will be the same as the TransformResult without extension
-            For conversion like Blob, the file name will be the blob's
-            file name
-        content_converted:
-            The content converter in string (XML, Json, unicode)
-        content_extension:
-            .xml, .json, .png
+    file_name:
+        For simple conversion like XML, JSON etc.. The file name
+        will be the same as the TransformResult without extension
+        For conversion like Blob, the file name will be the blob's
+        file name
+    content_converted:
+        The content converter in string (XML, Json, unicode)
+    content_extension:
+        .xml, .json, .png
     """
 
     file_name = fields.StringField(default="")
@@ -150,14 +150,14 @@ class TransformResultContent(Document):
 
 
 class TransformResult(Document):
-    """ Represents a result after transformation
+    """Represents a result after transformation
 
-        source_document_name:
-            It will be the source document name like "myFile.xml"
-        transform_result_content:
-            List of result.
-            One result expected for simple conversion like XML, Json
-            but zero or N result for blob export
+    source_document_name:
+        It will be the source document name like "myFile.xml"
+    transform_result_content:
+        List of result.
+        One result expected for simple conversion like XML, Json
+        but zero or N result for blob export
     """
 
     source_document_name = fields.StringField(default="")
@@ -165,7 +165,7 @@ class TransformResult(Document):
 
 
 def get_exporter_module_from_url(exporter_url):
-    """ Returns the exporter module from exporter url
+    """Returns the exporter module from exporter url
 
     Args:
         exporter_url:
@@ -186,7 +186,7 @@ def get_exporter_module_from_url(exporter_url):
 
 
 def generate_zip_wrapper(args):
-    """ wraps generate zip parameter
+    """wraps generate zip parameter
 
     Args:
         args:

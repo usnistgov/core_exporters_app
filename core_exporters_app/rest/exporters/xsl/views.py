@@ -16,13 +16,12 @@ from core_main_app.utils.decorators import api_staff_member_required
 
 
 class ExporterXslList(APIView):
-    """ List all XSL Exporters, or create
-    """
+    """List all XSL Exporters, or create"""
 
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        """ Get all XSL Exporters
+        """Get all XSL Exporters
 
         Args:
 
@@ -48,7 +47,7 @@ class ExporterXslList(APIView):
 
     @method_decorator(api_staff_member_required())
     def post(self, request):
-        """ Save an XSL Exporter
+        """Save an XSL Exporter
 
         Parameters:
 
@@ -88,13 +87,12 @@ class ExporterXslList(APIView):
 
 
 class ExporterXslDetail(APIView):
-    """" Get an XSL Exporter
-    """
+    """ " Get an XSL Exporter"""
 
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
-        """ Retrieve an XSL Exporter
+        """Retrieve an XSL Exporter
 
         Args:
 
@@ -110,7 +108,7 @@ class ExporterXslDetail(APIView):
             raise Http404
 
     def get(self, request, pk):
-        """ Get an XSL Exporter
+        """Get an XSL Exporter
 
         Args:
 

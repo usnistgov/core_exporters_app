@@ -19,12 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 class XslExporter(AbstractExporter):
-    """ XSLT Exporter module. generate the XML results
-    """
+    """XSLT Exporter module. generate the XML results"""
 
     def __init__(self):
-        """ Sets the default name and extension
-        """
+        """Sets the default name and extension"""
         self.name = "XSLT"
         # default extension
         self.extension = ".xml"
@@ -32,7 +30,7 @@ class XslExporter(AbstractExporter):
         self.transformation = None
 
     def set_xslt(self, xsl_transformation):
-        """ Set the XSLT to use for the transformation.
+        """Set the XSLT to use for the transformation.
 
         Args:
             xsl_transformation:
@@ -52,7 +50,7 @@ class XslExporter(AbstractExporter):
         self.transformation = XSDTree.transform_to_xslt(xslt_parsed)
 
     def transform(self, xml_inputs, session_key):
-        """ Transforms the input to a json content
+        """Transforms the input to a json content
 
         Args:
             xml_inputs: xml files
@@ -87,7 +85,7 @@ class XslExporter(AbstractExporter):
         return results_transform
 
     def _set_extension_from_xslt(self, xslt):
-        """ Define the extension from the xslt
+        """Define the extension from the xslt
 
         Args:
             xslt:
@@ -111,8 +109,7 @@ class XslExporter(AbstractExporter):
 
 
 class ExporterXsl(Exporter):
-    """ Export XSL object
-    """
+    """Export XSL object"""
 
     xsl_transformation = fields.ReferenceField(
         XslTransformation, blank=False, reverse_delete_rule=CASCADE
@@ -120,7 +117,7 @@ class ExporterXsl(Exporter):
 
     @staticmethod
     def get_all(is_cls):
-        """ Returns all XSL exporters
+        """Returns all XSL exporters
 
         Returns:
             XSL exporter collection
@@ -137,7 +134,7 @@ class ExporterXsl(Exporter):
 
     @staticmethod
     def get_all_by_xsl_id_list(xsl_id_list):
-        """ Returns all Xsl exporter with the given id list
+        """Returns all Xsl exporter with the given id list
 
         Returns:
 

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
-    """ Create a dictionary for matched API urls.
+    """Create a dictionary for matched API urls.
 
     Args:
         pattern: pattern to parse.
@@ -45,7 +45,7 @@ def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
 
 
 def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
-    """ Use recursion to flatten url tree.
+    """Use recursion to flatten url tree.
 
     Args:
         patterns: urlpatterns list
@@ -82,7 +82,7 @@ def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
 
 
 def discover_exporter():
-    """ Exporters discover
+    """Exporters discover
 
     Returns:
 

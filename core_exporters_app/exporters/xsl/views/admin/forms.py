@@ -6,8 +6,7 @@ import core_main_app.components.xsl_transformation.api as xsl_api
 
 
 class XsltSelectionForm(forms.Form):
-    """ Xslt selection form
-    """
+    """Xslt selection form"""
 
     xslt_list = forms.MultipleChoiceField(
         label="", widget=forms.SelectMultiple(), required=False
@@ -19,7 +18,7 @@ class XsltSelectionForm(forms.Form):
 
 
 def _get_xsl():
-    """ Get all xsl and format them to be displayed
+    """Get all xsl and format them to be displayed
 
     Returns:
         List of xsl

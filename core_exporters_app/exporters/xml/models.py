@@ -8,17 +8,15 @@ from core_exporters_app.exporters.exporter import (
 
 
 class XmlExporter(AbstractExporter):
-    """ XML Exporter. generate the XML results
-    """
+    """XML Exporter. generate the XML results"""
 
     def __init__(self):
-        """ Sets the default name and extension
-        """
+        """Sets the default name and extension"""
         self.name = "XML"
         self.extension = ".xml"
 
     def transform(self, xml_inputs, session_key):
-        """ Transforms the input to a json content
+        """Transforms the input to a json content
 
         Args:
             xml_inputs: xml files

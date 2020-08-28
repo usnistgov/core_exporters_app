@@ -9,8 +9,7 @@ from core_main_app.commons import exceptions
 
 
 class ExportedCompressedFile(Document):
-    """ Represents exported files
-    """
+    """Represents exported files"""
 
     file_name = fields.StringField()
     file = fields.FileField(
@@ -21,7 +20,7 @@ class ExportedCompressedFile(Document):
 
     @staticmethod
     def get_by_id(object_id):
-        """ Get Exported compressed file with the given id
+        """Get Exported compressed file with the given id
 
         Args:
             object_id:

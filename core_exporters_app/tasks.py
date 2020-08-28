@@ -21,7 +21,7 @@ from core_main_app.utils.requests_utils.requests_utils import send_get_request
 def export_files(
     exported_file_id, exporters_list_url, url_base, data_url_list, session_key
 ):
-    """ Asynchronous tasks exporting files
+    """Asynchronous tasks exporting files
 
     Args:
         exported_file_id:
@@ -57,7 +57,7 @@ def export_files(
 
 
 def _get_results_list_from_url_list(url_base, url_list, session_key):
-    """ Gets all data from url
+    """Gets all data from url
 
     Args:
         url_base: url of running server
