@@ -3,8 +3,11 @@
 from __future__ import absolute_import, unicode_literals
 
 import json
+import logging
 
 from celery import shared_task
+from celery.schedules import crontab
+from celery.task import periodic_task
 
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
@@ -14,7 +17,11 @@ from core_exporters_app.exporters.exporter import (
     get_exporter_module_from_url,
     AbstractExporter,
 )
+from core_exporters_app.settings import COMPRESSED_FILES_EXPIRE_AFTER_SECONDS
+from core_exporters_app.system.api import get_older_exported_files
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -54,6 +61,28 @@ def export_files(
 
     # Export in Zip
     AbstractExporter.export(exported_file_id, transformed_result_list)
+
+
+@periodic_task(run_every=crontab(minute="*"))
+def delete_old_exported_files():
+    """Delete older exported files.
+
+    Returns:
+
+    """
+    try:
+        # remove older exported files from database
+        for exported_file in get_older_exported_files(
+            seconds=COMPRESSED_FILES_EXPIRE_AFTER_SECONDS
+        ):
+            logger.info(
+                "Periodic task: delete exported file {}.".format(str(exported_file.id))
+            )
+            exported_file.delete()
+    except Exception as e:
+        logger.error(
+            "An error occurred while deleting exported files ({}).".format(str(e))
+        )
 
 
 def _get_results_list_from_url_list(url_base, url_list, session_key):
