@@ -96,7 +96,7 @@ def check_download_status(request):
     if file_id is not None:
         try:
             # Get the exported file with the given id
-            exported_file = exported_file_api.get_by_id(file_id)
+            exported_file = exported_file_api.get_by_id(file_id, request.user)
         except exceptions.DoesNotExist as e:
             return HttpResponseBadRequest("The file with the given id does not exist.")
         except Exception as e:
@@ -148,6 +148,7 @@ def _exporters_selection_post(request):
                         file_name="Query_Results.zip",
                         is_ready=False,
                         mime_type="application/zip",
+                        user_id=str(request.user.id),
                     )
 
                     # Save in database to generate an Id and be accessible via url
@@ -161,6 +162,7 @@ def _exporters_selection_post(request):
                             url_base,
                             data_url_list,
                             request.session.session_key,
+                            request.user.id,
                         )
                     except (
                         TimeoutError,
@@ -174,6 +176,7 @@ def _exporters_selection_post(request):
                             url_base,
                             data_url_list,
                             request.session.session_key,
+                            request.user.id,
                         )
 
                     # redirecting

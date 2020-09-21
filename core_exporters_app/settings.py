@@ -20,3 +20,9 @@ COMPRESSED_FILES_EXPIRE_AFTER_SECONDS = getattr(
     "COMPRESSED_FILES_EXPIRE_AFTER_SECONDS",
     3600,
 )
+
+CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT = getattr(
+    settings, "CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT", False
+)
+""" :py:class:`bool`: Can anonymous user access public document.
+"""

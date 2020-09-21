@@ -31,13 +31,13 @@ class AbstractExporter(object, metaclass=ABCMeta):
         raise NotImplementedError("This method is not implemented.")
 
     @staticmethod
-    def export(exported_compressed_file_id, transformed_result_list):
+    def export(exported_compressed_file_id, transformed_result_list, user):
         """
         Method: Exports the data
         """
         # Generate the zip file
         return AbstractExporter.generate_zip(
-            exported_compressed_file_id, transformed_result_list
+            exported_compressed_file_id, transformed_result_list, user
         )
 
     @staticmethod
@@ -82,19 +82,20 @@ class AbstractExporter(object, metaclass=ABCMeta):
         return hash_result.hexdigest()[0:number_of_characters]
 
     @staticmethod
-    def generate_zip(exported_compressed_file_id, transformed_result_list):
+    def generate_zip(exported_compressed_file_id, transformed_result_list, user):
         """Generates the zip file
 
         Args:
             exported_compressed_file_id:
             transformed_result_list:
+            user:
 
         Returns:
 
         """
         # Needed otherwise the file in db is not updated
         exported_compressed_file = exported_compressed_file_api.get_by_id(
-            exported_compressed_file_id
+            exported_compressed_file_id, user
         )
 
         # ZIP fileCreation

@@ -159,10 +159,11 @@ class TestExporterDownloadGetPermissions(SimpleTestCase):
     def test_authenticated_returns_http_200(
         self, mock_exported_compressed_file_get_by_id
     ):
-        mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
-            is_ready=True, file=None, file_name=""
-        )
         mock_user = create_mock_user("1")
+
+        mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
+            is_ready=True, file=None, file_name="", user_id=mock_user.id
+        )
 
         response = RequestMock.do_request_get(
             exporters_api_views.ExporterDownload.as_view(), mock_user, param={"pk": "0"}
@@ -172,10 +173,11 @@ class TestExporterDownloadGetPermissions(SimpleTestCase):
 
     @patch.object(exported_compressed_file_api, "get_by_id")
     def test_staff_returns_http_200(self, mock_exported_compressed_file_get_by_id):
-        mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
-            is_ready=True, file=None, file_name=""
-        )
         mock_user = create_mock_user("1", is_staff=True)
+
+        mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
+            is_ready=True, file=None, file_name="", user_id=mock_user.id
+        )
 
         response = RequestMock.do_request_get(
             exporters_api_views.ExporterDownload.as_view(), mock_user, param={"pk": "0"}

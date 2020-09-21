@@ -155,6 +155,7 @@ class ExportToZip(APIView):
                 file_name="Query_Results.zip",
                 is_ready=False,
                 mime_type="application/zip",
+                user_id=str(request.user.id),
             )
             # Save in database to generate an Id and be accessible via url
             exported_file = exported_compressed_file_api.upsert(exported_file)
@@ -185,7 +186,9 @@ class ExportToZip(APIView):
                     )
                 )
             # Export in Zip
-            AbstractExporter.export(exported_file.id, transformed_result_list)
+            AbstractExporter.export(
+                exported_file.id, transformed_result_list, request.user
+            )
             # Serialize object
             return_value = ExporterExportedCompressedFileSerializer(exported_file)
             # return the Id to download the zip file
@@ -203,19 +206,20 @@ class ExporterDownload(APIView):
 
     permission_classes = (IsAuthenticated,)
 
-    def get_object(self, pk):
+    def get_object(self, pk, user):
         """Retrieve an exported compressed file
 
         Args:
 
             pk: ObjectId
+            user:
 
         Returns:
 
             ZipFile
         """
         try:
-            return exported_compressed_file_api.get_by_id(pk)
+            return exported_compressed_file_api.get_by_id(pk, user)
         except exceptions.DoesNotExist:
             raise Http404
 
@@ -240,7 +244,7 @@ class ExporterDownload(APIView):
         """
         try:
             # Get object
-            compressed_file_object = self.get_object(pk)
+            compressed_file_object = self.get_object(pk, request.user)
             if compressed_file_object.is_ready:
                 return get_file_http_response(
                     compressed_file_object.file.read(), compressed_file_object.file_name

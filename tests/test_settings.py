@@ -34,3 +34,5 @@ TEMPLATES = [
         },
     },
 ]
+
+CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT = False

@@ -17,6 +17,7 @@ class ExportedCompressedFile(Document):
     )
     is_ready = fields.BooleanField(default=False)
     mime_type = fields.StringField()
+    user_id = fields.StringField(blank=False)
 
     @staticmethod
     def get_by_id(object_id):

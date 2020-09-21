@@ -13,6 +13,7 @@ import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
+import core_main_app.components.user.api as user_api
 from core_exporters_app.exporters.exporter import (
     get_exporter_module_from_url,
     AbstractExporter,
@@ -26,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def export_files(
-    exported_file_id, exporters_list_url, url_base, data_url_list, session_key
+    exported_file_id, exporters_list_url, url_base, data_url_list, session_key, user_id
 ):
     """Asynchronous tasks exporting files
 
@@ -36,6 +37,7 @@ def export_files(
         url_base:
         data_url_list:
         session_key:
+        user_id:
 
     Returns:
 
@@ -59,8 +61,11 @@ def export_files(
             exporter_module.transform(result_list, session_key)
         )
 
+    # Get current user
+    user = user_api.get_user_by_id(user_id) if user_id else None
+
     # Export in Zip
-    AbstractExporter.export(exported_file_id, transformed_result_list)
+    AbstractExporter.export(exported_file_id, transformed_result_list, user)
 
 
 @periodic_task(run_every=crontab(minute="*"))
