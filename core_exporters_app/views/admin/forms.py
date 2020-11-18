@@ -29,20 +29,26 @@ class AssociatedTemplatesForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        request = kwargs.pop("request")
         super(AssociatedTemplatesForm, self).__init__(*args, **kwargs)
-        self.fields["templates_manager"].choices = _get_templates_versions()
+        self.fields["templates_manager"].choices = _get_templates_versions(
+            request=request
+        )
 
 
-def _get_templates_versions():
+def _get_templates_versions(request):
     """Get templates versions.
 
+    Args:
+        request:
+
     Returns:
-        List of templates versions.
+        List of template versions
 
     """
     templates = []
     # display all template, global and from users
-    template_list = template_api.get_all()
+    template_list = template_api.get_all(request=request)
     for template in template_list:
         templates.append((template.id, template.display_name))
     return templates

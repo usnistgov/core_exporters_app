@@ -66,6 +66,7 @@ def open_form(request):
             template_id_list=template_id_list,
             template_hash_list=template_hash_list,
             data_url_list=data_url_list,
+            request=request,
         )
         context_params["exporters_selector_form"] = exporters_selection_form
 
@@ -138,6 +139,7 @@ def _exporters_selection_post(request):
                 template_id_list=templates_id,
                 template_hash_list=templates_hash,
                 data_url_list=data_url_list,
+                request=request,
             )
             url_base = request.build_absolute_uri("/")[:-1]
             if form.is_valid():

@@ -14,6 +14,7 @@ from core_exporters_app.views.admin.forms import (
     AssociatedTemplatesForm,
     EditExporterForm,
 )
+from core_main_app.access_control.exceptions import AccessControlError
 from core_main_app.views.common.ajax import EditObjectModalView
 
 
@@ -45,8 +46,10 @@ def associated_templates(request):
             return _associated_templates_post(request)
         else:
             return _associated_templates_get(request)
+    except AccessControlError as ace:
+        return HttpResponseBadRequest("You don't have enough rights to do this.")
     except Exception as e:
-        return HttpResponseBadRequest(escape(str(e)))
+        return HttpResponseBadRequest("An unexpected error occurred.")
 
 
 def _associated_templates_post(request):
@@ -58,27 +61,21 @@ def _associated_templates_post(request):
     Returns:
 
     """
-    try:
-        form = AssociatedTemplatesForm(request.POST)
-        if form.is_valid():
-            templates = request.POST.getlist("templates_manager", [])
-            exporter_id = request.POST.get("id", None)
-            if exporter_id is not None:
-                exporter = exporter_api.get_by_id(exporter_id)
-                template_id_list = [
-                    template_api.get(template_id) for template_id in templates
-                ]
-                exporter.templates = template_id_list
-                exporter_api.upsert(exporter)
-                return HttpResponse(
-                    json.dumps({}), content_type="application/javascript"
-                )
-        else:
-            return HttpResponseBadRequest("Bad entries. Please check your entries")
-    except Exception as e:
-        return HttpResponseBadRequest(
-            escape(str(e)), content_type="application/javascript"
-        )
+    form = AssociatedTemplatesForm(request.POST, request=request)
+    if form.is_valid():
+        templates = request.POST.getlist("templates_manager", [])
+        exporter_id = request.POST.get("id", None)
+        if exporter_id is not None:
+            exporter = exporter_api.get_by_id(exporter_id)
+            template_id_list = [
+                template_api.get(template_id, request=request)
+                for template_id in templates
+            ]
+            exporter.templates = template_id_list
+            exporter_api.upsert(exporter)
+            return HttpResponse(json.dumps({}), content_type="application/javascript")
+    else:
+        return HttpResponseBadRequest("Bad entries. Please check your entries")
 
 
 def _associated_templates_get(request):
@@ -90,27 +87,24 @@ def _associated_templates_get(request):
     Returns:
 
     """
-    try:
-        context_params = dict()
-        templates_selector = loader.get_template(
-            "core_exporters_app/admin/exporters/list/associated_templates_base.html"
-        )
+    context_params = dict()
+    templates_selector = loader.get_template(
+        "core_exporters_app/admin/exporters/list/associated_templates_base.html"
+    )
 
-        request_id = request.GET["exporter_id"]
-        exporter = exporter_api.get_by_id(request_id)
-        data_form = {
-            "id": exporter.id,
-            "templates_manager": [x.id for x in exporter.templates],
-        }
+    request_id = request.GET["exporter_id"]
+    exporter = exporter_api.get_by_id(request_id)
+    data_form = {
+        "id": exporter.id,
+        "templates_manager": [x.id for x in exporter.templates],
+    }
 
-        associated_form = AssociatedTemplatesForm(data_form)
-        context_params["associated_form"] = associated_form
-        context = {}
-        context.update(request)
-        context.update(context_params)
-        return HttpResponse(
-            json.dumps({"template": templates_selector.render(context)}),
-            content_type="application/javascript",
-        )
-    except Exception as e:
-        raise Exception("Error occurred during the form display")
+    associated_form = AssociatedTemplatesForm(data_form, request=request)
+    context_params["associated_form"] = associated_form
+    context = {}
+    context.update(request)
+    context.update(context_params)
+    return HttpResponse(
+        json.dumps({"template": templates_selector.render(context)}),
+        content_type="application/javascript",
+    )

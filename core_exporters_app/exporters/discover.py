@@ -10,7 +10,7 @@ from mongoengine.errors import ValidationError
 
 import core_exporters_app.components.exporter.api as exporters_api
 import core_main_app.commons.exceptions as main_exception
-import core_main_app.components.template.api as templates_api
+import core_main_app.system.api as system_api
 from core_exporters_app.components.exporter.models import Exporter
 from core_exporters_app.exporters import urls
 
@@ -102,7 +102,7 @@ def discover_exporter():
                     )
                     # If an exporter was added and is a default one, it is added in all templates
                     if exporter_added.enable_by_default is True:
-                        exporter_added.templates = templates_api.get_all()
+                        exporter_added.templates = system_api.get_all_templates()
                     exporters_api.upsert(exporter_added)
             except Exception as e:
                 logger.error(

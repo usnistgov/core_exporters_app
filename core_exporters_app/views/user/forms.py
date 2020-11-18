@@ -29,6 +29,7 @@ class ExportForm(forms.Form):
         self.data_url_list = []
         self.template_id_list = []
         self.template_hash_list = []
+        request = kwargs.pop("request")
 
         if "template_id_list" in kwargs and "template_hash_list" in kwargs:
             # Only stringified ObjectId in template_id_list
@@ -39,10 +40,12 @@ class ExportForm(forms.Form):
             ]
             self.template_hash_list = kwargs.pop("template_hash_list")
 
-            # Retrieves all corresponded template
-            templates_from_id = template_api.get_all_by_id_list(self.template_id_list)
-            templates_from_hash = template_api.get_all_by_hash_list(
-                self.template_hash_list
+            # Retrieves all corresponding templates
+            templates_from_id = template_api.get_all_accessible_by_id_list(
+                self.template_id_list, request=request
+            )
+            templates_from_hash = template_api.get_all_accessible_by_hash_list(
+                self.template_hash_list, request=request
             )
 
             # Retrieves all common exporter for exporters given

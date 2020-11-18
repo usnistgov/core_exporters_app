@@ -33,7 +33,7 @@ load_associated_templates_form = function(exporterId){
         },
         error:function(data){
             if (data.responseText != ""){
-                $("#form-associated-templates-errors").html(data.responseText);
+                $("#form_associated_templates_errors").html(data.responseText);
                 $("#banner_errors").show(500);
                 return (false);
             }
@@ -60,7 +60,7 @@ submit_associated_templates_form = function(){
         },
         error:function(data){
             if (data.responseText != ""){
-                $("#form-associated-templates-errors").html(data.responseText);
+                $("#form_associated_templates_errors").html(data.responseText);
                 $("#banner_errors").show(500);
                 return (false);
             }
