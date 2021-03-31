@@ -11,9 +11,9 @@ from celery.task import periodic_task
 
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
+import core_main_app.components.user.api as user_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
-import core_main_app.components.user.api as user_api
 from core_exporters_app.exporters.exporter import (
     get_exporter_module_from_url,
     AbstractExporter,
