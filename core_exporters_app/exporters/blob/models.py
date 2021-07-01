@@ -51,7 +51,7 @@ class BlobExporter(AbstractExporter):
             transform_result = TransformResult()
             transform_result.source_document_name = document_name_with_sha
             # Get all url from xml content
-            urls = _get_blob_url_list_from_xml(xml_item["xml_content"])
+            urls = get_blob_download_regex(xml_item["xml_content"])
             # Get all blobs from urls
             for url in urls:
                 try:
@@ -86,18 +86,6 @@ class BlobExporter(AbstractExporter):
 
             results_transform.append(transform_result)
         return results_transform
-
-
-def _get_blob_url_list_from_xml(xml):
-    """Returns all blob's url list
-
-    Args:
-        xml:
-
-    Returns:
-
-    """
-    return re.findall(get_blob_download_regex(), xml)
 
 
 def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
