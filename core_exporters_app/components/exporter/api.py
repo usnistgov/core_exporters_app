@@ -45,6 +45,19 @@ def get_by_id(exporter_id):
     return Exporter.get_by_id(exporter_id)
 
 
+def get_by_name(exporter_name):
+    """Returns exporter object with the given name
+
+    Args:
+        exporter_name:
+
+    Returns: exporter object
+
+    """
+
+    return Exporter.get_by_name(exporter_name)
+
+
 def get_by_url(exporter_url):
     """Returns exporter object with the given url
 

@@ -90,6 +90,24 @@ class Exporter(Document):
             raise exceptions.ModelError(str(ex))
 
     @staticmethod
+    def get_by_name(exporter_name):
+        """Returns the object with the given name
+
+        Args:
+            exporter_name:
+
+        Returns:
+            Exporter (obj): Exporter object with the given name
+
+        """
+        try:
+            return Exporter.objects.get(name=str(exporter_name))
+        except mongoengine_errors.DoesNotExist as e:
+            raise exceptions.DoesNotExist(str(e))
+        except Exception as ex:
+            raise exceptions.ModelError(str(ex))
+
+    @staticmethod
     def get_by_url(exporter_url):
         """Returns the object with the given url
 

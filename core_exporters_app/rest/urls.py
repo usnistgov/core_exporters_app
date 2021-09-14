@@ -4,6 +4,7 @@ from django.urls import re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
 from core_exporters_app.rest.exporters import views as exporters_views
+from core_exporters_app.rest.export.data import views as export_data_views
 from core_exporters_app.rest.exporters.xsl import views as xsl_views
 
 urlpatterns = [
@@ -36,6 +37,11 @@ urlpatterns = [
         r"^exporter/export/download/(?P<pk>\w+)/$",
         exporters_views.ExporterDownload.as_view(),
         name="core_exporters_app_rest_exporter_export_download",
+    ),
+    re_path(
+        r"^export/$",
+        export_data_views.ExportData.as_view(),
+        name="core_exporters_app_rest_export_data",
     ),
 ]
 
