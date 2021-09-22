@@ -43,8 +43,10 @@ class ExportData(APIView):
               content: Internal server error
         """
         try:
+            document = "Data"
             # get data by id/pid
             if "data_id" in request.GET:
+
                 data = data_api.get_by_id(request.GET["data_id"], request.user)
             # Check if 'core_linked_records_app' is installed before using pid
             elif "data_pid" in request.GET:
@@ -65,6 +67,7 @@ class ExportData(APIView):
                     "Error: data id/pid is missing or the value is empty."
                 )
 
+            document = "Exporter"
             # get the exporter with the given name
             exporter_object = exporter_api.get_by_name(request.GET["exporter"])
 
@@ -103,7 +106,7 @@ class ExportData(APIView):
             content = {"message": validation_exception.detail}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         except exceptions.DoesNotExist:
-            content = {"message": "Data or exporter not found."}
+            content = {"message": document + " not found."}
             return Response(content, status=status.HTTP_404_NOT_FOUND)
         except Exception as api_exception:
             content = {"message": str(api_exception)}
