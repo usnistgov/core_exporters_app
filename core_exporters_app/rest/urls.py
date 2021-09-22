@@ -39,7 +39,7 @@ urlpatterns = [
         name="core_exporters_app_rest_exporter_export_download",
     ),
     re_path(
-        r"^export/$",
+        r"^export$",
         export_data_views.ExportData.as_view(),
         name="core_exporters_app_rest_export_data",
     ),

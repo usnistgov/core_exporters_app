@@ -54,7 +54,7 @@ class ExportData(APIView):
                     )
 
                     data = linked_data_api.get_data_by_pid(
-                        request.GET["data_pid"], request.user
+                        request.GET["data_pid"], request
                     )
                 else:
                     return HttpResponseBadRequest(
