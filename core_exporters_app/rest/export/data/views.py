@@ -85,18 +85,32 @@ class ExportData(APIView):
                 request.session.session_key,
             )
 
-            # check if the list is not empty
+            # Check if the list is empty
             if transform_result_list:
-                # get the first transformed element from the list (since we have only one data)
-                transform_result = transform_result_list[0].transform_result_content[0]
-                extension = transform_result.content_extension
-                # get extension without '.'
-                content_type = extension.split(".")[1]
+                # get the list of the transformed content(first element since we have only one data)
+                transform_result_content_list = transform_result_list[
+                    0
+                ].transform_result_content
+
+                content_type = ""
+                extension = ""
+                content_converted = ""
+
+                # Check if the content is empty
+                if transform_result_content_list:
+                    # get the content  (first element since we have only one transformed content)
+                    transform_result_content = transform_result_content_list[0]
+                    # get the converted content
+                    content_converted = transform_result_content.content_converted
+                    # get the extension
+                    extension = transform_result_content.content_extension
+                    # get the type content by removing '.' from the extension
+                    content_type = "text/" + extension.split(".")[1]
 
                 return get_file_http_response(
-                    transform_result.content_converted,
+                    content_converted,
                     data.title,
-                    "text/" + content_type,
+                    content_type,
                     extension,
                 )
             else:
