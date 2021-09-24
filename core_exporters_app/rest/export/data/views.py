@@ -46,7 +46,6 @@ class ExportData(APIView):
             document = "Data"
             # get data by id/pid
             if "data_id" in request.GET:
-
                 data = data_api.get_by_id(request.GET["data_id"], request.user)
             # Check if 'core_linked_records_app' is installed before using pid
             elif "data_pid" in request.GET:
@@ -59,13 +58,12 @@ class ExportData(APIView):
                         request.GET["data_pid"], request
                     )
                 else:
-                    return HttpResponseBadRequest(
-                        "Error: module 'core_linked_records_app' not found."
-                    )
+                    content = {"message": "module 'core_linked_records_app' not found."}
+                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
             else:
-                return HttpResponseBadRequest(
-                    "Error: data id/pid is missing or the value is empty."
-                )
+                content = {"message": "data id/pid is missing or the value is empty."}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
             document = "Exporter"
             # get the exporter with the given name
