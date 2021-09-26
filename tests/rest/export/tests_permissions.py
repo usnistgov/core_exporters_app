@@ -14,6 +14,7 @@ from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 
 if "core_linked_records_app" in settings.INSTALLED_APPS:
     from core_linked_records_app.components.data import (
@@ -22,12 +23,21 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
 
 
 class TestExportDataByIdGetPermissions(SimpleTestCase):
-    def test_anonymous_returns_http_403(self):
+    @patch.object(data_api, "get_by_id")
+    @patch.object(exporter_api, "get_by_name")
+    def test_anonymous_returns_http_200(
+        self, mock_exporter_get_by_name, mock_data_api_get_by_id
+    ):
+
+        mock_exporter_get_by_name.return_value = _create_exporter()
+        mock_data_api_get_by_id.return_value = _create_data()
         response = RequestMock.do_request_get(
-            export_api_views.ExportData.as_view(), None
+            export_api_views.ExportData.as_view(),
+            AnonymousUser(),
+            data={"data_id": "6111b84691cb057052b3da20", "exporter": "XML"},
         )
 
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @patch.object(data_api, "get_by_id")
     @patch.object(exporter_api, "get_by_name")
@@ -69,12 +79,20 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
     )
 
     class TestExportDataByPIDGetPermissions(SimpleTestCase):
-        def test_anonymous_returns_http_403(self):
+        @patch.object(linked_data_api, "get_data_by_pid")
+        @patch.object(exporter_api, "get_by_name")
+        def test_anonymous_returns_http_200(
+            self, mock_exporter_get_by_name, mock_data_api_get_by_pid
+        ):
+            mock_exporter_get_by_name.return_value = _create_exporter()
+            mock_data_api_get_by_pid.return_value = _create_data()
             response = RequestMock.do_request_get(
-                export_api_views.ExportData.as_view(), None
+                export_api_views.ExportData.as_view(),
+                AnonymousUser(),
+                data={"data_pid": "6111b84691cb057052b3da20", "exporter": "XML"},
             )
 
-            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         @patch.object(linked_data_api, "get_data_by_pid")
         @patch.object(exporter_api, "get_by_name")

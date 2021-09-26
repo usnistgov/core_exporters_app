@@ -3,7 +3,6 @@
 
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.http.response import HttpResponseBadRequest
@@ -21,8 +20,6 @@ from core_main_app.commons import exceptions
 
 class ExportData(APIView):
     """Export Data"""
-
-    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         """Get the transformed Data file
