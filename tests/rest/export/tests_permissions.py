@@ -15,11 +15,7 @@ from core_main_app.utils.tests_tools.RequestMock import RequestMock
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
-
-if "core_linked_records_app" in settings.INSTALLED_APPS:
-    from core_linked_records_app.components.data import (
-        api as linked_data_api,
-    )
+from core_main_app.components.template.models import Template
 
 
 class TestExportDataByIdGetPermissions(SimpleTestCase):
@@ -28,9 +24,9 @@ class TestExportDataByIdGetPermissions(SimpleTestCase):
     def test_anonymous_returns_http_200(
         self, mock_exporter_get_by_name, mock_data_api_get_by_id
     ):
-
-        mock_exporter_get_by_name.return_value = _create_exporter()
-        mock_data_api_get_by_id.return_value = _create_data()
+        template = Template()
+        mock_exporter_get_by_name.return_value = _create_exporter(template)
+        mock_data_api_get_by_id.return_value = _create_data(template)
         response = RequestMock.do_request_get(
             export_api_views.ExportData.as_view(),
             AnonymousUser(),
@@ -44,9 +40,10 @@ class TestExportDataByIdGetPermissions(SimpleTestCase):
     def test_authenticated_returns_http_200(
         self, mock_exporter_get_by_name, mock_data_api_get_by_id
     ):
+        template = Template()
         mock_user = create_mock_user("1")
-        mock_exporter_get_by_name.return_value = _create_exporter()
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_exporter_get_by_name.return_value = _create_exporter(template)
+        mock_data_api_get_by_id.return_value = _create_data(template)
 
         response = RequestMock.do_request_get(
             export_api_views.ExportData.as_view(),
@@ -61,9 +58,10 @@ class TestExportDataByIdGetPermissions(SimpleTestCase):
     def test_staff_returns_http_200(
         self, mock_exporter_get_by_name, mock_data_api_get_by_id
     ):
+        template = Template()
         mock_user = create_mock_user("1", is_staff=True, is_superuser=True)
-        mock_exporter_get_by_name.return_value = _create_exporter()
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_exporter_get_by_name.return_value = _create_exporter(template)
+        mock_data_api_get_by_id.return_value = _create_data(template)
 
         response = RequestMock.do_request_get(
             export_api_views.ExportData.as_view(),
@@ -84,8 +82,9 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         def test_anonymous_returns_http_200(
             self, mock_exporter_get_by_name, mock_data_api_get_by_pid
         ):
-            mock_exporter_get_by_name.return_value = _create_exporter()
-            mock_data_api_get_by_pid.return_value = _create_data()
+            template = Template()
+            mock_exporter_get_by_name.return_value = _create_exporter(template)
+            mock_data_api_get_by_pid.return_value = _create_data(template)
             response = RequestMock.do_request_get(
                 export_api_views.ExportData.as_view(),
                 AnonymousUser(),
@@ -99,9 +98,10 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         def test_authenticated_returns_http_200(
             self, mock_exporter_get_by_name, mock_data_api_get_by_pid
         ):
+            template = Template()
             mock_user = create_mock_user("1")
-            mock_exporter_get_by_name.return_value = _create_exporter()
-            mock_data_api_get_by_pid.return_value = _create_data()
+            mock_exporter_get_by_name.return_value = _create_exporter(template)
+            mock_data_api_get_by_pid.return_value = _create_data(template)
 
             response = RequestMock.do_request_get(
                 export_api_views.ExportData.as_view(),
@@ -116,9 +116,10 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         def test_staff_returns_http_200(
             self, mock_exporter_get_by_name, mock_data_api_get_by_pid
         ):
+            template = Template()
             mock_user = create_mock_user("1", is_staff=True, is_superuser=True)
-            mock_exporter_get_by_name.return_value = _create_exporter()
-            mock_data_api_get_by_pid.return_value = _create_data()
+            mock_exporter_get_by_name.return_value = _create_exporter(template)
+            mock_data_api_get_by_pid.return_value = _create_data(template)
 
             response = RequestMock.do_request_get(
                 export_api_views.ExportData.as_view(),
@@ -129,32 +130,36 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
 
 
 def _create_exporter(
+    template,
     name="XML",
     url="core_exporters_app.exporters.xml.models.XmlExporter",
 ):
     """Create an exporter
 
     Args:
+        template:
         name:
         url:
 
     Returns:
     """
 
-    return Exporter(name=name, url=url, enable_by_default=True)
+    return Exporter(name=name, url=url, enable_by_default=True, templates=[template])
 
 
 def _create_data(
+    template,
     title="test",
 ):
     """Create a data
 
     Args:
+        template:
         title:
-        url:
 
     Returns:
     """
     data = Data(title=title, template="6137af4b91cb055990297f35", user_id="1")
+    data.template = template
     data.xml_content = '<root  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ><string>x</string></root>'
     return data

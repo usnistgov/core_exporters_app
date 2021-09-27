@@ -28,6 +28,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
 
     def setUp(self):
         super(TestExportDataById, self).setUp()
+        self.data = _create_data(self.fixture.template)
 
     @patch.object(data_api, "get_by_id")
     def test_export_data_with_xml_exporter_returns_the_transformed_data(
@@ -35,7 +36,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
     ):
         # Arrange
         user = create_mock_user("1")
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_data_api_get_by_id.return_value = self.data
 
         # Act
         response = RequestMock.do_request_get(
@@ -59,7 +60,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
     ):
         # Arrange
         user = create_mock_user("1")
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_data_api_get_by_id.return_value = self.data
 
         # Act
         response = RequestMock.do_request_get(
@@ -86,7 +87,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
         user = create_mock_user("1")
         self.fixture.exporter_xsl.xsl_transformation = _create_xsl_transform()
         mock_exporter_get_by_name.return_value = self.fixture.exporter_xsl
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_data_api_get_by_id.return_value = self.data
 
         # Act
         response = RequestMock.do_request_get(
@@ -112,6 +113,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
 
         def setUp(self):
             super(TestExportDataByPID, self).setUp()
+            self.data = _create_data(self.fixture.template)
 
         @patch.object(linked_data_api, "get_data_by_pid")
         def test_export_data_with_xml_exporter_returns_the_transformed_data(
@@ -119,7 +121,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         ):
             # Arrange
             user = create_mock_user("1")
-            mock_data_api_get_data_by_pid.return_value = _create_data()
+            mock_data_api_get_data_by_pid.return_value = self.data
 
             # Act
             response = RequestMock.do_request_get(
@@ -143,7 +145,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         ):
             # Arrange
             user = create_mock_user("1")
-            mock_data_api_get_data_by_pid.return_value = _create_data()
+            mock_data_api_get_data_by_pid.return_value = self.data
 
             # Act
             response = RequestMock.do_request_get(
@@ -172,7 +174,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             user = create_mock_user("1")
             self.fixture.exporter_xsl.xsl_transformation = _create_xsl_transform()
             mock_exporter_get_by_name.return_value = self.fixture.exporter_xsl
-            mock_data_api_get_data_by_pid.return_value = _create_data()
+            mock_data_api_get_data_by_pid.return_value = self.data
 
             # Act
             response = RequestMock.do_request_get(
@@ -188,17 +190,17 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             self.assertContains(response, "<additional>34</additional>")
 
 
-def _create_data(
-    title="test",
-):
+def _create_data(template, title="test"):
     """Create a data
 
     Args:
+        template
         title:
     Returns:
     """
     data = Data(title=title, template="6137af4b91cb055990297f35", user_id="1")
     data.id = "6111b84691cb057552b3da20"
+    data.template = template
     data.xml_content = "<root  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' ><test>value</test></root>"
     return data
 

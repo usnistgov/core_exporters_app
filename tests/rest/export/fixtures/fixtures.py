@@ -38,18 +38,24 @@ class ExportDataFixtures(FixtureInterface):
         self.data_1 = Data()
 
         self.exporter_xml = Exporter(
-            name="XML", url=constants.XML_URL, enable_by_default=True, templates=[]
+            name="XML",
+            url=constants.XML_URL,
+            enable_by_default=True,
+            templates=[self.template],
         ).save()
 
         self.exporter_json = Exporter(
-            name="JSON", url=constants.JSON_URL, enable_by_default=True, templates=[]
+            name="JSON",
+            url=constants.JSON_URL,
+            enable_by_default=True,
+            templates=[self.template],
         ).save()
 
         self.exporter_xsl = Exporter(
             name="XSL_trans",
             url=constants.XSL_URL,
             enable_by_default=True,
-            templates=[],
+            templates=[self.template],
         ).save()
 
         self.data_collection = [

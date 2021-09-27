@@ -24,6 +24,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
 
     def setUp(self):
         super(TestExportDataById, self).setUp()
+        self.data = _create_data(self.fixture.template)
 
     def test_export_data_wrong_id_returns_http_404(self):
         # Arrange
@@ -43,7 +44,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
     def test_export_data_wrong_exporter_returns_http_404(self, mock_data_api_get_by_id):
         # Arrange
         user = create_mock_user("1")
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_data_api_get_by_id.return_value = self.data
 
         # Act
         response = RequestMock.do_request_get(
@@ -62,7 +63,7 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
     def test_export_data_returns_status_200(self, mock_data_api_get_by_id):
         # Arrange
         user = create_mock_user("1")
-        mock_data_api_get_by_id.return_value = _create_data()
+        mock_data_api_get_by_id.return_value = self.data
 
         # Act
         response = RequestMock.do_request_get(
@@ -88,6 +89,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
 
         def setUp(self):
             super(TestExportDataByPID, self).setUp()
+            self.data = _create_data(self.fixture.template)
 
         @patch.object(linked_data_api, "get_data_by_pid")
         def test_export_data_wrong_exporter_returns_http_404(
@@ -96,7 +98,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             # Arrange
             user = create_mock_user("1")
 
-            mock_data_api_get_by_pid.return_value = _create_data()
+            mock_data_api_get_by_pid.return_value = self.data
 
             # Act
             response = RequestMock.do_request_get(
@@ -115,7 +117,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         def test_export_data_returns_status_200(self, mock_data_api_get_by_pid):
             # Arrange
             user = create_mock_user("1")
-            mock_data_api_get_by_pid.return_value = _create_data()
+            mock_data_api_get_by_pid.return_value = self.data
 
             # Act
             response = RequestMock.do_request_get(
@@ -131,17 +133,17 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-def _create_data(
-    title="test",
-):
+def _create_data(template, title="test"):
     """Create a data
 
     Args:
+        template
         title:
 
     Returns:
     """
     data = Data(title=title, template="6137af4b91cb055990297f35", user_id="1")
     data.id = "6111b84691cb057552b3da20"
+    data.template = template
     data.xml_content = '<root  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ><string>x</string></root>'
     return data
