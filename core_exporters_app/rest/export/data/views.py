@@ -2,7 +2,6 @@
 """
 
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 import core_exporters_app.commons.constants as exporter_constants
@@ -69,34 +68,38 @@ class ExportData(APIView):
                 content = {"message": "data id/pid is missing or the value is empty."}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
+            if "exporter" not in request.GET:
+                content = {"message": "exporter is missing or the value is empty."}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
             document = "Exporter"
             # get the exporter with the given name
             exporter_object = exporter_api.get_by_name(request.GET["exporter"])
 
             # check if template is linked to the exporter
-            if data.template in exporter_object.templates:
-                # get the exporter module
-                exporter_module = get_exporter_module_from_url(exporter_object.url)
-
-                # if is a xslt transformation, we have to set the xslt
-                if exporter_object.url == exporter_constants.XSL_URL:
-                    # set the xslt
-                    exporter_module.set_xslt(exporter_object.xsl_transformation)
-
-                # get the list of the transformed result
-                transform_result_list = exporter_module.transform(
-                    [Result(title=data.title, xml_content=data.xml_content)],
-                    request.session.session_key,
-                )
-
-                # Check if the list is empty
-                if transform_result_list:
-                    return export_data(transform_result_list, request.user, data.title)
-                else:
-                    content = {"message": "error during the transformation"}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
-            else:
+            if data.template not in exporter_object.templates:
                 content = {"message": "template not linked to this exporter"}
+                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+            # get the exporter module
+            exporter_module = get_exporter_module_from_url(exporter_object.url)
+
+            # if is a xslt transformation, we have to set the xslt
+            if exporter_object.url == exporter_constants.XSL_URL:
+                # set the xslt
+                exporter_module.set_xslt(exporter_object.xsl_transformation)
+
+            # get the list of the transformed result
+            transform_result_list = exporter_module.transform(
+                [Result(title=data.title, xml_content=data.xml_content)],
+                request.session.session_key,
+            )
+
+            # Check if the list is empty
+            if transform_result_list:
+                return export_data(transform_result_list, request.user, data.title)
+            else:
+                content = {"message": "error during the transformation"}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         except exceptions.DoesNotExist:
