@@ -1,5 +1,6 @@
 """ Authentication tests for Exporters REST API
 """
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import SimpleTestCase
 from mock.mock import patch
 from rest_framework import status
@@ -162,7 +163,10 @@ class TestExporterDownloadGetPermissions(SimpleTestCase):
         mock_user = create_mock_user("1")
 
         mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
-            is_ready=True, file=None, file_name="", user_id=mock_user.id
+            is_ready=True,
+            file=SimpleUploadedFile("file.txt", b"file"),
+            file_name="",
+            user_id=mock_user.id,
         )
 
         response = RequestMock.do_request_get(
@@ -176,7 +180,10 @@ class TestExporterDownloadGetPermissions(SimpleTestCase):
         mock_user = create_mock_user("1", is_staff=True)
 
         mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
-            is_ready=True, file=None, file_name="", user_id=mock_user.id
+            is_ready=True,
+            file=SimpleUploadedFile("file.txt", b"file"),
+            file_name="",
+            user_id=mock_user.id,
         )
 
         response = RequestMock.do_request_get(

@@ -1,43 +1,44 @@
 """ Handle Exporter signals
 """
+from django.db.models.signals import post_save, pre_delete
+
 import core_exporters_app.components.exporter.api as exporter_api
 from core_main_app.components.template.models import Template
-from signals_utils.signals.mongo import connector, signals
 
 
 def init():
     """Connect to template object events."""
-    connector.connect(post_save_template, signals.post_save, sender=Template)
-    connector.connect(post_delete_template, signals.post_delete, sender=Template)
+    post_save.connect(post_save_template, sender=Template)
+    pre_delete.connect(post_delete_template, sender=Template)
 
 
-def post_save_template(sender, document, **kwargs):
+def post_save_template(sender, instance, **kwargs):
     """Method executed after saving of a Template object.
     Args:
         sender:
-        document: template object.
+        instance: template object.
         **kwargs:
     """
     default_exporter_list = exporter_api.get_all_default_exporter()
 
     for exporter in default_exporter_list:
         # When an template is added, save is called 2 times
-        # so we have to avoid to had the same document several time
-        if document not in exporter.templates:
-            exporter.templates.append(document)
+        # so we have to avoid to had the same instance several time
+        if instance not in exporter.templates.all():
+            exporter.templates.add(instance)
             exporter_api.upsert(exporter)
 
 
-def post_delete_template(sender, document, **kwargs):
+def post_delete_template(sender, instance, **kwargs):
     """Method executed after a template deletion.
         We are removing in all exporter, the reference to the deleted template
     Args:
         sender:
-        document:
+        instance:
         **kwargs:
     """
     exporter_list = exporter_api.get_all()
     for exporter in exporter_list:
-        if document in exporter.templates:
-            exporter.templates.remove(document)
+        if instance in exporter.templates.all():
+            exporter.templates.remove(instance)
             exporter_api.upsert(exporter)

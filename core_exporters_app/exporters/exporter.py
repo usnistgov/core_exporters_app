@@ -6,9 +6,7 @@ import os
 import zipfile
 from abc import ABCMeta, abstractmethod
 from io import BytesIO
-
-from django_mongoengine import fields, Document
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 
 
@@ -35,6 +33,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
         """
         Method: Exports the data
         """
+
         # Generate the zip file
         return AbstractExporter.generate_zip(
             exported_compressed_file_id, transformed_result_list, user
@@ -124,14 +123,20 @@ class AbstractExporter(object, metaclass=ABCMeta):
         in_memory.seek(0)
 
         # save the file and upset the object
-        exported_compressed_file.file.put(
-            in_memory, content_type=exported_compressed_file.mime_type
+        exported_compressed_file.file = InMemoryUploadedFile(
+            in_memory,
+            None,
+            exported_compressed_file.file_name,
+            exported_compressed_file.mime_type,
+            in_memory.__sizeof__(),
+            None,
         )
+
         exported_compressed_file.is_ready = True
         return exported_compressed_file_api.upsert(exported_compressed_file)
 
 
-class TransformResultContent(Document):
+class TransformResultContent:
     """Represents a result content
 
     file_name:
@@ -145,12 +150,13 @@ class TransformResultContent(Document):
         .xml, .json, .png
     """
 
-    file_name = fields.StringField(default="")
-    content_converted = fields.StringField(default="")
-    content_extension = fields.StringField(default="")
+    def __init__(self, file_name="", content_converted="", content_extension=""):
+        self.file_name = file_name
+        self.content_converted = content_converted
+        self.content_extension = content_extension
 
 
-class TransformResult(Document):
+class TransformResult:
     """Represents a result after transformation
 
     source_document_name:
@@ -161,8 +167,11 @@ class TransformResult(Document):
         but zero or N result for blob export
     """
 
-    source_document_name = fields.StringField(default="")
-    transform_result_content = fields.ListField(TransformResultContent)
+    def __init__(self, source_document_name="", transform_result_content=None):
+        self.source_document_name = source_document_name
+        self.transform_result_content = (
+            transform_result_content if transform_result_content else []
+        )
 
 
 def get_exporter_module_from_url(exporter_url):

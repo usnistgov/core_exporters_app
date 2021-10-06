@@ -1,13 +1,13 @@
 """ Forms admin exporter
 """
 from django import forms
+from django.forms import ModelForm
 
 from core_exporters_app.components.exporter.models import Exporter
 from core_main_app.components.template import api as template_api
-from django_mongoengine.forms import DocumentForm
 
 
-class EditExporterForm(DocumentForm):
+class EditExporterForm(ModelForm):
     name = forms.CharField(
         label="Name",
         widget=forms.TextInput(
@@ -16,7 +16,7 @@ class EditExporterForm(DocumentForm):
     )
 
     class Meta(object):
-        document = Exporter
+        model = Exporter
         fields = ["name"]
 
 

@@ -9,10 +9,10 @@ if not settings.configured:
     settings.configure()
 
 # GridFS
-GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION = getattr(
+EXPORTED_COMPRESSED_FILE_FOLDER = getattr(
     settings,
-    "GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION",
-    "fs_exporter_compressed_file_collection",
+    "EXPORTED_COMPRESSED_FILE_FOLDER",
+    "exporter_compressed_files",
 )
 
 COMPRESSED_FILES_EXPIRE_AFTER_SECONDS = getattr(

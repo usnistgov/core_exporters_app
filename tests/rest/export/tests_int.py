@@ -2,23 +2,23 @@
 """
 
 
+import json
+
+import xmltodict
+from django.conf import settings
+from mock.mock import patch
+
+import core_exporters_app.components.exporter.api as exporter_api
 import core_exporters_app.rest.export.data.views as export_data_views
+import core_main_app.components.data.api as data_api
+from core_main_app.components.data.models import Data
+from core_main_app.components.xsl_transformation.models import XslTransformation
 from core_main_app.utils.integration_tests.integration_base_test_case import (
     MongoIntegrationBaseTestCase,
 )
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 from tests.rest.export.fixtures.fixtures import ExportDataFixtures
-from core_main_app.components.data.models import Data
-from mock.mock import patch
-import xmltodict
-import json
-import core_exporters_app.components.exporter.api as exporter_api
-from core_main_app.components.xsl_transformation.models import XslTransformation
-
-import core_main_app.components.data.api as data_api
-from django.conf import settings
-
 
 fixture_data = ExportDataFixtures()
 
@@ -198,9 +198,7 @@ def _create_data(template, title="test"):
         title:
     Returns:
     """
-    data = Data(title=title, template="6137af4b91cb055990297f35", user_id="1")
-    data.id = "6111b84691cb057552b3da20"
-    data.template = template
+    data = Data(id=1, template=template, title=title, user_id="1")
     data.xml_content = "<root  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' ><test>value</test></root>"
     return data
 

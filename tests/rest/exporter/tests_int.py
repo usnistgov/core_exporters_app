@@ -1,7 +1,6 @@
 """Integration tests for exporter rest api
 """
 
-from bson import ObjectId
 from rest_framework import status
 
 import core_exporters_app.rest.exporters.views as exporter_views
@@ -57,7 +56,7 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
     def test_get_raise_404_when_not_found(self):
         # Arrange
         user = create_mock_user("0")
-        self.param = {"pk": str(ObjectId())}
+        self.param = {"pk": -1}
 
         # Act
         response = RequestMock.do_request_get(
@@ -67,10 +66,10 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
         # Assert
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_raise_500_sever_error_when_general_error_occured(self):
+    def test_get_raise_500_sever_error_when_general_error_occurred(self):
         # Arrange
         user = create_mock_user("0")
-        self.param = {"pk": "0"}
+        self.param = {"pk": "test"}
 
         # Act
         response = RequestMock.do_request_get(
@@ -91,7 +90,7 @@ class TestGetExporterDownload(MongoIntegrationBaseTestCase):
     def test_get_raise_404_when_not_found(self):
         # Arrange
         user = create_mock_user("0")
-        self.param = {"pk": str(ObjectId())}
+        self.param = {"pk": -1}
 
         # Act
         response = RequestMock.do_request_get(
@@ -101,10 +100,10 @@ class TestGetExporterDownload(MongoIntegrationBaseTestCase):
         # Assert
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_get_raise_500_sever_error_when_general_error_occured(self):
+    def test_get_raise_500_sever_error_when_general_error_occurred(self):
         # Arrange
         user = create_mock_user("0")
-        self.param = {"pk": "0"}
+        self.param = {"pk": "test"}
 
         # Act
         response = RequestMock.do_request_get(

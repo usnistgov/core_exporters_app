@@ -1,6 +1,3 @@
-from core_main_app.utils.databases.mongoengine_database import Database
-import os
-
 SECRET_KEY = "fake-key"
 
 INSTALLED_APPS = [
@@ -13,6 +10,9 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # Local apps
     "tests",
+    "core_main_app",
+    "core_explore_common_app",
+    "core_exporters_app",
 ]
 
 MIDDLEWARE = (
@@ -49,19 +49,6 @@ DATABASES = {
         "PORT": "",
     },
 }
-MOCK_DATABASE_NAME = "db_mock"
-MOCK_DATABASE_HOST = "mongomock://localhost"
 
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT = False
-
-database = Database(MOCK_DATABASE_HOST, MOCK_DATABASE_NAME)
-database.connect()
-
-
-AUTO_SET_PID = os.getenv("AUTO_SET_PID", "False").lower() == "true"
-""" boolean: enable SAML2 SSO authentication.
-"""
-
-# Update Django Settings
-if AUTO_SET_PID:
-    INSTALLED_APPS = INSTALLED_APPS + ("core_linked_records_app",)

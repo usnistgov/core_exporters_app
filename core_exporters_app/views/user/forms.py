@@ -1,7 +1,6 @@
 """ Exporter forms
 """
 
-import bson
 from django import forms
 
 import core_exporters_app.components.exporter.api as exporters_api
@@ -33,11 +32,7 @@ class ExportForm(forms.Form):
 
         if "template_id_list" in kwargs and "template_hash_list" in kwargs:
             # Only stringified ObjectId in template_id_list
-            self.template_id_list = [
-                item
-                for item in kwargs.pop("template_id_list")
-                if bson.objectid.ObjectId.is_valid(item)
-            ]
+            self.template_id_list = kwargs.pop("template_id_list")
             self.template_hash_list = kwargs.pop("template_hash_list")
 
             # Retrieves all corresponding templates

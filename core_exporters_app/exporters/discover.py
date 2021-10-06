@@ -4,9 +4,9 @@ import logging
 import re
 
 from django.contrib.admindocs.views import simplify_regex
+from django.core.exceptions import ValidationError
 from django.urls import URLResolver, URLPattern
 from django.urls.resolvers import RegexPattern
-from mongoengine.errors import ValidationError
 
 import core_exporters_app.components.exporter.api as exporters_api
 import core_main_app.commons.exceptions as main_exception
@@ -100,10 +100,10 @@ def discover_exporter():
                         url=pattern["view"],
                         enable_by_default=pattern["enable_by_default"],
                     )
+                    exporters_api.upsert(exporter_added)
                     # If an exporter was added and is a default one, it is added in all templates
                     if exporter_added.enable_by_default is True:
-                        exporter_added.templates = system_api.get_all_templates()
-                    exporters_api.upsert(exporter_added)
+                        exporter_added.templates.set(system_api.get_all_templates())
             except Exception as e:
                 logger.error(
                     "Impossible to load the following exporter, class %s not found, exception: %s"

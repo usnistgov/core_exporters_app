@@ -32,7 +32,7 @@ class JsonExporter(AbstractExporter):
         for xml_item in xml_inputs:
             # generate the title document with the sha
             document_name_with_sha = AbstractExporter.get_title_document(
-                xml_item["title"], xml_item["xml_content"]
+                xml_item.title, xml_item.xml_content
             )
             transform_result = TransformResult()
             # set the document name to the collection
@@ -42,7 +42,7 @@ class JsonExporter(AbstractExporter):
             transform_result_content.file_name = document_name_with_sha
             # Transform to JSON
             transformed_content = xml_utils.raw_xml_to_dict(
-                xml_item["xml_content"], xml_utils.post_processor
+                xml_item.xml_content, xml_utils.post_processor
             )
             # sets the content and extension
             try:

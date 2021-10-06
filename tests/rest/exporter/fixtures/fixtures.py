@@ -27,6 +27,9 @@ class ExporterFixtures(FixtureInterface):
 
         """
         self.data_1 = Exporter(
-            name="name_1", url=constants.XSL_URL, enable_by_default=False, templates=[]
-        ).save()
+            name="name_1",
+            url=constants.XSL_URL,
+            enable_by_default=False,
+        )
+        self.data_1.save()
         self.data_collection = [self.data_1]

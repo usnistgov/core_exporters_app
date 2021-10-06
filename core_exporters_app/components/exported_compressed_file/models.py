@@ -1,23 +1,23 @@
 """ Exported Compressed File model
 """
+from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
 
-from django_mongoengine import fields, Document
-from mongoengine import errors as mongoengine_errors
-
-from core_exporters_app.settings import GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION
+from core_exporters_app.settings import EXPORTED_COMPRESSED_FILE_FOLDER
 from core_main_app.commons import exceptions
 
 
-class ExportedCompressedFile(Document):
+class ExportedCompressedFile(models.Model):
     """Represents exported files"""
 
-    file_name = fields.StringField()
-    file = fields.FileField(
-        blank=True, collection_name=GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION
+    file_name = models.CharField(blank=False, max_length=200)
+    file = models.FileField(
+        blank=True, null=True, upload_to=EXPORTED_COMPRESSED_FILE_FOLDER
     )
-    is_ready = fields.BooleanField(default=False)
-    mime_type = fields.StringField()
-    user_id = fields.StringField(blank=False)
+    is_ready = models.BooleanField(default=False)
+    mime_type = models.CharField(blank=False, max_length=200)
+    user_id = models.CharField(blank=False, max_length=200)  # FIXME: point to User
+    creation_date = models.DateTimeField(auto_now_add=True)
 
     @staticmethod
     def get_by_id(object_id):
@@ -31,7 +31,7 @@ class ExportedCompressedFile(Document):
         """
         try:
             return ExportedCompressedFile.objects.get(pk=str(object_id))
-        except mongoengine_errors.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))

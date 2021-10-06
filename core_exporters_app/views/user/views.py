@@ -47,7 +47,7 @@ def download_exported_compressed_file(request):
         response["Content-Disposition"] = (
             "attachment; filename=" + exported_file.file_name
         )
-        response["Content-Type"] = exported_file.file.content_type
+        response["Content-Type"] = exported_file.mime_type
         return response
     else:
         # Add assets

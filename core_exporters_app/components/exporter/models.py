@@ -1,27 +1,39 @@
 """ Exporter model
 """
-from mongoengine import errors as mongoengine_errors
-from mongoengine.queryset.base import PULL
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import RegexValidator
+from django.db import models, IntegrityError
 
 from core_main_app.commons import exceptions
+from core_main_app.commons.regex import NOT_EMPTY_OR_WHITESPACES
 from core_main_app.components.template.models import Template
-from core_main_app.utils.validation.regex_validation import not_empty_or_whitespaces
-from django_mongoengine import fields, Document
+from core_main_app.components.xsl_transformation.models import XslTransformation
 
 
-class Exporter(Document):
+class Exporter(models.Model):
     """Represents an exporter"""
 
-    meta = {"allow_inheritance": True}
+    class_name = "Exporter"
 
-    name = fields.StringField(
-        blank=False, unique=True, validation=not_empty_or_whitespaces
+    name = models.CharField(
+        blank=False,
+        validators=[
+            RegexValidator(
+                regex=NOT_EMPTY_OR_WHITESPACES,
+                message="Title must not be empty or only whitespaces",
+                code="invalid_title",
+            ),
+        ],
+        max_length=200,
+        unique=True,
     )
-    url = fields.StringField(blank=False)
-    enable_by_default = fields.BooleanField(blank=False)
-    templates = fields.ListField(
-        fields.ReferenceField(Template), blank=True, reverse_delete_rule=PULL
+    url = models.CharField(blank=False, max_length=200)
+    enable_by_default = models.BooleanField(blank=False)
+    templates = models.ManyToManyField(
+        Template,
+        blank=True,
     )
+    _cls = models.CharField(default="Exporter", max_length=200)
 
     @staticmethod
     def get_all(is_cls):
@@ -33,10 +45,10 @@ class Exporter(Document):
         """
         if is_cls:
             # will return all Exporter object only
-            return Exporter.objects(_cls=Exporter.__name__).all()
+            return Exporter.objects.filter(_cls=Exporter.class_name).all()
         else:
             # will return all inherited object
-            return Exporter.objects().all()
+            return Exporter.objects.all()
 
     @staticmethod
     def get_all_by_url(url):
@@ -48,7 +60,7 @@ class Exporter(Document):
         Returns:
 
         """
-        return Exporter.objects(url=url).all()
+        return Exporter.objects.filter(url=url).all()
 
     @staticmethod
     def get_all_default_exporter():
@@ -57,7 +69,7 @@ class Exporter(Document):
         Returns: exporter collection
 
         """
-        return Exporter.objects(enable_by_default=True).all()
+        return Exporter.objects.filter(enable_by_default=True).all()
 
     @staticmethod
     def get_all_by_template_list(template_id_list):
@@ -69,7 +81,21 @@ class Exporter(Document):
         Returns:
 
         """
-        return Exporter.objects(templates__all=template_id_list).all()
+        queryset = Exporter.objects.all()
+        for pk in template_id_list:
+            queryset = queryset.filter(templates=pk)
+        return queryset.all()  # TODO: test if works to replace __all
+
+    def has_template(self, template):
+        """Check if exporter has template
+
+        Args:
+            template:
+
+        Returns:
+
+        """
+        return self.templates.filter(id=template.id).exists()
 
     @staticmethod
     def get_by_id(exporter_id):
@@ -84,7 +110,7 @@ class Exporter(Document):
         """
         try:
             return Exporter.objects.get(pk=str(exporter_id))
-        except mongoengine_errors.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
@@ -102,7 +128,7 @@ class Exporter(Document):
         """
         try:
             return Exporter.objects.get(name=str(exporter_name))
-        except mongoengine_errors.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
@@ -120,7 +146,7 @@ class Exporter(Document):
         """
         try:
             return Exporter.objects.get(url=exporter_url)
-        except mongoengine_errors.DoesNotExist as e:
+        except ObjectDoesNotExist as e:
             raise exceptions.DoesNotExist(str(e))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
@@ -132,7 +158,7 @@ class Exporter(Document):
 
         """
         version_name_list = []
-        for template in self.templates:
+        for template in self.templates.all():
             version_name_list.append(template.display_name)
 
         return_value = ", ".join(version_name_list)
@@ -145,8 +171,9 @@ class Exporter(Document):
 
         """
         try:
+            self._cls = self.class_name
             return self.save()
-        except mongoengine_errors.NotUniqueError as e:
+        except IntegrityError as e:
             raise exceptions.NotUniqueError(
                 "The name is already used by an other exporter."
             )
@@ -160,3 +187,45 @@ class Exporter(Document):
 
         """
         self.name = self.name.strip()
+
+    def __str__(self):
+        """
+
+        Returns:
+
+        """
+        return self.name
+
+
+class ExporterXsl(Exporter):
+    """Export XSL object"""
+
+    class_name = "ExporterXsl"
+
+    xsl_transformation = models.ForeignKey(
+        XslTransformation, blank=False, on_delete=models.CASCADE
+    )
+
+    @staticmethod
+    def get_all(is_cls):
+        """Returns all XSL exporters
+
+        Returns:
+            XSL exporter collection
+
+        """
+        if is_cls:
+            # will return all Template object only
+            return ExporterXsl.objects.filter(_cls=ExporterXsl.class_name).all()
+        else:
+            # will return all inherited object
+            return ExporterXsl.object.all()
+
+    @staticmethod
+    def get_all_by_xsl_id_list(xsl_id_list):
+        """Returns all Xsl exporter with the given id list
+
+        Returns:
+
+        """
+        return ExporterXsl.objects.filter(xsl_transformation__in=xsl_id_list).all()

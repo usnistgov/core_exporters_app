@@ -1,1 +1,1 @@
-var associatedTemplateUrl = "{% url 'admin:core_exporters_app_exporters_associated_templates' %}";
+var associatedTemplateUrl = "{% url 'core-admin:core_exporters_app_exporters_associated_templates' %}";

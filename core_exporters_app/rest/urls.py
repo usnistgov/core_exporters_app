@@ -3,8 +3,8 @@
 from django.urls import re_path
 from rest_framework.urlpatterns import format_suffix_patterns
 
-from core_exporters_app.rest.exporters import views as exporters_views
 from core_exporters_app.rest.export.data import views as export_data_views
+from core_exporters_app.rest.exporters import views as exporters_views
 from core_exporters_app.rest.exporters.xsl import views as xsl_views
 
 urlpatterns = [

@@ -5,7 +5,6 @@ import json
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.urls import reverse_lazy
-from django.utils.html import escape
 
 import core_exporters_app.components.exporter.api as exporter_api
 import core_main_app.components.template.api as template_api
@@ -20,8 +19,8 @@ from core_main_app.views.common.ajax import EditObjectModalView
 
 class EditExporterView(EditObjectModalView):
     form_class = EditExporterForm
-    document = Exporter
-    success_url = reverse_lazy("admin:core_exporters_app_exporters")
+    model = Exporter
+    success_url = reverse_lazy("core-admin:core_exporters_app_exporters")
     success_message = "Exporter edited with success."
 
     def _save(self, form):
@@ -68,10 +67,10 @@ def _associated_templates_post(request):
         if exporter_id is not None:
             exporter = exporter_api.get_by_id(exporter_id)
             template_id_list = [
-                template_api.get(template_id, request=request)
+                template_api.get_by_id(template_id, request=request)
                 for template_id in templates
             ]
-            exporter.templates = template_id_list
+            exporter.templates.set(template_id_list)
             exporter_api.upsert(exporter)
             return HttpResponse(json.dumps({}), content_type="application/javascript")
     else:
@@ -96,7 +95,7 @@ def _associated_templates_get(request):
     exporter = exporter_api.get_by_id(request_id)
     data_form = {
         "id": exporter.id,
-        "templates_manager": [x.id for x in exporter.templates],
+        "templates_manager": [x.id for x in exporter.templates.all()],
     }
 
     associated_form = AssociatedTemplatesForm(data_form, request=request)

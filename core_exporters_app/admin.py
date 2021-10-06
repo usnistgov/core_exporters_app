@@ -6,7 +6,12 @@ from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import re_path
 
+from core_exporters_app.components.exported_compressed_file.models import (
+    ExportedCompressedFile,
+)
+from core_exporters_app.components.exporter.models import Exporter
 from core_exporters_app.views.admin import views as admin_views, ajax as admin_ajax
+from core_main_app.admin import core_admin_site
 
 admin_urls = [
     re_path(
@@ -25,5 +30,8 @@ admin_urls = [
     re_path(r"^xsl", include("core_exporters_app.exporters.xsl.urls")),
 ]
 
-urls = admin.site.get_urls()
-admin.site.get_urls = lambda: admin_urls + urls
+admin.site.register(Exporter)
+admin.site.register(ExportedCompressedFile)
+
+urls = core_admin_site.get_urls()
+core_admin_site.get_urls = lambda: admin_urls + urls
