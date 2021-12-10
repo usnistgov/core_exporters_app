@@ -131,8 +131,16 @@ def _exporters_selection_post(request):
     try:
         if request.method == "POST":
             # gets all parameters
-            templates_id = request.POST["template_id_list"].split(",")
-            templates_hash = request.POST["template_hash_list"].split(",")
+            templates_id = (
+                request.POST["template_id_list"].split(",")
+                if len(request.POST["template_id_list"])
+                else []
+            )
+            templates_hash = (
+                request.POST["template_hash_list"].split(",")
+                if len(request.POST["template_hash_list"])
+                else []
+            )
             data_url_list = request.POST["data_url_list"].split(",")
             form = ExportForm(
                 request.POST,
