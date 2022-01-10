@@ -15,9 +15,10 @@ class CoreExportersAppConfig(AppConfig):
 
     def ready(self):
         """Run once at startup"""
-        import core_exporters_app.components.exporter.watch as exporter_watch
-        from core_exporters_app.exporters import discover
-
         if "migrate" not in sys.argv:
+            import core_exporters_app.components.exporter.watch as exporter_watch
+            from core_exporters_app.exporters import discover
+
+            discover.init_periodic_tasks()
             discover.discover_exporter()
             exporter_watch.init()

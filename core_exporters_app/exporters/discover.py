@@ -3,16 +3,18 @@
 import logging
 import re
 
-from django.contrib.admindocs.views import simplify_regex
-from django.core.exceptions import ValidationError
-from django.urls import URLResolver, URLPattern
-from django.urls.resolvers import RegexPattern
-
 import core_exporters_app.components.exporter.api as exporters_api
 import core_main_app.commons.exceptions as main_exception
 import core_main_app.system.api as system_api
 from core_exporters_app.components.exporter.models import Exporter
 from core_exporters_app.exporters import urls
+from core_exporters_app.tasks import delete_old_exported_files
+from django.contrib.admindocs.views import simplify_regex
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+from django.urls import URLResolver, URLPattern
+from django.urls.resolvers import RegexPattern
+from django_celery_beat.models import CrontabSchedule, PeriodicTask
 
 logger = logging.getLogger(__name__)
 
@@ -115,3 +117,20 @@ def discover_exporter():
         )
     except Exception as e:
         raise e
+
+
+def init_periodic_tasks():
+    """Create periodic tasks for the app and add them to a crontab schedule"""
+    try:
+        schedule, _ = CrontabSchedule.objects.get_or_create(
+            minute="*",
+        )
+        PeriodicTask.objects.get(name=delete_old_exported_files.__name__)
+    except ObjectDoesNotExist:
+        PeriodicTask.objects.create(
+            crontab=schedule,
+            name=delete_old_exported_files.__name__,
+            task="core_exporters_app.tasks.delete_old_exported_files",
+        )
+    except Exception as e:
+        logger.error(str(e))

@@ -6,8 +6,6 @@ import json
 import logging
 
 from celery import shared_task
-from celery.schedules import crontab
-from celery.task import periodic_task
 
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
@@ -68,7 +66,7 @@ def export_files(
     AbstractExporter.export(exported_file_id, transformed_result_list, user)
 
 
-@periodic_task(run_every=crontab(minute="*"))
+@shared_task
 def delete_old_exported_files():
     """Delete older exported files.
 
