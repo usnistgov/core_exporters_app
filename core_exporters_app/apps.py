@@ -5,7 +5,6 @@ import sys
 from django.apps import AppConfig
 
 import core_exporters_app.components.exporter.watch as exporter_watch
-from core_exporters_app.exporters import discover
 
 
 # TODO: loaded two times (not a problem and may not happen in production)
@@ -19,5 +18,8 @@ class CoreExportersAppConfig(AppConfig):
     def ready(self):
         """Run once at startup"""
         if "migrate" not in sys.argv:
+            from core_exporters_app.exporters import discover
+
+            discover.init_periodic_tasks()
             discover.discover_exporter()
             exporter_watch.init()
