@@ -1,7 +1,7 @@
 """ Blob exporter
 """
 import logging
-
+import pathlib
 from rest_framework import status
 
 from core_exporters_app.exporters.exporter import (
@@ -63,7 +63,9 @@ class BlobExporter(AbstractExporter):
                             transform_result_content.file_name = blob_name
                             transform_result_content.content_converted = blob_content
                             # Don't need any additional extension, Is generated with the file name
-                            transform_result_content.content_extension = ""
+                            transform_result_content.content_extension = pathlib.Path(
+                                blob_name
+                            ).suffix
                             # add the blob to the result list
                             transform_result.transform_result_content.append(
                                 transform_result_content
