@@ -20,6 +20,11 @@ admin_urls = [
         name="core_exporters_app_exporters_edit",
     ),
     re_path(
+        r"^exporters/xsl/(?P<pk>[\w-]+)/edit/$",
+        staff_member_required(admin_ajax.EditExporterXslView.as_view()),
+        name="core_exporters_app_exporters_xsl_edit",
+    ),
+    re_path(
         r"^exporters/associated-templates",
         staff_member_required(admin_ajax.associated_templates),
         name="core_exporters_app_exporters_associated_templates",

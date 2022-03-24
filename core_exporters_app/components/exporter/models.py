@@ -229,3 +229,40 @@ class ExporterXsl(Exporter):
 
         """
         return ExporterXsl.objects.filter(xsl_transformation__in=xsl_id_list).all()
+
+    @staticmethod
+    def get_by_name(exporter_xsl_name):
+        """Returns the object with the given name
+
+        Args:
+            exporter_xsl_name:
+
+        Returns:
+            Exporter Xsl (obj): exporter xsl object with the given name
+
+        """
+        try:
+            return ExporterXsl.objects.get(name=str(exporter_xsl_name))
+        except ObjectDoesNotExist as e:
+            raise exceptions.DoesNotExist(str(e))
+
+        except Exception as ex:
+            raise exceptions.ModelError(str(ex))
+
+    @staticmethod
+    def get_by_id(exporter_xsl_id):
+        """Returns the object with the given id
+
+        Args:
+            exporter_xsl_id:
+
+        Returns:
+            Exporter Xsl (obj): Exporter xsl object with the given id
+
+        """
+        try:
+            return ExporterXsl.objects.get(pk=str(exporter_xsl_id))
+        except ObjectDoesNotExist as e:
+            raise exceptions.DoesNotExist(str(e))
+        except Exception as ex:
+            raise exceptions.ModelError(str(ex))

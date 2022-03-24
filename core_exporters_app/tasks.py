@@ -9,6 +9,7 @@ from celery import shared_task
 
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 import core_main_app.components.user.api as user_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
@@ -52,6 +53,8 @@ def export_files(
         exporter_module = get_exporter_module_from_url(exporter_object.url)
         # if is a xslt transformation, we have to set the xslt
         if exporter_object.url == exporter_constants.XSL_URL:
+            # get the exporter xsl object instead of exporter
+            exporter_object = exporter_xsl_api.get_by_id(exporter_id)
             # set the xslt
             exporter_module.set_xslt(exporter_object.xsl_transformation)
         # transform the list of xml files

@@ -14,6 +14,7 @@ from core_explore_common_app.components.result.models import Result
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 from core_exporters_app.exporters.exporter import (
     get_exporter_module_from_url,
     AbstractExporter,
@@ -87,6 +88,8 @@ class ExportData(APIView):
 
             # if is a xslt transformation, we have to set the xslt
             if exporter_object.url == exporter_constants.XSL_URL:
+                # get the exporter xsl object instead of exporter
+                exporter_object = exporter_xsl_api.get_by_name(request.GET["exporter"])
                 # set the xslt
                 exporter_module.set_xslt(exporter_object.xsl_transformation)
 

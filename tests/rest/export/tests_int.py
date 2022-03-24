@@ -9,6 +9,7 @@ from django.conf import settings
 from mock.mock import patch
 
 import core_exporters_app.components.exporter.api as exporter_api
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 import core_exporters_app.rest.export.data.views as export_data_views
 import core_main_app.components.data.api as data_api
 from core_main_app.components.data.models import Data
@@ -73,19 +74,25 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
         )
 
         # Assert
-        data_dict = xmltodict.parse(mock_data_api_get_by_id.return_value.xml_content)
-        expected_content = json.dumps(data_dict)
+        expected_content = xmltodict.parse(
+            mock_data_api_get_by_id.return_value.xml_content
+        )
 
-        self.assertJSONEqual(response.content.decode("utf-8"), expected_content)
+        self.assertEqual(json.loads(response.content), expected_content)
 
     @patch.object(data_api, "get_by_id")
     @patch.object(exporter_api, "get_by_name")
+    @patch.object(exporter_xsl_api, "get_by_name")
     def test_export_data_with_xsl_exporter_returns_the_transformed_data(
-        self, mock_exporter_get_by_name, mock_data_api_get_by_id
+        self,
+        mock_exporter_xsl_get_by_name,
+        mock_exporter_get_by_name,
+        mock_data_api_get_by_id,
     ):
         # Arrange
         user = create_mock_user("1")
         self.fixture.exporter_xsl.xsl_transformation = _create_xsl_transform()
+        mock_exporter_xsl_get_by_name.return_value = self.fixture.exporter_xsl
         mock_exporter_get_by_name.return_value = self.fixture.exporter_xsl
         mock_data_api_get_by_id.return_value = self.data
 

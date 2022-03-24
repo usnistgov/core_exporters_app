@@ -15,6 +15,30 @@ def get_all(is_cls=True):
     return ExporterXsl.get_all(is_cls)
 
 
+def get_by_name(exporter_xsl_name):
+    """Returns exporter xsl object with the given name
+
+    Args:
+        exporter_xsl_name:
+
+    Returns: exporter xsl object
+
+    """
+    return ExporterXsl.get_by_name(exporter_xsl_name)
+
+
+def get_by_id(exporter_xsl_id):
+    """Returns exporter xsl object with the given id
+
+    Args:
+        exporter_xsl_id:
+
+    Returns: exporter xsl object
+
+    """
+    return ExporterXsl.get_by_id(exporter_xsl_id)
+
+
 def get_all_xsl_id():
     """Returns all xsl transformation id
 
