@@ -26,3 +26,7 @@ CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT = getattr(
 )
 """ :py:class:`bool`: Can anonymous user access public document.
 """
+
+MAX_DOCUMENT_LIST = getattr(settings, "MAX_DOCUMENT_LIST", 100)
+""" :py:class:`int`: Maximum number of documents to be returned at once by the api.
+"""

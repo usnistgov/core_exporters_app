@@ -10,13 +10,13 @@ from django.urls import reverse
 from django.utils.html import escape
 
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
-import core_exporters_app.components.exported_compressed_file.api as exported_file_api
 import core_exporters_app.tasks as exporter_tasks
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
 from core_exporters_app.views.user.forms import ExportForm
 from core_main_app.commons import exceptions
+from core_exporters_app import settings
 
 logger = logging.getLogger(__name__)
 
@@ -97,7 +97,9 @@ def check_download_status(request):
     if file_id is not None:
         try:
             # Get the exported file with the given id
-            exported_file = exported_file_api.get_by_id(file_id, request.user)
+            exported_file = exported_compressed_file_api.get_by_id(
+                file_id, request.user
+            )
         except exceptions.DoesNotExist as e:
             return HttpResponseBadRequest("The file with the given id does not exist.")
         except Exception as e:
@@ -142,6 +144,9 @@ def _exporters_selection_post(request):
                 else []
             )
             data_url_list = request.POST["data_url_list"].split(",")
+            if len(data_url_list) > settings.MAX_DOCUMENT_LIST:
+                return HttpResponseBadRequest("Number of documents is over the limit.")
+
             form = ExportForm(
                 request.POST,
                 template_id_list=templates_id,
@@ -200,6 +205,7 @@ def _exporters_selection_post(request):
                     )
             else:
                 return HttpResponseBadRequest("Bad entries. Please check your entries")
+
         else:
             return HttpResponseBadRequest("Bad entries. Please check your entries")
     except Exception as e:
