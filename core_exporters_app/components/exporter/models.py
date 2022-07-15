@@ -173,7 +173,7 @@ class Exporter(models.Model):
         try:
             self._cls = self.class_name
             return self.save()
-        except IntegrityError as e:
+        except IntegrityError:
             raise exceptions.NotUniqueError(
                 "The name is already used by an other exporter."
             )

@@ -79,7 +79,7 @@ def open_form(request):
             json.dumps({"template": templates_selector.render(context)}),
             content_type="application/javascript",
         )
-    except Exception as e:
+    except Exception:
         raise Exception("Error occurred during the form display")
 
 
@@ -100,7 +100,7 @@ def check_download_status(request):
             exported_file = exported_compressed_file_api.get_by_id(
                 file_id, request.user
             )
-        except exceptions.DoesNotExist as e:
+        except exceptions.DoesNotExist:
             return HttpResponseBadRequest("The file with the given id does not exist.")
         except Exception as e:
             logger.error("Something went wrong while downloading: {0}".format(str(e)))
@@ -183,7 +183,7 @@ def _exporters_selection_post(request):
                         TimeoutError,
                         SoftTimeLimitExceeded,
                         exporter_tasks.export_files.OperationalError,
-                    ) as ex:
+                    ):
                         # Raised when a transport connection error occurs while sending a message
                         exporter_tasks.export_files(
                             str(exported_file.id),
@@ -205,7 +205,6 @@ def _exporters_selection_post(request):
                     )
             else:
                 return HttpResponseBadRequest("Bad entries. Please check your entries")
-
         else:
             return HttpResponseBadRequest("Bad entries. Please check your entries")
     except Exception as e:

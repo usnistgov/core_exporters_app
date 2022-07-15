@@ -93,5 +93,5 @@ def _add_xslt_get(request):
             json.dumps({"template": templates_selector.render(context)}),
             content_type="application/javascript",
         )
-    except Exception as e:
+    except Exception:
         raise Exception("Error occurred during the form display")

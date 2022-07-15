@@ -50,9 +50,9 @@ def associated_templates(request):
             return _associated_templates_post(request)
         else:
             return _associated_templates_get(request)
-    except AccessControlError as ace:
+    except AccessControlError:
         return HttpResponseBadRequest("You don't have enough rights to do this.")
-    except Exception as e:
+    except Exception:
         return HttpResponseBadRequest("An unexpected error occurred.")
 
 
