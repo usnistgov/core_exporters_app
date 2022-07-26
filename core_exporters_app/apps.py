@@ -11,7 +11,7 @@ class CoreExportersAppConfig(AppConfig):
     """Exporters configuration"""
 
     name = "core_exporters_app"
-    verbose_name = "Core Exporters App Config"
+    verbose_name = "Core Exporters App"
 
     def ready(self):
         """Run once at startup"""
