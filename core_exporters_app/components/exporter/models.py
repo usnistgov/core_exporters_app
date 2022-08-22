@@ -110,8 +110,8 @@ class Exporter(models.Model):
         """
         try:
             return Exporter.objects.get(pk=str(exporter_id))
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
 
@@ -128,8 +128,8 @@ class Exporter(models.Model):
         """
         try:
             return Exporter.objects.get(name=str(exporter_name))
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
 
@@ -146,8 +146,8 @@ class Exporter(models.Model):
         """
         try:
             return Exporter.objects.get(url=exporter_url)
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
 
@@ -243,8 +243,8 @@ class ExporterXsl(Exporter):
         """
         try:
             return ExporterXsl.objects.get(name=str(exporter_xsl_name))
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
 
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
@@ -262,7 +262,7 @@ class ExporterXsl(Exporter):
         """
         try:
             return ExporterXsl.objects.get(pk=str(exporter_xsl_id))
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))

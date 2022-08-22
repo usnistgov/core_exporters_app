@@ -9,13 +9,13 @@ from django.template import loader
 from django.urls import reverse
 from django.utils.html import escape
 
+from core_main_app.commons import exceptions
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import core_exporters_app.tasks as exporter_tasks
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
 from core_exporters_app.views.user.forms import ExportForm
-from core_main_app.commons import exceptions
 from core_exporters_app import settings
 
 logger = logging.getLogger(__name__)
@@ -33,10 +33,10 @@ def exporters_selection(request):
     try:
         if request.method == "POST":
             return _exporters_selection_post(request)
-        else:
-            raise Exception("request method should be POST")
-    except Exception as e:
-        return HttpResponseBadRequest(escape(str(e)))
+
+        raise Exception("request method should be POST")
+    except Exception as exception:
+        return HttpResponseBadRequest(escape(str(exception)))
 
 
 def open_form(request):
@@ -94,31 +94,28 @@ def check_download_status(request):
     """
     file_id = request.GET.get("file_id", None)
 
-    if file_id is not None:
-        try:
-            # Get the exported file with the given id
-            exported_file = exported_compressed_file_api.get_by_id(
-                file_id, request.user
-            )
-        except exceptions.DoesNotExist:
-            return HttpResponseBadRequest("The file with the given id does not exist.")
-        except Exception as e:
-            logger.error("Something went wrong while downloading: {0}".format(str(e)))
-            return HttpResponseBadRequest(
-                "Something went wrong while downloading. Please contact an administrator."
-            )
-
-        return HttpResponse(
-            json.dumps(
-                {
-                    "is_ready": exported_file.is_ready,
-                    "message": "The file is now ready for download",
-                }
-            ),
-            content_type="application/javascript",
-        )
-    else:
+    if file_id is None:
         return HttpResponseBadRequest("File id is missing in parameters")
+    try:
+        # Get the exported file with the given id
+        exported_file = exported_compressed_file_api.get_by_id(file_id, request.user)
+    except exceptions.DoesNotExist:
+        return HttpResponseBadRequest("The file with the given id does not exist.")
+    except Exception as exception:
+        logger.error("Something went wrong while downloading: %s", str(exception))
+        return HttpResponseBadRequest(
+            "Something went wrong while downloading. Please contact an administrator."
+        )
+
+    return HttpResponse(
+        json.dumps(
+            {
+                "is_ready": exported_file.is_ready,
+                "message": "The file is now ready for download",
+            }
+        ),
+        content_type="application/javascript",
+    )
 
 
 def _exporters_selection_post(request):
@@ -207,7 +204,7 @@ def _exporters_selection_post(request):
                 return HttpResponseBadRequest("Bad entries. Please check your entries")
         else:
             return HttpResponseBadRequest("Bad entries. Please check your entries")
-    except Exception as e:
+    except Exception as exception:
         return HttpResponseBadRequest(
-            escape(str(e)), content_type="application/javascript"
+            escape(str(exception)), content_type="application/javascript"
         )

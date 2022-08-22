@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.contrib.admin.views.decorators import staff_member_required
 from django.urls import re_path
 
+from core_main_app.admin import core_admin_site
+
 from core_exporters_app.components.exported_compressed_file.admin_site import (
     CustomExportedCompressedFileAdmin,
 )
@@ -15,7 +17,7 @@ from core_exporters_app.components.exported_compressed_file.models import (
 from core_exporters_app.components.exporter.admin_site import CustomExporterAdmin
 from core_exporters_app.components.exporter.models import Exporter
 from core_exporters_app.views.admin import views as admin_views, ajax as admin_ajax
-from core_main_app.admin import core_admin_site
+
 
 admin_urls = [
     re_path(

@@ -13,7 +13,7 @@ class XsltSelectionForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        super(XsltSelectionForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["xslt_list"].choices = _get_xsl()
 
 

@@ -2,6 +2,7 @@
 """
 from rest_framework.serializers import ListField, ModelSerializer
 
+from core_main_app.commons.serializers import BasicSerializer
 import core_exporters_app.components.exporter.api as exporter_api
 import core_exporters_app.exporters.xsl.api as xsl_api
 from core_exporters_app.commons.constants import XSL_URL
@@ -9,13 +10,12 @@ from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
 from core_exporters_app.components.exporter.models import Exporter, ExporterXsl
-from core_main_app.commons.serializers import BasicSerializer
 
 
 class ExporterSerializer(ModelSerializer):
     """Exporter serializer"""
 
-    class Meta(object):
+    class Meta:
         """Meta"""
 
         model = Exporter
@@ -35,7 +35,7 @@ class ExporterSerializer(ModelSerializer):
 class ExporterXslSerializer(ModelSerializer):
     """Xsl Exporter serializer"""
 
-    class Meta(object):
+    class Meta:
         """Meta"""
 
         model = ExporterXsl
@@ -61,7 +61,7 @@ class ExporterToZipSerializer(BasicSerializer):
 class ExporterExportedCompressedFileSerializer(ModelSerializer):
     """Compressed File serializer"""
 
-    class Meta(object):
+    class Meta:
         """Meta"""
 
         model = ExportedCompressedFile

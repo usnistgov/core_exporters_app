@@ -2,8 +2,8 @@
 """
 from django.db.models.signals import post_save, pre_delete
 
-import core_exporters_app.components.exporter.api as exporter_api
 from core_main_app.components.template.models import Template
+import core_exporters_app.components.exporter.api as exporter_api
 
 
 def init():

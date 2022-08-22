@@ -1,8 +1,9 @@
 """ Fixture files for Exporters
 """
+from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
+
 import core_exporters_app.commons.constants as constants
 from core_exporters_app.components.exporter.models import Exporter
-from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
 
 
 class ExporterFixtures(FixtureInterface):

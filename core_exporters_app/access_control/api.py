@@ -2,8 +2,8 @@
 """
 import logging
 
-from core_exporters_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
 from core_main_app.access_control.exceptions import AccessControlError
+from core_exporters_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
 
 logger = logging.getLogger(__name__)
 

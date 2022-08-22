@@ -2,19 +2,19 @@
 """
 import logging
 import re
-
-import core_exporters_app.components.exporter.api as exporters_api
-import core_main_app.commons.exceptions as main_exception
-import core_main_app.system.api as system_api
-from core_exporters_app.components.exporter.models import Exporter
-from core_exporters_app.exporters import urls
-from core_exporters_app.tasks import delete_old_exported_files
-from django.contrib.admindocs.views import simplify_regex
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import ValidationError
 from django.urls import URLResolver, URLPattern
 from django.urls.resolvers import RegexPattern
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
+from django.contrib.admindocs.views import simplify_regex
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+
+import core_main_app.commons.exceptions as main_exception
+import core_main_app.system.api as system_api
+
+import core_exporters_app.components.exporter.api as exporters_api
+from core_exporters_app.components.exporter.models import Exporter
+from core_exporters_app.exporters import urls
+from core_exporters_app.tasks import delete_old_exported_files
 
 logger = logging.getLogger(__name__)
 
@@ -106,17 +106,17 @@ def discover_exporter():
                     # If an exporter was added and is a default one, it is added in all templates
                     if exporter_added.enable_by_default is True:
                         exporter_added.templates.set(system_api.get_all_templates())
-            except Exception as e:
+            except Exception as exception:
                 logger.error(
-                    "Impossible to load the following exporter, class %s not found, exception: %s"
-                    % (pattern["view"], str(e))
+                    "Impossible to load the following exporter, class %s not found, exception: %s",
+                    (pattern["view"], str(exception)),
                 )
-    except ValidationError as e:
+    except ValidationError as exception:
         raise Exception(
-            "A validation error occurred during the exporter discovery: %s" % str(e)
+            f"A validation error occurred during the exporter discovery: {str(exception)}"
         )
-    except Exception as e:
-        raise e
+    except Exception as exception:
+        raise exception
 
 
 def init_periodic_tasks():
@@ -132,5 +132,5 @@ def init_periodic_tasks():
             name=delete_old_exported_files.__name__,
             task="core_exporters_app.tasks.delete_old_exported_files",
         )
-    except Exception as e:
-        logger.error(str(e))
+    except Exception as exception:
+        logger.error(str(exception))

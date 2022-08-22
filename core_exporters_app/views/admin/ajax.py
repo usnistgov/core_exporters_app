@@ -5,6 +5,10 @@ import json
 from django.http.response import HttpResponse, HttpResponseBadRequest
 from django.template import loader
 from django.urls import reverse_lazy
+
+from core_main_app.access_control.exceptions import AccessControlError
+from core_main_app.views.common.ajax import EditObjectModalView
+
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
 import core_exporters_app.exporters.xsl.api as exporter_xsl_api
@@ -14,11 +18,11 @@ from core_exporters_app.views.admin.forms import (
     AssociatedTemplatesForm,
     EditExporterForm,
 )
-from core_main_app.access_control.exceptions import AccessControlError
-from core_main_app.views.common.ajax import EditObjectModalView
 
 
 class EditExporterView(EditObjectModalView):
+    """Edit Exporter View"""
+
     form_class = EditExporterForm
     model = Exporter
     success_url = reverse_lazy("core-admin:core_exporters_app_exporters")
@@ -28,11 +32,13 @@ class EditExporterView(EditObjectModalView):
         # Save treatment.
         try:
             exporter_api.upsert(self.object)
-        except Exception as e:
-            form.add_error(None, str(e))
+        except Exception as exception:
+            form.add_error(None, str(exception))
 
 
 class EditExporterXslView(EditExporterView):
+    """Edit Exporter Xsl View"""
+
     model = ExporterXsl
 
 
@@ -48,8 +54,8 @@ def associated_templates(request):
     try:
         if request.method == "POST":
             return _associated_templates_post(request)
-        else:
-            return _associated_templates_get(request)
+
+        return _associated_templates_get(request)
     except AccessControlError:
         return HttpResponseBadRequest("You don't have enough rights to do this.")
     except Exception:

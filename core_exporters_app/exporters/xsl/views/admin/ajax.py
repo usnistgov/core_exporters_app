@@ -24,10 +24,10 @@ def add_xslt(request):
     try:
         if request.method == "POST":
             return _add_xslt_post(request)
-        else:
-            return _add_xslt_get(request)
-    except Exception as e:
-        return HttpResponseBadRequest(escape(str(e)))
+
+        return _add_xslt_get(request)
+    except Exception as exception:
+        return HttpResponseBadRequest(escape(str(exception)))
 
 
 def _add_xslt_post(request):
@@ -46,21 +46,20 @@ def _add_xslt_post(request):
             if form.is_valid():
                 # get the list of selected xslt
                 xslt_list_selected = request.POST.getlist("xslt_list", None)
-                if xslt_list_selected is not None:
-                    # insert or delete xslt exporter
-                    exporter_xsl_api.upsert_or_delete_exporter_xsl(xslt_list_selected)
-                    return HttpResponse(
-                        json.dumps({}), content_type="application/javascript"
-                    )
-                else:
+                if xslt_list_selected is None:
                     return HttpResponseBadRequest(
                         "Bad entries. Please check your entries"
                     )
-            else:
-                return HttpResponseBadRequest("Bad entries. Please check your entries")
-    except Exception as e:
+                    # insert or delete xslt exporter
+                exporter_xsl_api.upsert_or_delete_exporter_xsl(xslt_list_selected)
+                return HttpResponse(
+                    json.dumps({}), content_type="application/javascript"
+                )
+
+            return HttpResponseBadRequest("Bad entries. Please check your entries")
+    except Exception as exception:
         return HttpResponseBadRequest(
-            escape(str(e)), content_type="application/javascript"
+            escape(str(exception)), content_type="application/javascript"
         )
 
 

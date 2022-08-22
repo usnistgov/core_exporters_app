@@ -3,9 +3,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
-from core_exporters_app.settings import EXPORTED_COMPRESSED_FILE_FOLDER
 from core_main_app.commons import exceptions
 from core_main_app.utils.storage.storage import core_file_storage
+from core_exporters_app.settings import EXPORTED_COMPRESSED_FILE_FOLDER
 
 
 class ExportedCompressedFile(models.Model):
@@ -35,7 +35,7 @@ class ExportedCompressedFile(models.Model):
         """
         try:
             return ExportedCompressedFile.objects.get(pk=str(object_id))
-        except ObjectDoesNotExist as e:
-            raise exceptions.DoesNotExist(str(e))
+        except ObjectDoesNotExist as exception:
+            raise exceptions.DoesNotExist(str(exception))
         except Exception as ex:
             raise exceptions.ModelError(str(ex))

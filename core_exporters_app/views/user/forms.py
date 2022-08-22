@@ -3,8 +3,8 @@
 
 from django import forms
 
-import core_exporters_app.components.exporter.api as exporters_api
 import core_main_app.components.template.api as template_api
+import core_exporters_app.components.exporter.api as exporters_api
 
 
 class ExportForm(forms.Form):
@@ -71,5 +71,5 @@ class ExportForm(forms.Form):
         if "data_url_list" in kwargs:
             self.data_url_list = kwargs.pop("data_url_list")
 
-        super(ExportForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["my_exporters"].choices = self.export_options

@@ -6,11 +6,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core_main_app.commons import exceptions
+from core_main_app.utils.file import get_file_http_response
+import core_main_app.components.data.api as data_api
+from core_explore_common_app.components.result.models import Result
+
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import core_exporters_app.components.exporter.api as exporter_api
-import core_main_app.components.data.api as data_api
-from core_explore_common_app.components.result.models import Result
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
@@ -22,8 +25,6 @@ from core_exporters_app.exporters.exporter import (
 from core_exporters_app.rest.exporters.serializers import (
     ExporterExportedCompressedFileSerializer,
 )
-from core_main_app.commons import exceptions
-from core_main_app.utils.file import get_file_http_response
 
 
 class ExportData(APIView):
@@ -102,9 +103,9 @@ class ExportData(APIView):
             # Check if the list is empty
             if transform_result_list:
                 return export_data(transform_result_list, request.user, data.title)
-            else:
-                content = {"message": "error during the transformation"}
-                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+            content = {"message": "error during the transformation"}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         except exceptions.DoesNotExist:
             content = {"message": document + " not found."}

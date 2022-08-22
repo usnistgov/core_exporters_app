@@ -10,7 +10,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 
 
-class AbstractExporter(object, metaclass=ABCMeta):
+class AbstractExporter(metaclass=ABCMeta):
     """
     Export data to different formats
         - export: export the data
@@ -99,7 +99,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
         # ZIP fileCreation
         in_memory = BytesIO()
-        zip = zipfile.ZipFile(in_memory, "a")
+        zip_file = zipfile.ZipFile(in_memory, "a")
 
         # For each result
         for transformed_result in transformed_result_list:
@@ -110,14 +110,14 @@ class AbstractExporter(object, metaclass=ABCMeta):
                     content.file_name,
                     content.content_extension,
                 )
-                zip.writestr(path, content.content_converted)
+                zip_file.writestr(path, content.content_converted)
 
         # fix for Linux zip files read in Windows
-        for xmlFile in zip.filelist:
-            xmlFile.create_system = 0
+        for xml_file in zip_file.filelist:
+            xml_file.create_system = 0
 
         # Close zip file
-        zip.close()
+        zip_file.close()
 
         # ZIP file to be downloaded
         in_memory.seek(0)
@@ -189,8 +189,8 @@ def get_exporter_module_from_url(exporter_url):
     func = pkglist[-1:][0]
 
     imported_pkgs = importlib.import_module(pkgs)
-    a = getattr(imported_pkgs, func)
-    module = a()
+    attr = getattr(imported_pkgs, func)
+    module = attr()
 
     return module
 

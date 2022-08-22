@@ -4,14 +4,15 @@ import logging
 import pathlib
 from rest_framework import status
 
+from core_main_app.utils.blob_downloader import BlobDownloader
+from core_main_app.utils.file import get_filename_from_response
+from core_main_app.utils.urls import get_blob_download_regex
+
 from core_exporters_app.exporters.exporter import (
     AbstractExporter,
     TransformResult,
     TransformResultContent,
 )
-from core_main_app.utils.blob_downloader import BlobDownloader
-from core_main_app.utils.file import get_filename_from_response
-from core_main_app.utils.urls import get_blob_download_regex
 
 logger = logging.getLogger(__name__)
 
@@ -74,9 +75,9 @@ class BlobExporter(AbstractExporter):
                     # if something happens while downloading the blob, we don't want to freeze the export
                     # so we log the Url that fails
                     logger.error(
-                        "Something went wrong while exporting blob at {0}: {1}".format(
-                            url, str(ex)
-                        )
+                        "Something went wrong while exporting blob at %s: %s",
+                        url,
+                        str(ex),
                     )
 
             results_transform.append(transform_result)
@@ -109,6 +110,6 @@ def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
             return_value += "." + file_name_split[index]
         # file_name.sha.extension
         return return_value.replace("\r", "")
-    else:
-        # if header have no filename, we return the sha only
-        return sha
+
+    # if header have no filename, we return the sha only
+    return sha

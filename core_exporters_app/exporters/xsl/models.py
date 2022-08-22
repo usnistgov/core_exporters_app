@@ -2,13 +2,14 @@
 """
 import logging
 
-import xml_utils.commons.exceptions as exceptions
+from xml_utils.commons import exceptions
+from xml_utils.xsd_tree.xsd_tree import XSDTree
+
 from core_exporters_app.exporters.exporter import (
     AbstractExporter,
     TransformResult,
     TransformResultContent,
 )
-from xml_utils.xsd_tree.xsd_tree import XSDTree
 
 logger = logging.getLogger(__name__)
 
@@ -92,11 +93,11 @@ class XslExporter(AbstractExporter):
 
         try:
             extension_result = XSDTree.get_extension(xslt)
-        except exceptions.XMLError as e:
+        except exceptions.XMLError as exception:
             logger.error(
-                "It is not possible to determine the output format, xml by default will be used: {0}".format(
-                    str(e)
-                )
+                "It is not possible to determine the output format, "
+                "xml by default will be used: %s",
+                str(exception),
             )
 
         if extension_result:
