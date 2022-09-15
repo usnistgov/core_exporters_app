@@ -91,4 +91,5 @@ def upsert(exporter):
     Returns:
 
     """
-    return exporter.save_object()
+    exporter.save_object()
+    return exporter

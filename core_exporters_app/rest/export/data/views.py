@@ -1,23 +1,26 @@
 """ REST Views for Data Exporting
 """
 
+from django.conf import settings
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-import core_exporters_app.commons.constants as exporter_constants
-import core_exporters_app.components.exporter.api as exporter_api
+
+from core_main_app.commons import exceptions
+from core_main_app.utils.file import get_file_http_response
 import core_main_app.components.data.api as data_api
 from core_explore_common_app.components.result.models import Result
+
+import core_exporters_app.commons.constants as exporter_constants
+import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
+import core_exporters_app.components.exporter.api as exporter_api
+from core_exporters_app.components.exported_compressed_file.models import (
+    ExportedCompressedFile,
+)
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 from core_exporters_app.exporters.exporter import (
     get_exporter_module_from_url,
     AbstractExporter,
-)
-from django.conf import settings
-from core_main_app.utils.file import get_file_http_response
-from core_main_app.commons import exceptions
-import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
-from core_exporters_app.components.exported_compressed_file.models import (
-    ExportedCompressedFile,
 )
 from core_exporters_app.rest.exporters.serializers import (
     ExporterExportedCompressedFileSerializer,
@@ -77,7 +80,7 @@ class ExportData(APIView):
             exporter_object = exporter_api.get_by_name(request.GET["exporter"])
 
             # check if template is linked to the exporter
-            if data.template not in exporter_object.templates:
+            if not exporter_object.has_template(data.template):
                 content = {"message": "template not linked to this exporter"}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
@@ -86,6 +89,8 @@ class ExportData(APIView):
 
             # if is a xslt transformation, we have to set the xslt
             if exporter_object.url == exporter_constants.XSL_URL:
+                # get the exporter xsl object instead of exporter
+                exporter_object = exporter_xsl_api.get_by_name(request.GET["exporter"])
                 # set the xslt
                 exporter_module.set_xslt(exporter_object.xsl_transformation)
 
@@ -98,9 +103,9 @@ class ExportData(APIView):
             # Check if the list is empty
             if transform_result_list:
                 return export_data(transform_result_list, request.user, data.title)
-            else:
-                content = {"message": "error during the transformation"}
-                return Response(content, status=status.HTTP_400_BAD_REQUEST)
+
+            content = {"message": "error during the transformation"}
+            return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
         except exceptions.DoesNotExist:
             content = {"message": document + " not found."}
@@ -138,7 +143,7 @@ def export_data(transform_result_list, user, title):
         )
 
         # Save in database to generate an Id and be accessible via url
-        exported_file = exported_compressed_file_api.upsert(exported_file)
+        exported_compressed_file_api.upsert(exported_file)
 
         # Export in Zip
         AbstractExporter.export(exported_file.id, transform_result_list, user)

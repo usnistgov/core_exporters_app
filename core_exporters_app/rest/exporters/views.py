@@ -7,11 +7,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from core_main_app.commons import exceptions
+from core_main_app.utils.file import get_file_http_response
+import core_main_app.components.data.api as data_api
+from core_explore_common_app.components.result.models import Result
+
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 import core_exporters_app.components.exporter.api as exporter_api
-import core_main_app.components.data.api as data_api
-from core_explore_common_app.components.result.models import Result
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
@@ -24,8 +27,6 @@ from core_exporters_app.rest.exporters.serializers import (
     ExporterToZipSerializer,
     ExporterExportedCompressedFileSerializer,
 )
-from core_main_app.commons import exceptions
-from core_main_app.utils.file import get_file_http_response
 
 
 class ExporterList(APIView):
@@ -249,9 +250,9 @@ class ExporterDownload(APIView):
                 return get_file_http_response(
                     compressed_file_object.file.read(), compressed_file_object.file_name
                 )
-            else:
-                content = {"message": "The zip file is not yet ready."}
-                return Response(content, status=status.HTTP_204_NO_CONTENT)
+
+            content = {"message": "The zip file is not yet ready."}
+            return Response(content, status=status.HTTP_204_NO_CONTENT)
         except Http404:
             content = {"message": "Compressed file not found."}
             return Response(content, status=status.HTTP_404_NOT_FOUND)

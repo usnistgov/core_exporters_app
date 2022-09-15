@@ -9,10 +9,10 @@ if not settings.configured:
     settings.configure()
 
 # GridFS
-GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION = getattr(
+EXPORTED_COMPRESSED_FILE_FOLDER = getattr(
     settings,
-    "GRIDFS_EXPORTED_COMPRESSED_FILE_COLLECTION",
-    "fs_exporter_compressed_file_collection",
+    "EXPORTED_COMPRESSED_FILE_FOLDER",
+    "exporter_compressed_files",
 )
 
 COMPRESSED_FILES_EXPIRE_AFTER_SECONDS = getattr(
@@ -25,4 +25,8 @@ CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT = getattr(
     settings, "CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT", False
 )
 """ :py:class:`bool`: Can anonymous user access public document.
+"""
+
+MAX_DOCUMENT_LIST = getattr(settings, "MAX_DOCUMENT_LIST", 100)
+""" :py:class:`int`: Maximum number of documents to be returned at once by the api.
 """

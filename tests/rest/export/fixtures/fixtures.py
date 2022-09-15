@@ -1,10 +1,11 @@
 """ Fixture files for Exporters
 """
-import core_exporters_app.commons.constants as constants
 from core_main_app.components.data.models import Data
 from core_main_app.components.template.models import Template
-from core_exporters_app.components.exporter.models import Exporter
 from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
+
+import core_exporters_app.commons.constants as constants
+from core_exporters_app.components.exporter.models import Exporter
 
 
 class ExportDataFixtures(FixtureInterface):
@@ -41,22 +42,25 @@ class ExportDataFixtures(FixtureInterface):
             name="XML",
             url=constants.XML_URL,
             enable_by_default=True,
-            templates=[self.template],
-        ).save()
+        )
+        self.exporter_xml.save()
+        self.exporter_xml.templates.set([self.template])
 
         self.exporter_json = Exporter(
             name="JSON",
             url=constants.JSON_URL,
             enable_by_default=True,
-            templates=[self.template],
-        ).save()
+        )
+        self.exporter_json.save()
+        self.exporter_json.templates.set([self.template])
 
         self.exporter_xsl = Exporter(
             name="XSL_trans",
             url=constants.XSL_URL,
             enable_by_default=True,
-            templates=[self.template],
-        ).save()
+        )
+        self.exporter_xsl.save()
+        self.exporter_xsl.templates.set([self.template])
 
         self.data_collection = [
             self.data_1,
@@ -71,7 +75,7 @@ class ExportDataFixtures(FixtureInterface):
         Returns:
 
         """
-        template = Template()
+        self.template = Template()
 
         xsd = (
             '<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">'
@@ -84,7 +88,7 @@ class ExportDataFixtures(FixtureInterface):
             "</xsd:schema>"
         )
 
-        template.content = xsd
-        template.hash = ""
-        template.filename = "filename"
-        self.template = template.save()
+        self.template.content = xsd
+        self.template.hash = ""
+        self.template.filename = "filename"
+        self.template.save()

@@ -7,18 +7,21 @@ import logging
 
 from celery import shared_task
 
-import core_exporters_app.commons.constants as exporter_constants
-import core_exporters_app.components.exporter.api as exporter_api
+from core_main_app.utils.requests_utils.requests_utils import send_get_request
 import core_main_app.components.user.api as user_api
 from core_explore_common_app.components.result.models import Result
 from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
+
+import core_exporters_app.commons.constants as exporter_constants
+import core_exporters_app.components.exporter.api as exporter_api
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
 from core_exporters_app.exporters.exporter import (
     get_exporter_module_from_url,
     AbstractExporter,
 )
 from core_exporters_app.settings import COMPRESSED_FILES_EXPIRE_AFTER_SECONDS
 from core_exporters_app.system.api import get_older_exported_files
-from core_main_app.utils.requests_utils.requests_utils import send_get_request
+
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +55,8 @@ def export_files(
         exporter_module = get_exporter_module_from_url(exporter_object.url)
         # if is a xslt transformation, we have to set the xslt
         if exporter_object.url == exporter_constants.XSL_URL:
+            # get the exporter xsl object instead of exporter
+            exporter_object = exporter_xsl_api.get_by_id(exporter_id)
             # set the xslt
             exporter_module.set_xslt(exporter_object.xsl_transformation)
         # transform the list of xml files
@@ -79,12 +84,12 @@ def delete_old_exported_files():
             seconds=COMPRESSED_FILES_EXPIRE_AFTER_SECONDS
         ):
             logger.info(
-                "Periodic task: delete exported file {}.".format(str(exported_file.id))
+                "Periodic task: delete exported file %s.", str(exported_file.id)
             )
             exported_file.delete()
-    except Exception as e:
+    except Exception as exception:
         logger.error(
-            "An error occurred while deleting exported files ({}).".format(str(e))
+            "An error occurred while deleting exported files (%s).", str(exception)
         )
 
 

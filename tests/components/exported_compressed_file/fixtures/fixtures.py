@@ -1,9 +1,10 @@
 """ Fixture files for Exporters
 """
+
+from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
-from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
 
 
 class ExportedCompressedFileFixtures(FixtureInterface):
@@ -34,21 +35,24 @@ class ExportedCompressedFileFixtures(FixtureInterface):
             mime_type="application/zip",
             is_ready=True,
             user_id="1",
-        ).save()
+        )
+        self.exported_compressed_file_1.save()
 
         self.exported_compressed_file_2 = ExportedCompressedFile(
             file_name="exported_compressed_file_2",
             mime_type="application/zip",
             is_ready=True,
             user_id="2",
-        ).save()
+        )
+        self.exported_compressed_file_2.save()
 
         self.exported_compressed_file_3 = ExportedCompressedFile(
             file_name="exported_compressed_file_3",
             mime_type="application/zip",
             is_ready=True,
             user_id="None",
-        ).save()
+        )
+        self.exported_compressed_file_3.save()
 
         self.data_collection = [
             self.exported_compressed_file_1,

@@ -1,24 +1,18 @@
 """ Blob exporter
 """
 import logging
-import re
-from urllib.parse import urlparse
-
+import pathlib
 from rest_framework import status
+
+from core_main_app.utils.blob_downloader import BlobDownloader
+from core_main_app.utils.file import get_filename_from_response
+from core_main_app.utils.urls import get_blob_download_regex
 
 from core_exporters_app.exporters.exporter import (
     AbstractExporter,
     TransformResult,
     TransformResultContent,
 )
-from core_main_app.settings import INSTALLED_APPS, SERVER_URI
-from core_main_app.utils.blob_downloader import BlobDownloader
-from core_main_app.utils.file import get_filename_from_response
-from core_main_app.utils.requests_utils import requests_utils
-from core_main_app.utils.urls import get_blob_download_regex
-
-if "core_federated_search_app" in INSTALLED_APPS:
-    import core_federated_search_app.components.instance.api as instance_api
 
 logger = logging.getLogger(__name__)
 
@@ -43,15 +37,15 @@ class BlobExporter(AbstractExporter):
         results_transform = []
         for xml_item in xml_inputs:
             # get the sha of the xml
-            sha = AbstractExporter.get_sha(xml_item["xml_content"])
+            sha = AbstractExporter.get_sha(xml_item.xml_content)
             # get the name of the xml document representing the source document name
             document_name_with_sha = AbstractExporter.get_title_document(
-                xml_item["title"], xml_item["xml_content"]
+                xml_item.title, xml_item.xml_content
             )
             transform_result = TransformResult()
             transform_result.source_document_name = document_name_with_sha
             # Get all url from xml content
-            urls = get_blob_download_regex(xml_item["xml_content"])
+            urls = get_blob_download_regex(xml_item.xml_content)
             # Get all blobs from urls
             for url in urls:
                 try:
@@ -70,7 +64,9 @@ class BlobExporter(AbstractExporter):
                             transform_result_content.file_name = blob_name
                             transform_result_content.content_converted = blob_content
                             # Don't need any additional extension, Is generated with the file name
-                            transform_result_content.content_extension = ""
+                            transform_result_content.content_extension = pathlib.Path(
+                                blob_name
+                            ).suffix
                             # add the blob to the result list
                             transform_result.transform_result_content.append(
                                 transform_result_content
@@ -79,9 +75,9 @@ class BlobExporter(AbstractExporter):
                     # if something happens while downloading the blob, we don't want to freeze the export
                     # so we log the Url that fails
                     logger.error(
-                        "Something went wrong while exporting blob at {0}: {1}".format(
-                            url, str(ex)
-                        )
+                        "Something went wrong while exporting blob at %s: %s",
+                        url,
+                        str(ex),
                     )
 
             results_transform.append(transform_result)
@@ -114,6 +110,6 @@ def _get_filename_from_blob(blob_file_info, blob_file_read, sha_from_xml):
             return_value += "." + file_name_split[index]
         # file_name.sha.extension
         return return_value.replace("\r", "")
-    else:
-        # if header have no filename, we return the sha only
-        return sha
+
+    # if header have no filename, we return the sha only
+    return sha

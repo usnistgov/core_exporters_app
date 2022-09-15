@@ -2,10 +2,10 @@
 """
 from django.contrib.admin.views.decorators import staff_member_required
 
-import core_exporters_app.commons.constants as exporter_constants
-import core_exporters_app.components.exporter.api as exporter_api
-from core_exporters_app.views.admin.ajax import EditExporterView
 from core_main_app.utils.rendering import admin_render
+import core_exporters_app.components.exporter.api as exporter_api
+import core_exporters_app.exporters.xsl.api as exporter_xsl_api
+from core_exporters_app.views.admin.ajax import EditExporterView
 
 
 @staff_member_required
@@ -19,7 +19,7 @@ def manage_exporters(request):
 
     """
     exporter_list = exporter_api.get_all()
-    exporter_xslt_list = exporter_api.get_all_by_url(exporter_constants.XSL_URL)
+    exporter_xslt_list = exporter_xsl_api.get_all()
 
     context = {
         "exporters_list": exporter_list,

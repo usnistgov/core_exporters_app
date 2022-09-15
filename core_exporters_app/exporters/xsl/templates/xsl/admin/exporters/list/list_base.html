@@ -30,7 +30,7 @@
                     <td>{{ exporter.get_templates_to_string }}</td>
                     <td id="{{ exporter.id }}">
                         {% block box_actions %}
-                            {% url 'admin:core_exporters_app_exporters_edit' exporter.id as edit_url %}
+                            {% url 'core-admin:core_exporters_app_exporters_xsl_edit' exporter.id as edit_url %}
                             {% include 'core_main_app/common/buttons/edit.html' %}
                             <span class="associated-templates">
                                 <a class="btn btn-secondary" href="#"><i class="fas fa-random">

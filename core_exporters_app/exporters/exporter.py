@@ -6,13 +6,11 @@ import os
 import zipfile
 from abc import ABCMeta, abstractmethod
 from io import BytesIO
-
-from django_mongoengine import fields, Document
-
+from django.core.files.uploadedfile import InMemoryUploadedFile
 import core_exporters_app.components.exported_compressed_file.api as exported_compressed_file_api
 
 
-class AbstractExporter(object, metaclass=ABCMeta):
+class AbstractExporter(metaclass=ABCMeta):
     """
     Export data to different formats
         - export: export the data
@@ -35,6 +33,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
         """
         Method: Exports the data
         """
+
         # Generate the zip file
         return AbstractExporter.generate_zip(
             exported_compressed_file_id, transformed_result_list, user
@@ -100,7 +99,7 @@ class AbstractExporter(object, metaclass=ABCMeta):
 
         # ZIP fileCreation
         in_memory = BytesIO()
-        zip = zipfile.ZipFile(in_memory, "a")
+        zip_file = zipfile.ZipFile(in_memory, "a")
 
         # For each result
         for transformed_result in transformed_result_list:
@@ -111,27 +110,33 @@ class AbstractExporter(object, metaclass=ABCMeta):
                     content.file_name,
                     content.content_extension,
                 )
-                zip.writestr(path, content.content_converted)
+                zip_file.writestr(path, content.content_converted)
 
         # fix for Linux zip files read in Windows
-        for xmlFile in zip.filelist:
-            xmlFile.create_system = 0
+        for xml_file in zip_file.filelist:
+            xml_file.create_system = 0
 
         # Close zip file
-        zip.close()
+        zip_file.close()
 
         # ZIP file to be downloaded
         in_memory.seek(0)
 
         # save the file and upset the object
-        exported_compressed_file.file.put(
-            in_memory, content_type=exported_compressed_file.mime_type
+        exported_compressed_file.file = InMemoryUploadedFile(
+            in_memory,
+            None,
+            exported_compressed_file.file_name,
+            exported_compressed_file.mime_type,
+            in_memory.__sizeof__(),
+            None,
         )
+
         exported_compressed_file.is_ready = True
         return exported_compressed_file_api.upsert(exported_compressed_file)
 
 
-class TransformResultContent(Document):
+class TransformResultContent:
     """Represents a result content
 
     file_name:
@@ -145,12 +150,13 @@ class TransformResultContent(Document):
         .xml, .json, .png
     """
 
-    file_name = fields.StringField(default="")
-    content_converted = fields.StringField(default="")
-    content_extension = fields.StringField(default="")
+    def __init__(self, file_name="", content_converted="", content_extension=""):
+        self.file_name = file_name
+        self.content_converted = content_converted
+        self.content_extension = content_extension
 
 
-class TransformResult(Document):
+class TransformResult:
     """Represents a result after transformation
 
     source_document_name:
@@ -161,8 +167,11 @@ class TransformResult(Document):
         but zero or N result for blob export
     """
 
-    source_document_name = fields.StringField(default="")
-    transform_result_content = fields.ListField(TransformResultContent)
+    def __init__(self, source_document_name="", transform_result_content=None):
+        self.source_document_name = source_document_name
+        self.transform_result_content = (
+            transform_result_content if transform_result_content else []
+        )
 
 
 def get_exporter_module_from_url(exporter_url):
@@ -180,8 +189,8 @@ def get_exporter_module_from_url(exporter_url):
     func = pkglist[-1:][0]
 
     imported_pkgs = importlib.import_module(pkgs)
-    a = getattr(imported_pkgs, func)
-    module = a()
+    attr = getattr(imported_pkgs, func)
+    module = attr()
 
     return module
 

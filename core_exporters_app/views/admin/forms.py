@@ -1,13 +1,15 @@
 """ Forms admin exporter
 """
 from django import forms
+from django.forms import ModelForm
 
-from core_exporters_app.components.exporter.models import Exporter
 from core_main_app.components.template import api as template_api
-from django_mongoengine.forms import DocumentForm
+from core_exporters_app.components.exporter.models import Exporter
 
 
-class EditExporterForm(DocumentForm):
+class EditExporterForm(ModelForm):
+    """Edit Exporter Form"""
+
     name = forms.CharField(
         label="Name",
         widget=forms.TextInput(
@@ -15,8 +17,10 @@ class EditExporterForm(DocumentForm):
         ),
     )
 
-    class Meta(object):
-        document = Exporter
+    class Meta:
+        """Meta"""
+
+        model = Exporter
         fields = ["name"]
 
 
@@ -30,7 +34,7 @@ class AssociatedTemplatesForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         request = kwargs.pop("request")
-        super(AssociatedTemplatesForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["templates_manager"].choices = _get_templates_versions(
             request=request
         )

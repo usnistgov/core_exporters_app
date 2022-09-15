@@ -2,7 +2,7 @@
 """
 import core_main_app.components.xsl_transformation.api as xsl_transformation_api
 from core_exporters_app.commons.constants import XSL_URL
-from core_exporters_app.exporters.xsl.models import ExporterXsl
+from core_exporters_app.components.exporter.models import ExporterXsl
 
 
 def get_all(is_cls=True):
@@ -13,6 +13,30 @@ def get_all(is_cls=True):
 
     """
     return ExporterXsl.get_all(is_cls)
+
+
+def get_by_name(exporter_xsl_name):
+    """Returns exporter xsl object with the given name
+
+    Args:
+        exporter_xsl_name:
+
+    Returns: exporter xsl object
+
+    """
+    return ExporterXsl.get_by_name(exporter_xsl_name)
+
+
+def get_by_id(exporter_xsl_id):
+    """Returns exporter xsl object with the given id
+
+    Args:
+        exporter_xsl_id:
+
+    Returns: exporter xsl object
+
+    """
+    return ExporterXsl.get_by_id(exporter_xsl_id)
 
 
 def get_all_xsl_id():
@@ -44,7 +68,8 @@ def upsert(exporter):
     Returns:
 
     """
-    return exporter.save()
+    exporter.save_object()
+    return exporter
 
 
 def upsert_or_delete_exporter_xsl(xsl_list):

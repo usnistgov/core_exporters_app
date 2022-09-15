@@ -2,13 +2,13 @@
 """
 import json
 
+from core_main_app.settings import XML_POST_PROCESSOR, XML_FORCE_LIST
+from core_main_app.utils import xml as xml_utils
 from core_exporters_app.exporters.exporter import (
     AbstractExporter,
     TransformResult,
     TransformResultContent,
 )
-from core_main_app.settings import XML_POST_PROCESSOR, XML_FORCE_LIST
-from core_main_app.utils import xml as xml_utils
 
 
 class JsonExporter(AbstractExporter):
@@ -33,7 +33,7 @@ class JsonExporter(AbstractExporter):
         for xml_item in xml_inputs:
             # generate the title document with the sha
             document_name_with_sha = AbstractExporter.get_title_document(
-                xml_item["title"], xml_item["xml_content"]
+                xml_item.title, xml_item.xml_content
             )
             transform_result = TransformResult()
             # set the document name to the collection
@@ -43,7 +43,7 @@ class JsonExporter(AbstractExporter):
             transform_result_content.file_name = document_name_with_sha
             # Transform to JSON
             transformed_content = xml_utils.raw_xml_to_dict(
-                xml_item["xml_content"],
+                xml_item.xml_content,
                 postprocessor=XML_POST_PROCESSOR,
                 force_list=XML_FORCE_LIST,
             )
