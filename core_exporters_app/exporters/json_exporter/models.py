@@ -52,7 +52,7 @@ class JsonExporter(AbstractExporter):
                 transform_result_content.content_converted = json.dumps(
                     transformed_content, indent=4, ensure_ascii=False
                 )
-            except:
+            except Exception:
                 transform_result_content.content_converted = json.dumps(
                     transformed_content, indent=4
                 )
