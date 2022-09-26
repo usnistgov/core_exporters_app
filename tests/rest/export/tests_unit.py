@@ -48,7 +48,9 @@ class TestExportDataById(MongoIntegrationBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     @patch.object(data_api, "get_by_id")
-    def test_export_data_wrong_exporter_returns_http_404(self, mock_data_api_get_by_id):
+    def test_export_data_wrong_exporter_returns_http_404(
+        self, mock_data_api_get_by_id
+    ):
         """test_export_data_wrong_exporter_returns_http_404"""
 
         # Arrange
@@ -131,7 +133,9 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         @patch.object(linked_data_api, "get_data_by_pid")
-        def test_export_data_returns_status_200(self, mock_data_api_get_by_pid):
+        def test_export_data_returns_status_200(
+            self, mock_data_api_get_by_pid
+        ):
             """test_export_data_returns_status_200"""
 
             # Arrange

@@ -87,7 +87,9 @@ class TestExporterDetailGetPermissions(SimpleTestCase):
         mock_user = create_mock_user("1")
 
         response = RequestMock.do_request_get(
-            exporters_api_views.ExporterDetail.as_view(), mock_user, param={"pk": "0"}
+            exporters_api_views.ExporterDetail.as_view(),
+            mock_user,
+            param={"pk": "0"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -102,7 +104,9 @@ class TestExporterDetailGetPermissions(SimpleTestCase):
         mock_user = create_mock_user("1", is_staff=True)
 
         response = RequestMock.do_request_get(
-            exporters_api_views.ExporterDetail.as_view(), mock_user, param={"pk": "0"}
+            exporters_api_views.ExporterDetail.as_view(),
+            mock_user,
+            param={"pk": "0"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -193,34 +197,44 @@ class TestExporterDownloadGetPermissions(SimpleTestCase):
 
         mock_user = create_mock_user("1")
 
-        mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
-            is_ready=True,
-            file=SimpleUploadedFile("file.txt", b"file"),
-            file_name="",
-            user_id=mock_user.id,
+        mock_exported_compressed_file_get_by_id.return_value = (
+            ExportedCompressedFile(
+                is_ready=True,
+                file=SimpleUploadedFile("file.txt", b"file"),
+                file_name="",
+                user_id=mock_user.id,
+            )
         )
 
         response = RequestMock.do_request_get(
-            exporters_api_views.ExporterDownload.as_view(), mock_user, param={"pk": "0"}
+            exporters_api_views.ExporterDownload.as_view(),
+            mock_user,
+            param={"pk": "0"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     @patch.object(exported_compressed_file_api, "get_by_id")
-    def test_staff_returns_http_200(self, mock_exported_compressed_file_get_by_id):
+    def test_staff_returns_http_200(
+        self, mock_exported_compressed_file_get_by_id
+    ):
         """test_staff_returns_http_200"""
 
         mock_user = create_mock_user("1", is_staff=True)
 
-        mock_exported_compressed_file_get_by_id.return_value = ExportedCompressedFile(
-            is_ready=True,
-            file=SimpleUploadedFile("file.txt", b"file"),
-            file_name="",
-            user_id=mock_user.id,
+        mock_exported_compressed_file_get_by_id.return_value = (
+            ExportedCompressedFile(
+                is_ready=True,
+                file=SimpleUploadedFile("file.txt", b"file"),
+                file_name="",
+                user_id=mock_user.id,
+            )
         )
 
         response = RequestMock.do_request_get(
-            exporters_api_views.ExporterDownload.as_view(), mock_user, param={"pk": "0"}
+            exporters_api_views.ExporterDownload.as_view(),
+            mock_user,
+            param={"pk": "0"},
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

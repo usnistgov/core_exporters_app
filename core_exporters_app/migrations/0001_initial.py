@@ -33,7 +33,9 @@ class Migration(migrations.Migration):
                 (
                     "file",
                     models.FileField(
-                        blank=True, null=True, upload_to="exporter_compressed_files"
+                        blank=True,
+                        null=True,
+                        upload_to="exporter_compressed_files",
                     ),
                 ),
                 ("is_ready", models.BooleanField(default=False)),
@@ -73,7 +75,9 @@ class Migration(migrations.Migration):
                 ("_cls", models.CharField(default="Exporter", max_length=200)),
                 (
                     "templates",
-                    models.ManyToManyField(blank=True, to="core_main_app.Template"),
+                    models.ManyToManyField(
+                        blank=True, to="core_main_app.Template"
+                    ),
                 ),
             ],
         ),

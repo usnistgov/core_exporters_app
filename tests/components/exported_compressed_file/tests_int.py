@@ -104,7 +104,9 @@ class TestGetByExportedCompressedFile(MongoIntegrationBaseTestCase):
                 self.fixture.exported_compressed_file_3.id, user
             )
 
-    def test_get_exported_compressed_file_not_owner_raises_access_control_error(self):
+    def test_get_exported_compressed_file_not_owner_raises_access_control_error(
+        self,
+    ):
         """test_get_exported_compressed_file_not_owner_raises_access_control_error"""
 
         # Arrange

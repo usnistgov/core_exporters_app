@@ -98,11 +98,17 @@ def check_download_status(request):
         return HttpResponseBadRequest("File id is missing in parameters")
     try:
         # Get the exported file with the given id
-        exported_file = exported_compressed_file_api.get_by_id(file_id, request.user)
+        exported_file = exported_compressed_file_api.get_by_id(
+            file_id, request.user
+        )
     except exceptions.DoesNotExist:
-        return HttpResponseBadRequest("The file with the given id does not exist.")
+        return HttpResponseBadRequest(
+            "The file with the given id does not exist."
+        )
     except Exception as exception:
-        logger.error("Something went wrong while downloading: %s", str(exception))
+        logger.error(
+            "Something went wrong while downloading: %s", str(exception)
+        )
         return HttpResponseBadRequest(
             "Something went wrong while downloading. Please contact an administrator."
         )
@@ -142,7 +148,9 @@ def _exporters_selection_post(request):
             )
             data_url_list = request.POST["data_url_list"].split(",")
             if len(data_url_list) > settings.MAX_DOCUMENT_LIST:
-                return HttpResponseBadRequest("Number of documents is over the limit.")
+                return HttpResponseBadRequest(
+                    "Number of documents is over the limit."
+                )
 
             form = ExportForm(
                 request.POST,
@@ -192,7 +200,9 @@ def _exporters_selection_post(request):
                         )
 
                     # redirecting
-                    url_download = reverse("core_exporters_app_exporters_download")
+                    url_download = reverse(
+                        "core_exporters_app_exporters_download"
+                    )
                     url_to_redirect = "{0}{1}?id={2}".format(
                         url_base, url_download, str(exported_file.id)
                     )
@@ -201,9 +211,13 @@ def _exporters_selection_post(request):
                         content_type="application/json",
                     )
             else:
-                return HttpResponseBadRequest("Bad entries. Please check your entries")
+                return HttpResponseBadRequest(
+                    "Bad entries. Please check your entries"
+                )
         else:
-            return HttpResponseBadRequest("Bad entries. Please check your entries")
+            return HttpResponseBadRequest(
+                "Bad entries. Please check your entries"
+            )
     except Exception as exception:
         return HttpResponseBadRequest(
             escape(str(exception)), content_type="application/javascript"

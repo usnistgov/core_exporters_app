@@ -81,7 +81,9 @@ class AbstractExporter(metaclass=ABCMeta):
         return hash_result.hexdigest()[0:number_of_characters]
 
     @staticmethod
-    def generate_zip(exported_compressed_file_id, transformed_result_list, user):
+    def generate_zip(
+        exported_compressed_file_id, transformed_result_list, user
+    ):
         """Generates the zip file
 
         Args:
@@ -150,7 +152,9 @@ class TransformResultContent:
         .xml, .json, .png
     """
 
-    def __init__(self, file_name="", content_converted="", content_extension=""):
+    def __init__(
+        self, file_name="", content_converted="", content_extension=""
+    ):
         self.file_name = file_name
         self.content_converted = content_converted
         self.content_extension = content_extension

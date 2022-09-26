@@ -1,7 +1,9 @@
 """ Fixture files for Exporters
 """
 
-from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
+from core_main_app.utils.integration_tests.fixture_interface import (
+    FixtureInterface,
+)
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )

@@ -57,7 +57,9 @@ def associated_templates(request):
 
         return _associated_templates_get(request)
     except AccessControlError:
-        return HttpResponseBadRequest("You don't have enough rights to do this.")
+        return HttpResponseBadRequest(
+            "You don't have enough rights to do this."
+        )
     except Exception:
         return HttpResponseBadRequest("An unexpected error occurred.")
 
@@ -83,7 +85,9 @@ def _associated_templates_post(request):
             ]
             exporter.templates.set(template_id_list)
             exporter_api.upsert(exporter)
-            return HttpResponse(json.dumps({}), content_type="application/javascript")
+            return HttpResponse(
+                json.dumps({}), content_type="application/javascript"
+            )
     else:
         return HttpResponseBadRequest("Bad entries. Please check your entries")
 

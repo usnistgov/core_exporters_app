@@ -7,7 +7,9 @@ from django.db import models, IntegrityError
 from core_main_app.commons import exceptions
 from core_main_app.commons.regex import NOT_EMPTY_OR_WHITESPACES
 from core_main_app.components.template.models import Template
-from core_main_app.components.xsl_transformation.models import XslTransformation
+from core_main_app.components.xsl_transformation.models import (
+    XslTransformation,
+)
 
 
 class Exporter(models.Model):
@@ -216,7 +218,9 @@ class ExporterXsl(Exporter):
         """
         if is_cls:
             # will return all Template object only
-            return ExporterXsl.objects.filter(_cls=ExporterXsl.class_name).all()
+            return ExporterXsl.objects.filter(
+                _cls=ExporterXsl.class_name
+            ).all()
         else:
             # will return all inherited object
             return ExporterXsl.object.all()
@@ -228,7 +232,9 @@ class ExporterXsl(Exporter):
         Returns:
 
         """
-        return ExporterXsl.objects.filter(xsl_transformation__in=xsl_id_list).all()
+        return ExporterXsl.objects.filter(
+            xsl_transformation__in=xsl_id_list
+        ).all()
 
     @staticmethod
     def get_by_name(exporter_xsl_name):

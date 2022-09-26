@@ -55,7 +55,10 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
 
         # Act
         response = RequestMock.do_request_get(
-            exporter_views.ExporterDetail.as_view(), user, self.data, self.param
+            exporter_views.ExporterDetail.as_view(),
+            user,
+            self.data,
+            self.param,
         )
 
         # Assert
@@ -69,7 +72,10 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
 
         # Act
         response = RequestMock.do_request_get(
-            exporter_views.ExporterDetail.as_view(), user, self.data, self.param
+            exporter_views.ExporterDetail.as_view(),
+            user,
+            self.data,
+            self.param,
         )
 
         # Assert
@@ -83,11 +89,16 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
 
         # Act
         response = RequestMock.do_request_get(
-            exporter_views.ExporterDetail.as_view(), user, self.data, self.param
+            exporter_views.ExporterDetail.as_view(),
+            user,
+            self.data,
+            self.param,
         )
 
         # Assert
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(
+            response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 class TestGetExporterDownload(MongoIntegrationBaseTestCase):
@@ -108,7 +119,10 @@ class TestGetExporterDownload(MongoIntegrationBaseTestCase):
 
         # Act
         response = RequestMock.do_request_get(
-            exporter_views.ExporterDownload.as_view(), user, self.data, self.param
+            exporter_views.ExporterDownload.as_view(),
+            user,
+            self.data,
+            self.param,
         )
 
         # Assert
@@ -122,8 +136,13 @@ class TestGetExporterDownload(MongoIntegrationBaseTestCase):
 
         # Act
         response = RequestMock.do_request_get(
-            exporter_views.ExporterDownload.as_view(), user, self.data, self.param
+            exporter_views.ExporterDownload.as_view(),
+            user,
+            self.data,
+            self.param,
         )
 
         # Assert
-        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+        self.assertEqual(
+            response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

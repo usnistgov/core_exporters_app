@@ -59,7 +59,9 @@ class JsonExporter(AbstractExporter):
 
             transform_result_content.content_extension = self.extension
             # add the content to the list of content
-            transform_result.transform_result_content.append(transform_result_content)
+            transform_result.transform_result_content.append(
+                transform_result_content
+            )
             # add the result to the list of result
             results_transform.append(transform_result)
         return results_transform

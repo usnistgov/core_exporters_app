@@ -34,12 +34,18 @@ def manage_exporters(request):
 
     assets = {
         "js": [
-            {"path": "core_main_app/libs/fSelect/js/fSelect.js", "is_raw": False},
+            {
+                "path": "core_main_app/libs/fSelect/js/fSelect.js",
+                "is_raw": False,
+            },
             {
                 "path": "core_exporters_app/admin/js/exporters/list/modals/associated_templates.js",
                 "is_raw": False,
             },
-            {"path": "xsl/admin/js/exporters/list/modals/add.js", "is_raw": False},
+            {
+                "path": "xsl/admin/js/exporters/list/modals/add.js",
+                "is_raw": False,
+            },
             EditExporterView.get_modal_js_path(),
         ],
         "css": [

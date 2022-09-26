@@ -32,11 +32,15 @@ def download_exported_compressed_file(request):
 
     try:
         # Get the exported file with the given id
-        exported_file = exported_file_api.get_by_id(exporter_file_id, request.user)
+        exported_file = exported_file_api.get_by_id(
+            exporter_file_id, request.user
+        )
     except exceptions.DoesNotExist:
         context["message"] = "The file with the given id does not exist."
     except Exception as exception:
-        logger.error("Something went wrong while downloading: %s", str(exception))
+        logger.error(
+            "Something went wrong while downloading: %s", str(exception)
+        )
         context[
             "message"
         ] = "Something went wrong while downloading. Please contact administrator"

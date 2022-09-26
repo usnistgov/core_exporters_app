@@ -11,7 +11,10 @@ class ExportForm(forms.Form):
     """Create the form for exporting data"""
 
     my_exporters = forms.MultipleChoiceField(
-        label="", choices=[], widget=forms.CheckboxSelectMultiple(), required=True
+        label="",
+        choices=[],
+        widget=forms.CheckboxSelectMultiple(),
+        required=True,
     )
 
     export_options = []

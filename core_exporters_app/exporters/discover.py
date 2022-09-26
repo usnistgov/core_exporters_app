@@ -105,7 +105,9 @@ def discover_exporter():
                     exporters_api.upsert(exporter_added)
                     # If an exporter was added and is a default one, it is added in all templates
                     if exporter_added.enable_by_default is True:
-                        exporter_added.templates.set(system_api.get_all_templates())
+                        exporter_added.templates.set(
+                            system_api.get_all_templates()
+                        )
             except Exception as exception:
                 logger.error(
                     "Impossible to load the following exporter, class %s not found, exception: %s",

@@ -24,7 +24,10 @@ class TestExportDataByIdGetPermissions(SimpleTestCase):
     @patch.object(data_api, "get_by_id")
     @patch.object(exporter_api, "get_by_name")
     def test_anonymous_returns_http_200(
-        self, mock_exporter_get_by_name, mock_data_api_get_by_id, mock_has_template
+        self,
+        mock_exporter_get_by_name,
+        mock_data_api_get_by_id,
+        mock_has_template,
     ):
         """test_anonymous_returns_http_200"""
 
@@ -45,7 +48,10 @@ class TestExportDataByIdGetPermissions(SimpleTestCase):
     @patch.object(data_api, "get_by_id")
     @patch.object(exporter_api, "get_by_name")
     def test_authenticated_returns_http_200(
-        self, mock_exporter_get_by_name, mock_data_api_get_by_id, mock_has_template
+        self,
+        mock_exporter_get_by_name,
+        mock_data_api_get_by_id,
+        mock_has_template,
     ):
         """test_authenticated_returns_http_200"""
 
@@ -67,7 +73,10 @@ class TestExportDataByIdGetPermissions(SimpleTestCase):
     @patch.object(data_api, "get_by_id")
     @patch.object(exporter_api, "get_by_name")
     def test_staff_returns_http_200(
-        self, mock_exporter_get_by_name, mock_data_api_get_by_id, mock_has_template
+        self,
+        mock_exporter_get_by_name,
+        mock_data_api_get_by_id,
+        mock_has_template,
     ):
         """test_staff_returns_http_200"""
 
@@ -106,7 +115,10 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             response = RequestMock.do_request_get(
                 export_api_views.ExportData.as_view(),
                 AnonymousUser(),
-                data={"data_pid": "6111b84691cb057052b3da20", "exporter": "XML"},
+                data={
+                    "data_pid": "6111b84691cb057052b3da20",
+                    "exporter": "XML",
+                },
             )
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -126,7 +138,10 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             response = RequestMock.do_request_get(
                 export_api_views.ExportData.as_view(),
                 mock_user,
-                data={"data_pid": "6111b84691cb057052b3da20", "exporter": "XML"},
+                data={
+                    "data_pid": "6111b84691cb057052b3da20",
+                    "exporter": "XML",
+                },
             )
 
             self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -146,7 +161,10 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             response = RequestMock.do_request_get(
                 export_api_views.ExportData.as_view(),
                 mock_user,
-                data={"data_pid": "6111b84691cb057052b3da20", "exporter": "XML"},
+                data={
+                    "data_pid": "6111b84691cb057052b3da20",
+                    "exporter": "XML",
+                },
             )
             self.assertEqual(response.status_code, status.HTTP_200_OK)
 

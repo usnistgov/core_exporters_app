@@ -50,7 +50,9 @@ class BlobExporter(AbstractExporter):
             for url in urls:
                 try:
                     # download the blob
-                    response = BlobDownloader(url, session_key).get_blob_response()
+                    response = BlobDownloader(
+                        url, session_key
+                    ).get_blob_response()
                     # manage the response
                     if response is not None:
                         if response.status_code == status.HTTP_200_OK:
@@ -62,11 +64,13 @@ class BlobExporter(AbstractExporter):
                             # generates an content result representing the blob file
                             transform_result_content = TransformResultContent()
                             transform_result_content.file_name = blob_name
-                            transform_result_content.content_converted = blob_content
+                            transform_result_content.content_converted = (
+                                blob_content
+                            )
                             # Don't need any additional extension, Is generated with the file name
-                            transform_result_content.content_extension = pathlib.Path(
-                                blob_name
-                            ).suffix
+                            transform_result_content.content_extension = (
+                                pathlib.Path(blob_name).suffix
+                            )
                             # add the blob to the result list
                             transform_result.transform_result_content.append(
                                 transform_result_content

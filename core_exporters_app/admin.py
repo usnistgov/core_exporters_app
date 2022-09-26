@@ -14,9 +14,14 @@ from core_exporters_app.components.exported_compressed_file.admin_site import (
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,
 )
-from core_exporters_app.components.exporter.admin_site import CustomExporterAdmin
+from core_exporters_app.components.exporter.admin_site import (
+    CustomExporterAdmin,
+)
 from core_exporters_app.components.exporter.models import Exporter
-from core_exporters_app.views.admin import views as admin_views, ajax as admin_ajax
+from core_exporters_app.views.admin import (
+    views as admin_views,
+    ajax as admin_ajax,
+)
 
 
 admin_urls = [
@@ -36,7 +41,9 @@ admin_urls = [
         name="core_exporters_app_exporters_associated_templates",
     ),
     re_path(
-        r"^exporters", admin_views.manage_exporters, name="core_exporters_app_exporters"
+        r"^exporters",
+        admin_views.manage_exporters,
+        name="core_exporters_app_exporters",
     ),
     re_path(r"^xsl", include("core_exporters_app.exporters.xsl.urls")),
 ]

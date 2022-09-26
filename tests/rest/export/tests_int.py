@@ -12,7 +12,9 @@ from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
 import core_main_app.components.data.api as data_api
 from core_main_app.components.data.models import Data
-from core_main_app.components.xsl_transformation.models import XslTransformation
+from core_main_app.components.xsl_transformation.models import (
+    XslTransformation,
+)
 from core_main_app.utils.integration_tests.integration_base_test_case import (
     MongoIntegrationBaseTestCase,
 )
@@ -188,7 +190,9 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
             )
             expected_content = json.dumps(data_dict)
 
-            self.assertJSONEqual(response.content.decode("utf-8"), expected_content)
+            self.assertJSONEqual(
+                response.content.decode("utf-8"), expected_content
+            )
 
         @patch.object(linked_data_api, "get_data_by_pid")
         @patch.object(exporter_api, "get_by_name")
@@ -199,7 +203,9 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
 
             # Arrange
             user = create_mock_user("1")
-            self.fixture.exporter_xsl.xsl_transformation = _create_xsl_transform()
+            self.fixture.exporter_xsl.xsl_transformation = (
+                _create_xsl_transform()
+            )
             mock_exporter_get_by_name.return_value = self.fixture.exporter_xsl
             mock_data_api_get_data_by_pid.return_value = self.data
 

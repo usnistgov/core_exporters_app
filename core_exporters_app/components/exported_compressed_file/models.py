@@ -20,7 +20,9 @@ class ExportedCompressedFile(models.Model):
     )
     is_ready = models.BooleanField(default=False)
     mime_type = models.CharField(blank=False, max_length=200)
-    user_id = models.CharField(blank=False, max_length=200)  # FIXME: point to User
+    user_id = models.CharField(
+        blank=False, max_length=200
+    )  # FIXME: point to User
     creation_date = models.DateTimeField(auto_now_add=True)
 
     @staticmethod

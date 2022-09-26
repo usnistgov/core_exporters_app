@@ -22,7 +22,9 @@ def can_read(func, document_id, user):
     if user and user.is_superuser:
         return func(document_id, user)
 
-    if (user is None or user.is_anonymous) and not CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
+    if (
+        user is None or user.is_anonymous
+    ) and not CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
         raise AccessControlError("The user doesn't have enough rights.")
 
     if user:

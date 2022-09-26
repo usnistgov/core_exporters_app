@@ -8,7 +8,9 @@ from django.template import loader
 from django.utils.html import escape
 
 import core_exporters_app.exporters.xsl.api as exporter_xsl_api
-from core_exporters_app.exporters.xsl.views.admin.forms import XsltSelectionForm
+from core_exporters_app.exporters.xsl.views.admin.forms import (
+    XsltSelectionForm,
+)
 
 
 @staff_member_required
@@ -51,12 +53,16 @@ def _add_xslt_post(request):
                         "Bad entries. Please check your entries"
                     )
                     # insert or delete xslt exporter
-                exporter_xsl_api.upsert_or_delete_exporter_xsl(xslt_list_selected)
+                exporter_xsl_api.upsert_or_delete_exporter_xsl(
+                    xslt_list_selected
+                )
                 return HttpResponse(
                     json.dumps({}), content_type="application/javascript"
                 )
 
-            return HttpResponseBadRequest("Bad entries. Please check your entries")
+            return HttpResponseBadRequest(
+                "Bad entries. Please check your entries"
+            )
     except Exception as exception:
         return HttpResponseBadRequest(
             escape(str(exception)), content_type="application/javascript"
@@ -80,7 +86,9 @@ def _add_xslt_get(request):
         # get all xsl exporter
         exporter_xsl_list = exporter_xsl_api.get_all()
         # get all xsl id list from exporters xsl
-        xslt_list = [exporter.xsl_transformation.id for exporter in exporter_xsl_list]
+        xslt_list = [
+            exporter.xsl_transformation.id for exporter in exporter_xsl_list
+        ]
         data_form = {"xslt_list": xslt_list}
         # set the list as data for pre selection
         xslt_form = XsltSelectionForm(data_form)

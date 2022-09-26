@@ -8,7 +8,9 @@ from celery import shared_task
 from core_main_app.utils.requests_utils.requests_utils import send_get_request
 import core_main_app.components.user.api as user_api
 from core_explore_common_app.components.result.models import Result
-from core_explore_common_app.rest.result.serializers import ResultBaseSerializer
+from core_explore_common_app.rest.result.serializers import (
+    ResultBaseSerializer,
+)
 
 import core_exporters_app.commons.constants as exporter_constants
 import core_exporters_app.components.exporter.api as exporter_api
@@ -26,7 +28,12 @@ logger = logging.getLogger(__name__)
 
 @shared_task
 def export_files(
-    exported_file_id, exporters_list_url, url_base, data_url_list, session_key, user_id
+    exported_file_id,
+    exporters_list_url,
+    url_base,
+    data_url_list,
+    session_key,
+    user_id,
 ):
     """Asynchronous tasks exporting files
 
@@ -42,7 +49,9 @@ def export_files(
 
     """
     # gets all data from the url list
-    result_list = _get_results_list_from_url_list(url_base, data_url_list, session_key)
+    result_list = _get_results_list_from_url_list(
+        url_base, data_url_list, session_key
+    )
 
     transformed_result_list = []
     # Converts all data
@@ -82,12 +91,14 @@ def delete_old_exported_files():
             seconds=COMPRESSED_FILES_EXPIRE_AFTER_SECONDS
         ):
             logger.info(
-                "Periodic task: delete exported file %s.", str(exported_file.id)
+                "Periodic task: delete exported file %s.",
+                str(exported_file.id),
             )
             exported_file.delete()
     except Exception as exception:
         logger.error(
-            "An error occurred while deleting exported files (%s).", str(exception)
+            "An error occurred while deleting exported files (%s).",
+            str(exception),
         )
 
 
@@ -103,10 +114,14 @@ def _get_results_list_from_url_list(url_base, url_list, session_key):
     """
     result_list = []
     for url in url_list:
-        response = send_get_request(url_base + url, cookies={"sessionid": session_key})
+        response = send_get_request(
+            url_base + url, cookies={"sessionid": session_key}
+        )
         if response.status_code == 200:
             # Build serializer
-            results_serializer = ResultBaseSerializer(data=json.loads(response.text))
+            results_serializer = ResultBaseSerializer(
+                data=json.loads(response.text)
+            )
             # Validate result
             results_serializer.is_valid(raise_exception=True)
             # Append the list returned

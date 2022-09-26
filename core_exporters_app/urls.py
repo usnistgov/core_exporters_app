@@ -3,7 +3,10 @@
 from django.conf.urls import include
 from django.urls import re_path
 
-from core_exporters_app.views.user import ajax as user_ajax, views as user_views
+from core_exporters_app.views.user import (
+    ajax as user_ajax,
+    views as user_views,
+)
 
 urlpatterns = [
     re_path(r"^rest/", include("core_exporters_app.rest.urls")),

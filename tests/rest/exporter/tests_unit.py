@@ -19,7 +19,9 @@ class TestGetExporterList(SimpleTestCase):
         self.data = None
 
     @patch.object(Exporter, "get_all")
-    def test_get_returns_status_200_with_no_permission_needed(self, mock_get_all):
+    def test_get_returns_status_200_with_no_permission_needed(
+        self, mock_get_all
+    ):
         """test_get_returns_status_200_with_no_permission_needed"""
         # Arrange
         user = create_mock_user("0")

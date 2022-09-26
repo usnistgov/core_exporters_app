@@ -64,15 +64,23 @@ class ExportData(APIView):
                         request.GET["data_pid"], request
                     )
                 else:
-                    content = {"message": "module 'core_linked_records_app' not found."}
-                    return Response(content, status=status.HTTP_400_BAD_REQUEST)
+                    content = {
+                        "message": "module 'core_linked_records_app' not found."
+                    }
+                    return Response(
+                        content, status=status.HTTP_400_BAD_REQUEST
+                    )
 
             else:
-                content = {"message": "data id/pid is missing or the value is empty."}
+                content = {
+                    "message": "data id/pid is missing or the value is empty."
+                }
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
             if "exporter" not in request.GET:
-                content = {"message": "exporter is missing or the value is empty."}
+                content = {
+                    "message": "exporter is missing or the value is empty."
+                }
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
 
             document = "Exporter"
@@ -90,7 +98,9 @@ class ExportData(APIView):
             # if is a xslt transformation, we have to set the xslt
             if exporter_object.url == exporter_constants.XSL_URL:
                 # get the exporter xsl object instead of exporter
-                exporter_object = exporter_xsl_api.get_by_name(request.GET["exporter"])
+                exporter_object = exporter_xsl_api.get_by_name(
+                    request.GET["exporter"]
+                )
                 # set the xslt
                 exporter_module.set_xslt(exporter_object.xsl_transformation)
 
@@ -102,7 +112,9 @@ class ExportData(APIView):
 
             # Check if the list is empty
             if transform_result_list:
-                return export_data(transform_result_list, request.user, data.title)
+                return export_data(
+                    transform_result_list, request.user, data.title
+                )
 
             content = {"message": "error during the transformation"}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
@@ -112,7 +124,9 @@ class ExportData(APIView):
             return Response(content, status=status.HTTP_404_NOT_FOUND)
         except Exception as api_exception:
             content = {"message": str(api_exception)}
-            return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                content, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 def export_data(transform_result_list, user, title):
@@ -127,7 +141,9 @@ def export_data(transform_result_list, user, title):
         HttpResponse:
     """
     # get the list of the transformed content(first element since we have only one data)
-    transform_result_content_list = transform_result_list[0].transform_result_content
+    transform_result_content_list = transform_result_list[
+        0
+    ].transform_result_content
 
     file_content = ""
     file_name = title

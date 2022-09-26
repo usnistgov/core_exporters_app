@@ -10,7 +10,9 @@ from core_main_app.utils.tests_tools.RequestMock import RequestMock
 import core_exporters_app.components.exporter.api as exporter_api
 import core_exporters_app.exporters.xsl.api as xsl_api
 from core_exporters_app.rest.exporters.serializers import ExporterXslSerializer
-from core_exporters_app.rest.exporters.xsl import views as xsl_exporters_api_views
+from core_exporters_app.rest.exporters.xsl import (
+    views as xsl_exporters_api_views,
+)
 
 
 class TestExporterXslListGetPermissions(SimpleTestCase):
@@ -72,7 +74,10 @@ class TestExporterXslListPostPermissions(SimpleTestCase):
     @patch.object(ExporterXslSerializer, "save")
     @patch.object(ExporterXslSerializer, "data")
     def test_authenticated_returns_http_403(
-        self, mock_exporter_xsl_data, mock_exporter_xsl_save, mock_exporter_xsl_is_valid
+        self,
+        mock_exporter_xsl_data,
+        mock_exporter_xsl_save,
+        mock_exporter_xsl_is_valid,
     ):
         """test_authenticated_returns_http_403"""
 
@@ -88,7 +93,10 @@ class TestExporterXslListPostPermissions(SimpleTestCase):
     @patch.object(ExporterXslSerializer, "save")
     @patch.object(ExporterXslSerializer, "data")
     def test_staff_returns_http_201(
-        self, mock_exporter_xsl_data, mock_exporter_xsl_save, mock_exporter_xsl_is_valid
+        self,
+        mock_exporter_xsl_data,
+        mock_exporter_xsl_save,
+        mock_exporter_xsl_is_valid,
     ):
         """test_staff_returns_http_201"""
 
@@ -132,7 +140,9 @@ class TestExporterXslDetailGetPermissions(SimpleTestCase):
 
     @patch.object(exporter_api, "get_by_id")
     @patch.object(ExporterXslSerializer, "data")
-    def test_staff_returns_http_200(self, mock_exporter_data, mock_exporter_get_by_id):
+    def test_staff_returns_http_200(
+        self, mock_exporter_data, mock_exporter_get_by_id
+    ):
         """test_staff_returns_http_200"""
         mock_user = create_mock_user("1")
 

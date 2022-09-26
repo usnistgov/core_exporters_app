@@ -57,7 +57,9 @@ class ExporterList(APIView):
             return Response(return_value.data)
         except Exception as api_exception:
             content = {"message": str(api_exception)}
-            return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                content, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ExporterDetail(APIView):
@@ -108,7 +110,9 @@ class ExporterDetail(APIView):
             return Response(content, status=status.HTTP_404_NOT_FOUND)
         except Exception as api_exception:
             content = {"message": str(api_exception)}
-            return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                content, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ExportToZip(APIView):
@@ -162,24 +166,31 @@ class ExportToZip(APIView):
             exported_file = exported_compressed_file_api.upsert(exported_file)
 
             # get all data
-            data = data_api.get_by_id_list(request.data["data_id_list"], request.user)
+            data = data_api.get_by_id_list(
+                request.data["data_id_list"], request.user
+            )
 
             transformed_result_list = []
             for exporter_id in request.data["exporter_id_list"]:
                 # get the exporter with the given id
                 exporter_object = exporter_api.get_by_id(exporter_id)
                 # get the exporter module
-                exporter_module = get_exporter_module_from_url(exporter_object.url)
+                exporter_module = get_exporter_module_from_url(
+                    exporter_object.url
+                )
                 # if is a xslt transformation, we have to set the xslt
                 if exporter_object.url == exporter_constants.XSL_URL:
                     # set the xslt
-                    exporter_module.set_xslt(exporter_object.xsl_transformation)
+                    exporter_module.set_xslt(
+                        exporter_object.xsl_transformation
+                    )
                 # transform the list of xml files
                 transformed_result_list.extend(
                     exporter_module.transform(
                         [
                             Result(
-                                title=data_item.title, xml_content=data_item.xml_content
+                                title=data_item.title,
+                                xml_content=data_item.xml_content,
                             )
                             for data_item in data
                         ],
@@ -191,7 +202,9 @@ class ExportToZip(APIView):
                 exported_file.id, transformed_result_list, request.user
             )
             # Serialize object
-            return_value = ExporterExportedCompressedFileSerializer(exported_file)
+            return_value = ExporterExportedCompressedFileSerializer(
+                exported_file
+            )
             # return the Id to download the zip file
             return Response(return_value.data, status=status.HTTP_200_OK)
         except ValidationError as validation_exception:
@@ -199,7 +212,9 @@ class ExportToZip(APIView):
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         except Exception as api_exception:
             content = {"message": str(api_exception)}
-            return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                content, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class ExporterDownload(APIView):
@@ -248,7 +263,8 @@ class ExporterDownload(APIView):
             compressed_file_object = self.get_object(pk, request.user)
             if compressed_file_object.is_ready:
                 return get_file_http_response(
-                    compressed_file_object.file.read(), compressed_file_object.file_name
+                    compressed_file_object.file.read(),
+                    compressed_file_object.file_name,
                 )
 
             content = {"message": "The zip file is not yet ready."}
@@ -258,4 +274,6 @@ class ExporterDownload(APIView):
             return Response(content, status=status.HTTP_404_NOT_FOUND)
         except Exception as api_exception:
             content = {"message": str(api_exception)}
-            return Response(content, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                content, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

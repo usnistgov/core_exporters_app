@@ -2,7 +2,9 @@
 """
 from core_main_app.components.data.models import Data
 from core_main_app.components.template.models import Template
-from core_main_app.utils.integration_tests.fixture_interface import FixtureInterface
+from core_main_app.utils.integration_tests.fixture_interface import (
+    FixtureInterface,
+)
 
 import core_exporters_app.commons.constants as constants
 from core_exporters_app.components.exporter.models import Exporter

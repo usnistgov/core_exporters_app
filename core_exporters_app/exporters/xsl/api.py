@@ -93,7 +93,9 @@ def upsert_or_delete_exporter_xsl(xsl_list):
     # get all exporter with the xsl id list given
     exporter_list_for_deletion = []
     if len(xsl_id_list_for_deletion) > 0:
-        exporter_list_for_deletion = get_all_by_xsl_id_list(xsl_id_list_for_deletion)
+        exporter_list_for_deletion = get_all_by_xsl_id_list(
+            xsl_id_list_for_deletion
+        )
 
     # deletes all exporter not in list but in database without associated templates
     for exporter in exporter_list_for_deletion:

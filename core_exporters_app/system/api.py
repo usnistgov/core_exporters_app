@@ -18,6 +18,7 @@ def get_older_exported_files(seconds):
     exported_files = [
         exported_file
         for exported_file in ExportedCompressedFile.objects.all()
-        if exported_file.creation_date < timezone.now() - timedelta(seconds=seconds)
+        if exported_file.creation_date
+        < timezone.now() - timedelta(seconds=seconds)
     ]
     return exported_files
