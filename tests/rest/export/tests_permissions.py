@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.test import SimpleTestCase
-from mock.mock import patch
+from unittest.mock import patch
 from rest_framework import status
 
 from core_main_app.components.data.models import Data

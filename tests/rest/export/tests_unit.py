@@ -2,7 +2,7 @@
 """
 
 from django.conf import settings
-from mock.mock import patch
+from unittest.mock import patch
 from rest_framework import status
 
 

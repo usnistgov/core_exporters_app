@@ -150,7 +150,7 @@ class ExportToZip(APIView):
             # Build serializer
             export_serializer = ExporterToZipSerializer(data=request.data)
             # Validate xsl
-            export_serializer.is_valid(True)
+            export_serializer.is_valid(raise_exception=True)
             # Creation of the compressed file with is_ready to false
             exported_file = ExportedCompressedFile(
                 file_name="Query_Results.zip",

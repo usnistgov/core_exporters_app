@@ -1,7 +1,5 @@
 """ Exporters tasks
 """
-from __future__ import absolute_import, unicode_literals
-
 import json
 import logging
 
@@ -110,7 +108,7 @@ def _get_results_list_from_url_list(url_base, url_list, session_key):
             # Build serializer
             results_serializer = ResultBaseSerializer(data=json.loads(response.text))
             # Validate result
-            results_serializer.is_valid(True)
+            results_serializer.is_valid(raise_exception=True)
             # Append the list returned
             result_list.append(
                 Result(

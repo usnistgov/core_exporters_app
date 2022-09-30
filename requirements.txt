@@ -3,4 +3,3 @@ Django
 djangorestframework
 django-simple-menu
 requests
-future

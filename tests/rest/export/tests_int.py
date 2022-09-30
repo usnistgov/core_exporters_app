@@ -6,7 +6,7 @@ import json
 
 import xmltodict
 from django.conf import settings
-from mock.mock import patch
+from unittest.mock import patch
 
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock

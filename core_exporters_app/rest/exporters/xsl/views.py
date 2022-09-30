@@ -75,7 +75,7 @@ class ExporterXslList(APIView):
             # Build serializer
             xsl_serializer = ExporterXslSerializer(data=request.data)
             # Validation
-            xsl_serializer.is_valid(True)
+            xsl_serializer.is_valid(raise_exception=True)
             # save or update the object
             xsl_serializer.save()
             return Response(xsl_serializer.data, status=status.HTTP_201_CREATED)
