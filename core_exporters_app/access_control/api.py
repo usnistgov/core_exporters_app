@@ -3,7 +3,7 @@
 import logging
 
 from core_main_app.access_control.exceptions import AccessControlError
-from core_exporters_app.settings import CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ def can_read(func, document_id, user):
 
     if (
         user is None or user.is_anonymous
-    ) and not CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
+    ) and not settings.CAN_ANONYMOUS_ACCESS_PUBLIC_DOCUMENT:
         raise AccessControlError("The user doesn't have enough rights.")
 
     if user:
