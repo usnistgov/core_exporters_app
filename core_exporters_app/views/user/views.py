@@ -64,6 +64,10 @@ def download_exported_compressed_file(request):
         ],
         "css": [],
     }
+
+    # Set page title
+    context.update({"page_title": "Download Exported Files"})
+
     # Render the page
     return render(
         request,
