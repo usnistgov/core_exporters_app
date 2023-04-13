@@ -29,7 +29,6 @@ load_associated_templates_form = function(exporterId){
         success: function(data){
             $("#banner_errors").hide();
             $("#form-associated-template-content").html(data.template);
-            InitSelectMultipleTemplates();
         },
         error:function(data){
             if (data.responseText != ""){
@@ -66,19 +65,5 @@ submit_associated_templates_form = function(){
             }
             return (true);
         }
-    });
-};
-
-/**
- * Init the drop down list of templates
- */
-InitSelectMultipleTemplates = function()
-{
-    $('#id_templates_manager').fSelect({
-        placeholder: 'Select templates',
-        numDisplayed: 3,
-        overflowText: '{n} selected',
-        searchText: 'Search',
-        showSearch: true
     });
 };

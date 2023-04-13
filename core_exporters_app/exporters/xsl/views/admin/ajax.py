@@ -97,7 +97,13 @@ def _add_xslt_get(request):
         context.update(request)
         context.update(context_params)
         return HttpResponse(
-            json.dumps({"template": templates_selector.render(context)}),
+            json.dumps(
+                {
+                    "template": templates_selector.render(
+                        context,
+                    )
+                }
+            ),
             content_type="application/javascript",
         )
     except Exception:

@@ -25,7 +25,6 @@ load_xslt_selection_form = function(){
         success: function(data){
             $("#banner_errors").hide();
             $("#form-add-xslt-content").html(data.template);
-            InitSelectMultipleXslt();
         },
         error:function(data){
             if (data.responseText != ""){
@@ -62,19 +61,5 @@ submit_xslt_selection_form = function(){
             }
             return (true);
         }
-    });
-};
-
-/**
- * Init the drop down list of XSLT
- */
-InitSelectMultipleXslt = function()
-{
-    $('#id_xslt_list').fSelect({
-        placeholder: 'Select XSLT',
-        numDisplayed: 500,
-        overflowText: '{n} selected',
-        searchText: 'Search',
-        showSearch: true
     });
 };

@@ -9,7 +9,11 @@ class XsltSelectionForm(forms.Form):
     """Xslt selection form"""
 
     xslt_list = forms.MultipleChoiceField(
-        label="", widget=forms.SelectMultiple(), required=False
+        label="Select XSLT:",
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "multiple-columns"}
+        ),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):

@@ -29,7 +29,9 @@ class AssociatedTemplatesForm(forms.Form):
 
     id = forms.CharField(widget=forms.HiddenInput(), required=False)
     templates_manager = forms.MultipleChoiceField(
-        label="", widget=forms.SelectMultiple(), required=False
+        label="Select templates",
+        widget=forms.CheckboxSelectMultiple(attrs={"class": "double-columns"}),
+        required=False,
     )
 
     def __init__(self, *args, **kwargs):
