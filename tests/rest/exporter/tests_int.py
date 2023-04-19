@@ -4,7 +4,7 @@
 from rest_framework import status
 
 from core_main_app.utils.integration_tests.integration_base_test_case import (
-    MongoIntegrationBaseTestCase,
+    IntegrationBaseTestCase,
 )
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
@@ -14,7 +14,7 @@ from tests.rest.exporter.fixtures.fixtures import ExporterFixtures
 fixture_data = ExporterFixtures()
 
 
-class TestGetExportersList(MongoIntegrationBaseTestCase):
+class TestGetExportersList(IntegrationBaseTestCase):
     """Test Get Exporters List"""
 
     fixture = fixture_data
@@ -37,7 +37,7 @@ class TestGetExportersList(MongoIntegrationBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-class TestGetExportersDetail(MongoIntegrationBaseTestCase):
+class TestGetExportersDetail(IntegrationBaseTestCase):
     """Test Get Exporters Detail"""
 
     fixture = fixture_data
@@ -101,7 +101,7 @@ class TestGetExportersDetail(MongoIntegrationBaseTestCase):
         )
 
 
-class TestGetExporterDownload(MongoIntegrationBaseTestCase):
+class TestGetExporterDownload(IntegrationBaseTestCase):
     """Test Get Exporter Download"""
 
     fixture = fixture_data

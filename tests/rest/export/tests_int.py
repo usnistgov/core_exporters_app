@@ -16,7 +16,7 @@ from core_main_app.components.xsl_transformation.models import (
     XslTransformation,
 )
 from core_main_app.utils.integration_tests.integration_base_test_case import (
-    MongoIntegrationBaseTestCase,
+    IntegrationBaseTestCase,
 )
 import core_exporters_app.components.exporter.api as exporter_api
 import core_exporters_app.exporters.xsl.api as exporter_xsl_api
@@ -28,7 +28,7 @@ from tests.rest.export.fixtures.fixtures import ExportDataFixtures
 fixture_data = ExportDataFixtures()
 
 
-class TestExportDataById(MongoIntegrationBaseTestCase):
+class TestExportDataById(IntegrationBaseTestCase):
     """Test Export Data By Id"""
 
     fixture = fixture_data
@@ -128,7 +128,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         api as linked_data_api,
     )
 
-    class TestExportDataByPID(MongoIntegrationBaseTestCase):
+    class TestExportDataByPID(IntegrationBaseTestCase):
         """Test Export Data By PID"""
 
         fixture = fixture_data

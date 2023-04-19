@@ -6,7 +6,7 @@ from django.test import override_settings
 
 from core_main_app.access_control.exceptions import AccessControlError
 from core_main_app.utils.integration_tests.integration_base_test_case import (
-    MongoIntegrationBaseTestCase,
+    IntegrationBaseTestCase,
 )
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_exporters_app.components.exported_compressed_file import (
@@ -22,7 +22,7 @@ from tests.components.exported_compressed_file.fixtures.fixtures import (
 fixture_data = ExportedCompressedFileFixtures()
 
 
-class TestGetByExportedCompressedFile(MongoIntegrationBaseTestCase):
+class TestGetByExportedCompressedFile(IntegrationBaseTestCase):
     """Test Get By Exported Compressed File"""
 
     fixture = fixture_data
@@ -153,7 +153,7 @@ class TestGetByExportedCompressedFile(MongoIntegrationBaseTestCase):
         self.assertEqual(result, self.fixture.exported_compressed_file_2)
 
 
-class TestUpsertExportedCompressedFile(MongoIntegrationBaseTestCase):
+class TestUpsertExportedCompressedFile(IntegrationBaseTestCase):
     """Test Upsert Exported Compressed File"""
 
     fixture = fixture_data

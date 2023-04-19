@@ -9,7 +9,7 @@ from rest_framework import status
 import core_main_app.components.data.api as data_api
 from core_main_app.components.data.models import Data
 from core_main_app.utils.integration_tests.integration_base_test_case import (
-    MongoIntegrationBaseTestCase,
+    IntegrationBaseTestCase,
 )
 from core_main_app.utils.tests_tools.MockUser import create_mock_user
 from core_main_app.utils.tests_tools.RequestMock import RequestMock
@@ -20,7 +20,7 @@ from tests.rest.export.fixtures.fixtures import ExportDataFixtures
 fixture_data = ExportDataFixtures()
 
 
-class TestExportDataById(MongoIntegrationBaseTestCase):
+class TestExportDataById(IntegrationBaseTestCase):
     """Test Export Data By Id"""
 
     fixture = fixture_data
@@ -97,7 +97,7 @@ if "core_linked_records_app" in settings.INSTALLED_APPS:
         api as linked_data_api,
     )
 
-    class TestExportDataByPID(MongoIntegrationBaseTestCase):
+    class TestExportDataByPID(IntegrationBaseTestCase):
         """Test Export Data By PID"""
 
         fixture = fixture_data
