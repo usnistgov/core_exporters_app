@@ -29,7 +29,7 @@ class AssociatedTemplatesForm(forms.Form):
 
     id = forms.CharField(widget=forms.HiddenInput(), required=False)
     templates_manager = forms.MultipleChoiceField(
-        label="Select templates",
+        label="",
         widget=forms.CheckboxSelectMultiple(attrs={"class": "double-columns"}),
         required=False,
     )
