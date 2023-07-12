@@ -31,12 +31,11 @@ load_associated_templates_form = function(exporterId){
             $("#form-associated-template-content").html(data.template);
         },
         error:function(data){
-            if (data.responseText != ""){
-                $("#form_associated_templates_errors").html(data.responseText);
-                $("#banner_errors").show(500);
-                return (false);
-            }
-            return (true);
+            if (data.responseText === "")
+                return
+
+            $("#form_associated_templates_errors").html(data.responseText);
+            $("#banner_errors").show(500);
         }
     });
 };

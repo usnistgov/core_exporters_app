@@ -1,2 +1,12 @@
 {% csrf_token %}
-{{associated_form}}
+<div>
+{% for field in associated_form.hidden_fields %}
+    {{ field }}
+{% endfor %}
+{% for field in associated_form.visible_fields %}
+    {% if field.errors %}
+    <div class="alert alert-danger">Errors: {{ field.errors }}</div>
+    {% endif %}
+    <div class="multiple-select-form">{{ field }}</div>
+{% endfor %}
+</div>
