@@ -6,7 +6,7 @@ from rest_framework import status
 
 from core_main_app.utils.blob_downloader import BlobDownloader
 from core_main_app.utils.file import get_filename_from_response
-from core_main_app.utils.urls import get_blob_download_regex
+from core_main_app.utils import urls as main_urls
 
 from core_exporters_app.exporters.exporter import (
     AbstractExporter,
@@ -24,28 +24,28 @@ class BlobExporter(AbstractExporter):
         self.name = "BLOB"
         self.extension = ".blob"
 
-    def transform(self, xml_inputs, session_key):
-        """find and download all blobs from an xml content
+    def transform(self, item_list, session_key):
+        """find and download all blobs from the xml content
 
         Args:
-            xml_inputs:
+            item_list:
             session_key: session key
 
         Returns:
 
         """
         results_transform = []
-        for xml_item in xml_inputs:
+        for item in item_list:
             # get the sha of the xml
-            sha = AbstractExporter.get_sha(xml_item.xml_content)
+            sha = AbstractExporter.get_sha(item.content)
             # get the name of the xml document representing the source document name
             document_name_with_sha = AbstractExporter.get_title_document(
-                xml_item.title, xml_item.xml_content
+                item.title, item.content
             )
             transform_result = TransformResult()
             transform_result.source_document_name = document_name_with_sha
             # Get all url from xml content
-            urls = get_blob_download_regex(xml_item.xml_content)
+            urls = main_urls.get_blob_download_regex(item.content)
             # Get all blobs from urls
             for url in urls:
                 try:

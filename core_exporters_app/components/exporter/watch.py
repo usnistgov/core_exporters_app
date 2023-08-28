@@ -2,8 +2,8 @@
 """
 from django.db.models.signals import post_save, pre_delete
 
-from core_main_app.components.template.models import Template
 import core_exporters_app.components.exporter.api as exporter_api
+from core_main_app.components.template.models import Template
 
 
 def init():
@@ -19,11 +19,19 @@ def post_save_template(sender, instance, **kwargs):
         instance: template object.
         **kwargs:
     """
-    default_exporter_list = exporter_api.get_all_default_exporter()
+    # Check template format
+    if instance.format == Template.XSD:
+        default_exporter_list = exporter_api.get_all_default_exporter()
+    elif instance.format == Template.JSON:
+        default_exporter_list = exporter_api.get_all_default_exporter().filter(
+            name=Template.JSON
+        )
+    else:
+        default_exporter_list = exporter_api.get_none()
 
     for exporter in default_exporter_list:
-        # When an template is added, save is called 2 times
-        # so we have to avoid to had the same instance several time
+        # When a template is added, save is called twice,
+        # so we need to make sure we don't have the duplicates
         if instance not in exporter.templates.all():
             exporter.templates.add(instance)
             exporter_api.upsert(exporter)

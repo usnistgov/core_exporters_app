@@ -93,3 +93,12 @@ def upsert(exporter):
     """
     exporter.save_object()
     return exporter
+
+
+def get_none():
+    """Returns None queryset
+
+    Returns:
+
+    """
+    return Exporter.get_none()

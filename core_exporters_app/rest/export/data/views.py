@@ -106,7 +106,7 @@ class ExportData(APIView):
 
             # get the list of the transformed result
             transform_result_list = exporter_module.transform(
-                [Result(title=data.title, xml_content=data.xml_content)],
+                [Result(title=data.title, content=data.content)],
                 request.session.session_key,
             )
 

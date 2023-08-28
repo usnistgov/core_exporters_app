@@ -128,7 +128,7 @@ def _get_results_list_from_url_list(url_base, url_list, session_key):
             result_list.append(
                 Result(
                     title=results_serializer.data["title"],
-                    xml_content=results_serializer.data["xml_content"],
+                    content=results_serializer.data["content"],
                 )
             )
     return result_list

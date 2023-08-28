@@ -3,8 +3,8 @@
 from django import forms
 from django.forms import ModelForm
 
-from core_main_app.components.template import api as template_api
 from core_exporters_app.components.exporter.models import Exporter
+from core_main_app.components.template import api as template_api
 
 
 class EditExporterForm(ModelForm):

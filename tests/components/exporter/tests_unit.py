@@ -1,11 +1,13 @@
 """Units tests for exporter api
 """
+from unittest.mock import patch, MagicMock
+
 from django.test import TestCase
-from unittest.mock import patch
-from core_main_app.commons import exceptions
 
 import core_exporters_app.components.exporter.api as exporter_api
 from core_exporters_app.components.exporter.models import Exporter
+from core_exporters_app.components.exporter.watch import post_save_template
+from core_main_app.commons import exceptions
 
 
 class TestExporterGetAllByUrl(TestCase):
@@ -69,6 +71,16 @@ class TestExporterGetAllByTemplateList(TestCase):
         self.assertEqual(len(result), 1)
         self.assertTrue(exporter in result)
 
+    def test_get_all_by_template_list_with_empty_list_returns_empty_list(
+        self,
+    ):
+        """test_get_all_by_template_list_with_empty_list_returns_empty_list"""
+        # Act
+        result = exporter_api.get_all_by_template_list([])
+
+        # Assert
+        self.assertEqual(len(result), 0)
+
 
 class TestExporterUpsert(TestCase):
     """Test Exporter Upsert"""
@@ -89,6 +101,105 @@ class TestExporterUpsert(TestCase):
 
         # Assert
         self.assertEqual(result, exporter)
+
+
+class TestExporterGetNone(TestCase):
+    """Test Exporter Upsert"""
+
+    def test_exporter_get_none_returns_empty_list(self):
+        """test_exporter_get_none_returns_empty_list
+
+        Args:
+
+        Returns:
+
+        """
+        # Act
+        result = exporter_api.get_none()
+
+        # Assert
+        self.assertEqual(len(result), 0)
+
+
+class TestPostSaveTemplate(TestCase):
+    """Test Post Save Template"""
+
+    @patch(
+        "core_exporters_app.components.exporter.api.get_all_default_exporter"
+    )
+    def test_post_save_template_xsd_gets_all_exporters(
+        self, mock_get_all_default_exporter
+    ):
+        """test_post_save_template_xsd_gets_all_exporters
+
+        Args:
+
+        Returns:
+
+        """
+        # Arrange
+        mock_sender = MagicMock()
+        mock_template = MagicMock(format="XSD")
+        mock_all_default_exporters = MagicMock()
+        mock_get_all_default_exporter.return_value = mock_all_default_exporters
+
+        # Act
+        post_save_template(sender=mock_sender, instance=mock_template)
+
+        # Assert
+        self.assertTrue(mock_get_all_default_exporter.called)
+        self.assertFalse(mock_all_default_exporters.filter.called)
+
+    @patch(
+        "core_exporters_app.components.exporter.api.get_all_default_exporter"
+    )
+    def test_post_save_template_json_gets_filtered_exporters(
+        self, mock_get_all_default_exporter
+    ):
+        """test_post_save_template_json_gets_filtered_exporters
+
+        Args:
+
+        Returns:
+
+        """
+        # Arrange
+        mock_sender = MagicMock()
+        mock_template = MagicMock(format="JSON")
+        mock_all_default_exporters = MagicMock()
+        mock_get_all_default_exporter.return_value = mock_all_default_exporters
+
+        # Act
+        post_save_template(sender=mock_sender, instance=mock_template)
+
+        # Assert
+        self.assertTrue(mock_get_all_default_exporter.called)
+        self.assertTrue(mock_all_default_exporters.filter.called)
+
+    @patch("core_exporters_app.components.exporter.api.get_none")
+    @patch(
+        "core_exporters_app.components.exporter.api.get_all_default_exporter"
+    )
+    def test_post_save_template_unknown_formats_gets_no_exporters(
+        self, mock_get_all_default_exporter, mock_get_none
+    ):
+        """test_post_save_template_unknown_formats_gets_no_exporters
+
+        Args:
+
+        Returns:
+
+        """
+        # Arrange
+        mock_sender = MagicMock()
+        mock_template = MagicMock(format="UNKNOWN")
+
+        # Act
+        post_save_template(sender=mock_sender, instance=mock_template)
+
+        # Assert
+        self.assertFalse(mock_get_all_default_exporter.called)
+        self.assertTrue(mock_get_none.called)
 
 
 def _create_mock_exporter():

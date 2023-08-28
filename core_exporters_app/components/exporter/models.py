@@ -83,6 +83,8 @@ class Exporter(models.Model):
         Returns:
 
         """
+        if not template_id_list:
+            return Exporter.objects.none()
         queryset = Exporter.objects.all()
         for pk in template_id_list:
             queryset = queryset.filter(templates=pk)
@@ -181,6 +183,15 @@ class Exporter(models.Model):
             )
         except Exception as ex:
             raise exceptions.ModelError(str(ex))
+
+    @staticmethod
+    def get_none():
+        """Return None object.
+
+        Returns:
+
+        """
+        return Exporter.objects.none()
 
     def clean(self):
         """Clean is called before saving

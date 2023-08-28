@@ -1,6 +1,7 @@
 """ Json exporter
 """
 import json
+from json.decoder import JSONDecodeError
 
 from core_main_app.settings import XML_POST_PROCESSOR, XML_FORCE_LIST
 from core_main_app.utils import xml as xml_utils
@@ -18,11 +19,11 @@ class JsonExporter(AbstractExporter):
         self.name = "JSON"
         self.extension = ".json"
 
-    def transform(self, xml_inputs, session_key):
+    def transform(self, item_list, session_key):
         """Transforms the input to a json content
 
         Args:
-            xml_inputs:
+            item_list:
             session_key:
 
         Returns:
@@ -30,10 +31,10 @@ class JsonExporter(AbstractExporter):
         """
         results_transform = []
         # loops on all xml input
-        for xml_item in xml_inputs:
+        for item in item_list:
             # generate the title document with the sha
             document_name_with_sha = AbstractExporter.get_title_document(
-                xml_item.title, xml_item.xml_content
+                item.title, item.content
             )
             transform_result = TransformResult()
             # set the document name to the collection
@@ -42,11 +43,14 @@ class JsonExporter(AbstractExporter):
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
             # Transform to JSON
-            transformed_content = xml_utils.raw_xml_to_dict(
-                xml_item.xml_content,
-                postprocessor=XML_POST_PROCESSOR,
-                force_list=XML_FORCE_LIST,
-            )
+            try:
+                transformed_content = json.loads(item.content)
+            except JSONDecodeError:
+                transformed_content = xml_utils.raw_xml_to_dict(
+                    item.content,
+                    postprocessor=XML_POST_PROCESSOR,
+                    force_list=XML_FORCE_LIST,
+                )
             # sets the content and extension
             try:
                 transform_result_content.content_converted = json.dumps(

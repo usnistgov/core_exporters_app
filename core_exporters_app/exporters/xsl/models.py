@@ -45,11 +45,11 @@ class XslExporter(AbstractExporter):
         # set the transform
         self.transformation = XSDTree.transform_to_xslt(xslt_parsed)
 
-    def transform(self, xml_inputs, session_key):
+    def transform(self, item_list, session_key):
         """Transforms the input to a json content
 
         Args:
-            xml_inputs: xml files
+            item_list: xml files
             session_key: session key
 
         Returns:
@@ -57,10 +57,10 @@ class XslExporter(AbstractExporter):
         """
         results_transform = []
         # loops on all xml input
-        for xml_item in xml_inputs:
+        for item in item_list:
             # generate the title document with the sha
             document_name_with_sha = AbstractExporter.get_title_document(
-                xml_item.title, xml_item.xml_content
+                item.title, item.content
             )
             transform_result = TransformResult()
             # set the document name to the collection
@@ -71,7 +71,7 @@ class XslExporter(AbstractExporter):
             transform_result_content = TransformResultContent()
             transform_result_content.file_name = document_name_with_sha
             # sets the content and extension
-            dom = XSDTree.transform_to_xml(xml_item.xml_content)
+            dom = XSDTree.transform_to_xml(item.content)
             transform_result_content.content_converted = str(
                 self.transformation(dom)
             )
