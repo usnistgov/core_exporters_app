@@ -2,18 +2,17 @@
 """
 import logging
 import re
+
+from django.contrib.admindocs.views import simplify_regex
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.urls import URLResolver, URLPattern
 from django.urls.resolvers import RegexPattern
 from django_celery_beat.models import CrontabSchedule, PeriodicTask
-from django.contrib.admindocs.views import simplify_regex
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-
-import core_main_app.commons.exceptions as main_exception
-import core_main_app.system.api as system_api
 
 import core_exporters_app.components.exporter.api as exporters_api
+import core_main_app.commons.exceptions as main_exception
+import core_main_app.system.api as system_api
 from core_exporters_app.components.exporter.models import Exporter
-from core_exporters_app.exporters import urls
 from core_exporters_app.tasks import delete_old_exported_files
 
 logger = logging.getLogger(__name__)
@@ -83,13 +82,13 @@ def __flatten_patterns_tree__(patterns, prefix="", filter_path=None):
     return pattern_list
 
 
-def discover_exporter():
+def discover_exporter(url_patterns):
     """Exporters discover
 
     Returns:
 
     """
-    patterns = __flatten_patterns_tree__(urls.urlpatterns)
+    patterns = __flatten_patterns_tree__(url_patterns)
     try:
         for pattern in patterns:
             try:

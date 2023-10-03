@@ -18,7 +18,8 @@ class CoreExportersAppConfig(AppConfig):
         if "migrate" not in sys.argv:
             import core_exporters_app.components.exporter.watch as exporter_watch
             from core_exporters_app.exporters import discover
+            from core_exporters_app.exporters import urls
 
             discover.init_periodic_tasks()
-            discover.discover_exporter()
+            discover.discover_exporter(urls.urlpatterns)
             exporter_watch.init()
