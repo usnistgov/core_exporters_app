@@ -75,7 +75,6 @@ loadExporterSelectionForm = function(){
             }
         }
     });
-
     if (data_url_selected.length != 0) {
         $.ajax({
             url: exporterOpenFormUrl,
@@ -93,6 +92,8 @@ loadExporterSelectionForm = function(){
             },
             error: function (data) {
                 if (data.responseText != "") {
+                    $("#form-exporter-selection").html("");
+                    $("#select-exporters-modal").modal("show");
                     $("#form-exporter-selection-errors").html(data.responseText);
                     $("#banner_errors").show(500);
                     return false;

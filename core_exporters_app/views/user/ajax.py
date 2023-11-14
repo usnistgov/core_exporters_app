@@ -79,8 +79,11 @@ def open_form(request):
             json.dumps({"template": templates_selector.render(context)}),
             content_type="application/javascript",
         )
-    except Exception:
-        raise Exception("Error occurred during the form display")
+    except Exception as exception:
+        return HttpResponseBadRequest(
+            escape(str(exception)),
+            content_type="application/javascript",
+        )
 
 
 def check_download_status(request):

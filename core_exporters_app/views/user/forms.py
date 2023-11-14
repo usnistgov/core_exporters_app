@@ -5,6 +5,7 @@ from django import forms
 
 import core_main_app.components.template.api as template_api
 import core_exporters_app.components.exporter.api as exporters_api
+from core_main_app.access_control.exceptions import AccessControlError
 
 
 class ExportForm(forms.Form):
@@ -42,6 +43,12 @@ class ExportForm(forms.Form):
             templates_from_id = template_api.get_all_accessible_by_id_list(
                 self.template_id_list, request=request
             )
+            # check if user has access to template for each data selected
+            if len(templates_from_id) != len(self.template_id_list):
+                raise AccessControlError(
+                    "User doesn't have enough rights to access some of the templates."
+                )
+
             templates_from_hash = template_api.get_all_accessible_by_hash_list(
                 self.template_hash_list, request=request
             )
