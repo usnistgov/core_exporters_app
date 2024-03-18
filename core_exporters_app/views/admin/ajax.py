@@ -26,7 +26,7 @@ class EditExporterView(EditObjectModalView):
     form_class = EditExporterForm
     model = Exporter
     success_url = reverse_lazy("core-admin:core_exporters_app_exporters")
-    success_message = "Exporter edited with success."
+    success_message = "Exporter edited."
 
     def _save(self, form):
         # Save treatment.
