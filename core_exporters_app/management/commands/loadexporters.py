@@ -1,8 +1,8 @@
 """Load exporters command
 """
 from django.core.management.base import BaseCommand
-from django.urls import get_resolver
 
+from core_exporters_app.exporters import urls
 from core_exporters_app.exporters.discover import discover_exporter
 
 
@@ -19,7 +19,7 @@ class Command(BaseCommand):
         Returns:
 
         """
-        discover_exporter(get_resolver().url_patterns)
+        discover_exporter(urls.urlpatterns)
         self.stdout.write(
             self.style.SUCCESS("Exporters were loaded in database.")
         )

@@ -36,6 +36,12 @@ class TestDiscoverExporters(TestCase):
         mock_get_exporter_by_id.side_effect = DoesNotExist("error")
         mock_upsert_exporter.return_value = MagicMock()
         discover_exporter(
-            [re_path("exporter-test", View, name="core_exporter_test")]
+            [
+                re_path(
+                    "exporter-test",
+                    View,
+                    {"name": "TEST", "enable_by_default": True},
+                )
+            ]
         )
         self.assertTrue(mock_upsert_exporter.called)

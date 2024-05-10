@@ -40,10 +40,8 @@ def __assemble_endpoint_data__(pattern, prefix="", filter_path=None):
     return {
         "url": path,
         "view": pattern.lookup_str,
-        "name": pattern.name,
-        "enable_by_default": pattern.enable_by_default
-        if hasattr(pattern, "enable_by_default")
-        else False,
+        "name": pattern.default_args["name"],
+        "enable_by_default": pattern.default_args["enable_by_default"],
     }
 
 
@@ -112,7 +110,8 @@ def discover_exporter(url_patterns):
             except Exception as exception:
                 logger.error(
                     "Impossible to load the following exporter, class %s not found, exception: %s",
-                    (pattern["view"], str(exception)),
+                    pattern["view"],
+                    str(exception),
                 )
     except ValidationError as exception:
         raise Exception(
