@@ -1,5 +1,6 @@
 """ Unit tests for views from `views.user.ajax`.
 """
+
 from unittest import TestCase
 
 from django.http import HttpResponseBadRequest

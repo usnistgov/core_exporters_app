@@ -1,5 +1,6 @@
 """ Authentication tests for Data Export REST API
 """
+
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.test import SimpleTestCase

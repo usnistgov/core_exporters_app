@@ -1,5 +1,6 @@
 """ Handle Exporter signals
 """
+
 from django.db.models.signals import post_save, pre_delete
 
 import core_exporters_app.components.exporter.api as exporter_api

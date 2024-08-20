@@ -1,5 +1,6 @@
 """ Ajax admin
 """
+
 import json
 
 from django.http.response import HttpResponse, HttpResponseBadRequest

@@ -1,7 +1,6 @@
 """Integration tests for exporter rest api
 """
 
-
 import json
 
 import xmltodict

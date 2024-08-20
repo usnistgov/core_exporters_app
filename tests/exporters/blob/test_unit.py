@@ -1,5 +1,6 @@
 """Units tests for blob exporter
 """
+
 from unittest.mock import MagicMock, patch
 
 from django.test import TestCase

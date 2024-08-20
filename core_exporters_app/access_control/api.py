@@ -1,5 +1,6 @@
 """ Set of functions to define the rules for access control across collections
 """
+
 import logging
 
 from core_main_app.access_control.exceptions import AccessControlError
