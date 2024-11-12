@@ -5,8 +5,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 
 from core_main_app.commons import exceptions
-from core_main_app.utils.storage.storage import core_file_storage
-from core_exporters_app.settings import EXPORTED_COMPRESSED_FILE_FOLDER
+from core_main_app.utils.storage.storage import (
+    core_file_storage,
+    user_directory_path,
+)
 
 
 class ExportedCompressedFile(models.Model):
@@ -16,7 +18,7 @@ class ExportedCompressedFile(models.Model):
     file = models.FileField(
         blank=True,
         null=True,
-        upload_to=EXPORTED_COMPRESSED_FILE_FOLDER,
+        upload_to=user_directory_path,
         storage=core_file_storage(model="exported_compressed_files"),
     )
     is_ready = models.BooleanField(default=False)
