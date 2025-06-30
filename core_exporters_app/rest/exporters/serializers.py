@@ -20,7 +20,7 @@ class ExporterSerializer(ModelSerializer):
         """Meta"""
 
         model = Exporter
-        fields = "__all__"
+        exclude = ["_cls"]
 
     def create(self, validated_data):
         exporter = exporter_api.upsert(Exporter(**validated_data))
@@ -40,7 +40,7 @@ class ExporterXslSerializer(ModelSerializer):
         """Meta"""
 
         model = ExporterXsl
-        fields = "__all__"
+        exclude = ["_cls"]
         read_only_fields = ("enable_by_default", "url")
 
     def create(self, validated_data):

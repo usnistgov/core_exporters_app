@@ -2,6 +2,12 @@
 """
 
 from django.conf import settings
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiResponse,
+    OpenApiParameter,
+    extend_schema,
+)
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,18 +33,53 @@ from core_exporters_app.rest.exporters.serializers import (
 )
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="Export Data",
+)
 class ExportData(APIView):
     """Export Data"""
 
+    @extend_schema(
+        summary="Get the transformed Data file",
+        description="Get the transformed Data file",
+        parameters=[
+            OpenApiParameter(
+                name="data_id",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description="Data ID",
+                required=False,
+            ),
+            OpenApiParameter(
+                name="data_pid",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description="Data PID",
+                required=False,
+            ),
+            OpenApiParameter(
+                name="exporter",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+                description="Exporter name",
+                required=True,
+            ),
+        ],
+        responses={
+            200: OpenApiResponse(description="Transformed data"),
+            400: OpenApiResponse(
+                description="Validation error or missing required parameters"
+            ),
+            404: OpenApiResponse(description="Object was not found"),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+    )
     def get(self, request):
         """Get the transformed Data file
-
         Args:
-
             request: HTTP request
-
         Returns:
-
             - code: 200
               content: transformed data
             - code: 400
@@ -70,31 +111,25 @@ class ExportData(APIView):
                     return Response(
                         content, status=status.HTTP_400_BAD_REQUEST
                     )
-
             else:
                 content = {
                     "message": "data id/pid is missing or the value is empty."
                 }
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
             if "exporter" not in request.GET:
                 content = {
                     "message": "exporter is missing or the value is empty."
                 }
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
             document = "Exporter"
             # get the exporter with the given name
             exporter_object = exporter_api.get_by_name(request.GET["exporter"])
-
             # check if template is linked to the exporter
             if not exporter_object.has_template(data.template):
                 content = {"message": "template not linked to this exporter"}
                 return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
             # get the exporter module
             exporter_module = get_exporter_module_from_url(exporter_object.url)
-
             # if is a xslt transformation, we have to set the xslt
             if exporter_object.url == exporter_constants.XSL_URL:
                 # get the exporter xsl object instead of exporter
@@ -103,22 +138,18 @@ class ExportData(APIView):
                 )
                 # set the xslt
                 exporter_module.set_xslt(exporter_object.xsl_transformation)
-
             # get the list of the transformed result
             transform_result_list = exporter_module.transform(
                 [Result(title=data.title, content=data.content)],
                 request.session.session_key,
             )
-
             # Check if the list is empty
             if transform_result_list:
                 return export_data(
                     transform_result_list, request.user, data.title
                 )
-
             content = {"message": "error during the transformation"}
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
-
         except exceptions.DoesNotExist:
             content = {"message": document + " not found."}
             return Response(content, status=status.HTTP_404_NOT_FOUND)

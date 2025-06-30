@@ -3,6 +3,13 @@
 
 from django.http import Http404
 from django.utils.decorators import method_decorator
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema,
+    OpenApiParameter,
+    OpenApiResponse,
+)
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -17,20 +24,28 @@ import core_exporters_app.exporters.xsl.api as xsl_api
 from core_exporters_app.rest.exporters.serializers import ExporterXslSerializer
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="List all XSL Exporters, or create",
+)
 class ExporterXslList(APIView):
     """List all XSL Exporters, or create"""
 
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(
+        summary="Get all XSL exporters",
+        description="Get all XSL Exporters",
+        responses={
+            200: ExporterXslSerializer(many=True),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+    )
     def get(self, request):
         """Get all XSL Exporters
-
         Args:
-
             request: HTTP request
-
         Returns:
-
             - code: 200
               content: List of XSL Exporters
             - code: 500
@@ -49,24 +64,40 @@ class ExporterXslList(APIView):
                 content, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    @extend_schema(
+        summary="Create a new XSL exporter",
+        description="Save an XSL Exporter",
+        request=ExporterXslSerializer,
+        responses={
+            201: ExporterXslSerializer,
+            400: OpenApiResponse(description="Validation error"),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+        examples=[
+            OpenApiExample(
+                "Example request",
+                summary="Example request body",
+                description="Example request body for creating an XSL exporter",
+                value={
+                    "name": "exporter_name",
+                    "templates": ["id", "id"],
+                    "xsl_transformation": "id",
+                },
+            ),
+        ],
+    )
     @method_decorator(api_staff_member_required())
     def post(self, request):
         """Save an XSL Exporter
-
         Parameters:
-
             {
-                "name": "exporter_name",
-                "templates": ["id", "id"],
-                "xsl_transformation": "id"
+              "name": "exporter_name",
+              "templates": ["id", "id"],
+              "xsl_transformation": "id"
             }
-
         Args:
-
             request: HTTP request
-
         Returns:
-
             - code: 201
               content: Created XSL Exporter
             - code: 400
@@ -94,20 +125,20 @@ class ExporterXslList(APIView):
             )
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="Get an XSL Exporter",
+)
 class ExporterXslDetail(APIView):
-    """ " Get an XSL Exporter"""
+    """Get an XSL Exporter"""
 
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         """Retrieve an XSL Exporter
-
         Args:
-
             pk: ObjectId
-
         Returns:
-
             ExporterXsl
         """
         try:
@@ -115,16 +146,29 @@ class ExporterXslDetail(APIView):
         except exceptions.DoesNotExist:
             raise Http404
 
+    @extend_schema(
+        summary="Retrieve an XSL exporter",
+        description="Retrieve an XSL Exporter",
+        parameters=[
+            OpenApiParameter(
+                name="id",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+                description="XSL exporter ID",
+            ),
+        ],
+        responses={
+            200: ExporterXslSerializer,
+            404: OpenApiResponse(description="Object was not found"),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+    )
     def get(self, request, pk):
         """Get an XSL Exporter
-
         Args:
-
             request: HTTP request
             pk: ObjectId
-
         Returns:
-
             - code: 200
               content: ExporterXsl
             - code: 404

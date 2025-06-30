@@ -2,6 +2,13 @@
 """
 
 from django.http import Http404
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema,
+    OpenApiParameter,
+    OpenApiResponse,
+)
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -30,20 +37,28 @@ from core_exporters_app.rest.exporters.serializers import (
 )
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="List all Exporters",
+)
 class ExporterList(APIView):
     """List all Exporters"""
 
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(
+        summary="Get all exporters",
+        description="Get all Exporters",
+        responses={
+            200: ExporterSerializer(many=True),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+    )
     def get(self, request):
         """Get all Exporters
-
         Args:
-
             request: HTTP request
-
         Returns:
-
             - code: 200
               content: List of exporters
             - code: 500
@@ -63,35 +78,49 @@ class ExporterList(APIView):
             )
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="Get an Exporter",
+)
 class ExporterDetail(APIView):
-    """ " Get an Exporter"""
+    """Get an Exporter"""
 
     permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         """Retrieve an Exporter
-
         Args:
             pk:
-
         Returns:
-
         """
         try:
             return exporter_api.get_by_id(pk)
         except exceptions.DoesNotExist:
             raise Http404
 
+    @extend_schema(
+        summary="Retrieve an exporter",
+        description="Retrieve an Exporter",
+        parameters=[
+            OpenApiParameter(
+                name="id",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+                description="Exporter ID",
+            ),
+        ],
+        responses={
+            200: ExporterSerializer,
+            404: OpenApiResponse(description="Object was not found"),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+    )
     def get(self, request, pk):
         """Get an Exporter
-
         Args:
-
             request: HTTP request
             pk: ObjectId
-
         Returns:
-
             - code: 200
               content: Exporter
             - code: 404
@@ -116,34 +145,54 @@ class ExporterDetail(APIView):
             )
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="Export Data into a zip file",
+)
 class ExportToZip(APIView):
     """Export Data into a zip file"""
 
     permission_classes = (IsAuthenticated,)
 
+    @extend_schema(
+        summary="Generate a zip file and return its ID",
+        description="Generate a zip file and return its ID. It can then be used with the download URL to retrieve the file.",
+        request=ExporterToZipSerializer,
+        responses={
+            200: ExporterExportedCompressedFileSerializer,
+            400: OpenApiResponse(description="Validation error"),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+        examples=[
+            OpenApiExample(
+                "Example request",
+                summary="Example request body",
+                description="Example request body for exporting data to zip",
+                value={
+                    "exporter_id_list": [
+                        "5a81bcc08e4b10323d26b4dd",
+                        "5a81bcc08e4b10323d26b4de",
+                    ],
+                    "data_id_list": ["5a8314468e4b10dfbea6ffa4"],
+                },
+            ),
+        ],
+    )
     def post(self, request):
         """Generate a zip file and return its ID
-
         It can then be used with the download url to retrieve the file
-
         Parameters:
-
             {
-                "exporter_id_list": ["id", "id", ...],
-                "data_id_list": ["id", "id", ...]
+              "exporter_id_list": ["id", "id", ...],
+              "data_id_list": ["id", "id", ...]
             }
-
             {
-                "exporter_id_list":["5a81bcc08e4b10323d26b4dd", "5a81bcc08e4b10323d26b4de"],
-                "data_id_list":["5a8314468e4b10dfbea6ffa4"]
+              "exporter_id_list":["5a81bcc08e4b10323d26b4dd", "5a81bcc08e4b10323d26b4de"],
+              "data_id_list":["5a8314468e4b10dfbea6ffa4"]
             }
-
         Args:
-
             request: HTTP request
-
         Returns:
-
             - code: 200
               content: Zip file Id
             - code: 400
@@ -165,12 +214,10 @@ class ExportToZip(APIView):
             )
             # Save in database to generate an Id and be accessible via url
             exported_file = exported_compressed_file_api.upsert(exported_file)
-
             # get all data
             data = data_api.get_by_id_list(
                 request.data["data_id_list"], request.user
             )
-
             transformed_result_list = []
             for exporter_id in request.data["exporter_id_list"]:
                 # get the exporter with the given id
@@ -218,6 +265,10 @@ class ExportToZip(APIView):
             )
 
 
+@extend_schema(
+    tags=["Exporter"],
+    description="Download a zip file",
+)
 class ExporterDownload(APIView):
     """Download a zip file"""
 
@@ -225,14 +276,10 @@ class ExporterDownload(APIView):
 
     def get_object(self, pk, user):
         """Retrieve an exported compressed file
-
         Args:
-
             pk: ObjectId
             user:
-
         Returns:
-
             ZipFile
         """
         try:
@@ -240,21 +287,38 @@ class ExporterDownload(APIView):
         except exceptions.DoesNotExist:
             raise Http404
 
+    @extend_schema(
+        summary="Download a zip file",
+        description="Download the file",
+        parameters=[
+            OpenApiParameter(
+                name="id",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.PATH,
+                description="Exported compressed file ID",
+            ),
+        ],
+        responses={
+            200: OpenApiResponse(
+                description="Zip file",
+                response={"application/zip": {}},
+            ),
+            204: OpenApiResponse(description="The zip file is not yet ready"),
+            404: OpenApiResponse(description="Object was not found"),
+            500: OpenApiResponse(description="Internal server error"),
+        },
+    )
     def get(self, request, pk):
         """Download the file
-
         Args:
-
             request: HTTP request
             pk: ObjectId
-
         Returns:
-
             - code: 200
               content: ZipFile
             - code: 204
               content: The zip file is not yet ready
-            - code: 203
+            - code: 404
               content: Object was not found
             - code: 500
               content: Internal server error
@@ -267,7 +331,6 @@ class ExporterDownload(APIView):
                     compressed_file_object.file.read(),
                     compressed_file_object.file_name,
                 )
-
             content = {"message": "The zip file is not yet ready."}
             return Response(content, status=status.HTTP_204_NO_CONTENT)
         except Http404:
