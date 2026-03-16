@@ -1,5 +1,4 @@
-""" Exported Compressed File api
-"""
+"""Exported Compressed File api"""
 
 from core_main_app.access_control.decorators import access_control
 from core_exporters_app.access_control.api import can_read

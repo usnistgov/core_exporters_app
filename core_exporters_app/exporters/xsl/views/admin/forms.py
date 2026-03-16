@@ -1,5 +1,4 @@
-""" XSLT forms
-"""
+"""XSLT forms"""
 
 from django import forms
 

@@ -1,5 +1,4 @@
-""" Fixture files for Exporters
-"""
+"""Fixture files for Exporters"""
 
 from core_main_app.components.data.models import Data
 from core_main_app.components.template.models import Template

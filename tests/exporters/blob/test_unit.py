@@ -1,5 +1,4 @@
-"""Units tests for blob exporter
-"""
+"""Units tests for blob exporter"""
 
 from unittest.mock import MagicMock, patch
 

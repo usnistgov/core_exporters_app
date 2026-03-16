@@ -1,5 +1,4 @@
-""" Ajax Exporter user
-"""
+"""Ajax Exporter user"""
 
 import json
 import logging

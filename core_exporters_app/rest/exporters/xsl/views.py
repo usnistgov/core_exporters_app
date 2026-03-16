@@ -1,5 +1,4 @@
-""" REST Views for XSL Exporters
-"""
+"""REST Views for XSL Exporters"""
 
 from django.http import Http404
 from django.utils.decorators import method_decorator

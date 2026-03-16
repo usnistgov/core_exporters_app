@@ -1,5 +1,4 @@
-"""Integration tests for exporter rest api
-"""
+"""Integration tests for exporter rest api"""
 
 from rest_framework import status
 

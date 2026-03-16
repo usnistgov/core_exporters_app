@@ -1,5 +1,4 @@
-""" Json exporter url
-"""
+"""Json exporter url"""
 
 from django.urls import re_path
 

@@ -1,5 +1,4 @@
-""" XSLT ajax
-"""
+"""XSLT ajax"""
 
 import json
 

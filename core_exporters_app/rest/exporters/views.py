@@ -1,5 +1,4 @@
-""" REST Views for Exporters
-"""
+"""REST Views for Exporters"""
 
 from django.http import Http404
 from drf_spectacular.types import OpenApiTypes

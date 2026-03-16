@@ -1,5 +1,4 @@
-""" XSLT exporter
-"""
+"""XSLT exporter"""
 
 import logging
 

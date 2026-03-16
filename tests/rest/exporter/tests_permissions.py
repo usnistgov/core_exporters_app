@@ -1,5 +1,4 @@
-""" Authentication tests for Exporters REST API
-"""
+"""Authentication tests for Exporters REST API"""
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import SimpleTestCase

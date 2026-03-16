@@ -1,5 +1,4 @@
-"""Integration tests for exporter rest api
-"""
+"""Integration tests for exporter rest api"""
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import override_settings

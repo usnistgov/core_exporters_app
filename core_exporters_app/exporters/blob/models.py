@@ -1,5 +1,4 @@
-""" Blob exporter
-"""
+"""Blob exporter"""
 
 import logging
 import pathlib

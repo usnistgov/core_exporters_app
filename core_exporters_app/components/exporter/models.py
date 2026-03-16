@@ -1,5 +1,4 @@
-""" Exporter model
-"""
+"""Exporter model"""
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import RegexValidator

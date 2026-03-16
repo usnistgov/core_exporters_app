@@ -1,5 +1,4 @@
-""" Exporter forms
-"""
+"""Exporter forms"""
 
 from django import forms
 

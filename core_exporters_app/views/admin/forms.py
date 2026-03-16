@@ -1,5 +1,4 @@
-""" Forms admin exporter
-"""
+"""Forms admin exporter"""
 
 from django import forms
 from django.forms import ModelForm

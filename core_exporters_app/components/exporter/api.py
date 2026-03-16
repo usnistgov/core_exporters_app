@@ -1,5 +1,4 @@
-""" Exporter api
-"""
+"""Exporter api"""
 
 from core_exporters_app.components.exporter.models import Exporter
 

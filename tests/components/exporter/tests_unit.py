@@ -1,5 +1,4 @@
-"""Units tests for exporter api
-"""
+"""Units tests for exporter api"""
 
 from unittest.mock import patch, MagicMock
 

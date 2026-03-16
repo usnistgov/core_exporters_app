@@ -1,5 +1,4 @@
-""" Custom admin site for the Exported Compressed File model
-"""
+"""Custom admin site for the Exported Compressed File model"""
 
 from django.contrib import admin
 

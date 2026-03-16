@@ -1,5 +1,4 @@
-""" Exporter User views
-"""
+"""Exporter User views"""
 
 import logging
 

@@ -1,5 +1,4 @@
-""" Core exporters apps config
-"""
+"""Core exporters apps config"""
 
 import sys
 

@@ -1,5 +1,4 @@
-""" Abstract class exporter
-"""
+"""Abstract class exporter"""
 
 import hashlib
 import importlib

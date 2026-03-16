@@ -1,5 +1,4 @@
-""" views exporters app
-"""
+"""views exporters app"""
 
 from django.contrib.admin.views.decorators import staff_member_required
 

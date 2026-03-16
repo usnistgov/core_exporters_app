@@ -1,5 +1,4 @@
-""" Handle Exporter signals
-"""
+"""Handle Exporter signals"""
 
 from django.db.models.signals import post_save, pre_delete
 

@@ -1,5 +1,4 @@
-"""Load exporters command
-"""
+"""Load exporters command"""
 
 from django.core.management.base import BaseCommand
 

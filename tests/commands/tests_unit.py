@@ -1,5 +1,4 @@
-"""Exporter command unit testing
-"""
+"""Exporter command unit testing"""
 
 from io import StringIO
 from unittest.case import TestCase

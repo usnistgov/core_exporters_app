@@ -1,5 +1,4 @@
-""" Set of functions to define the rules for access control across collections
-"""
+"""Set of functions to define the rules for access control across collections"""
 
 import logging
 

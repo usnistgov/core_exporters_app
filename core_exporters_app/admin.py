@@ -24,7 +24,6 @@ from core_exporters_app.views.admin import (
     ajax as admin_ajax,
 )
 
-
 admin_urls = [
     re_path(
         r"^exporters/(?P<pk>[\w-]+)/edit/$",

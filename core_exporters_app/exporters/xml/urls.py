@@ -1,5 +1,4 @@
-""" Xml exporter url
-"""
+"""Xml exporter url"""
 
 from django.urls import re_path
 

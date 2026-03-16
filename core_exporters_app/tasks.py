@@ -1,5 +1,4 @@
-""" Exporters tasks
-"""
+"""Exporters tasks"""
 
 import json
 import logging
@@ -22,7 +21,6 @@ from core_exporters_app.exporters.exporter import (
 )
 from core_exporters_app.settings import COMPRESSED_FILES_EXPIRE_AFTER_SECONDS
 from core_exporters_app.system.api import get_older_exported_files
-
 
 logger = logging.getLogger(__name__)
 

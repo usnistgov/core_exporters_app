@@ -1,5 +1,4 @@
-""" Exported Compressed File model
-"""
+"""Exported Compressed File model"""
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models

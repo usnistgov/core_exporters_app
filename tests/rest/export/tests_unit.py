@@ -1,5 +1,4 @@
-"""Unit tests for exporter rest api
-"""
+"""Unit tests for exporter rest api"""
 
 from django.conf import settings
 from unittest.mock import patch

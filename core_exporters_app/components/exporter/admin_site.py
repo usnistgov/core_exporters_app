@@ -1,5 +1,4 @@
-""" Custom admin site for the Exporter model
-"""
+"""Custom admin site for the Exporter model"""
 
 from django.contrib import admin
 

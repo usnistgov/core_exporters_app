@@ -1,5 +1,4 @@
-""" XSLT exporter url
-"""
+"""XSLT exporter url"""
 
 from django.urls import re_path
 

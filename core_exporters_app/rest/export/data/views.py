@@ -1,5 +1,4 @@
-""" REST Views for Data Exporting
-"""
+"""REST Views for Data Exporting"""
 
 from django.conf import settings
 from drf_spectacular.types import OpenApiTypes

@@ -1,5 +1,4 @@
-""" System API for Exported files.
-"""
+"""System API for Exported files."""
 
 from core_exporters_app.components.exported_compressed_file.models import (
     ExportedCompressedFile,

@@ -1,5 +1,4 @@
-""" Url router for the exporters application
-"""
+"""Url router for the exporters application"""
 
 from django.conf.urls import include
 from django.urls import re_path
